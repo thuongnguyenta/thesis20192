@@ -1,0 +1,642 @@
+{% extends "template.html" %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+<script>
+        
+        $(document).ready(function(){
+            $('.filter_check :checkbox').click(function(){
+                if ($('input:checkbox:checked').length) {
+                $('.shoe_item').hide();
+                $('input:checkbox:checked').each(function(){
+                        // alert()
+                       $('.shoe_item['+$(this).prop('name') +'*="'+$(this).val()+'"]' ).show();
+                    
+                });
+                }
+                else{
+                    $(".shoe_item").show();
+                }
+            });
+            
+
+            $('#gender_check :checkbox').click(function(){
+                if ($('input:checkbox:checked').length) {
+                $('.shoe_item').hide();
+                $('input:checkbox:checked').each(function(){
+                        // alert()
+                       $('.shoe_item['+$(this).prop('name') +'*="'+$(this).val()+'"]' ).show();
+                       $('.shoe_item['+$(this).prop('name') +'*="Both"]' ).show();
+                    
+                });
+                }
+                else{
+                    $(".shoe_item").show();
+                }
+            });
+
+            $('#colourcb :checkbox').click(function(){
+                if($('input:checkbox:checked').length){
+                    $('.shoe_item').hide();
+                    $('input:checkbox:checked').each(function(){
+                        // alert("hi");
+                        $('.box_color['+$(this).prop('name')+'*="'+$(this).val()+'"]' ).parent().parent().parent().show();
+                    })
+                }
+                else
+                {
+                    $(".shoe_item").show();
+                }
+            });
+
+            $('#surfacecb :checkbox').click(function(){
+                if($('input:checkbox:checked').length){
+                    $('.shoe_item').hide();
+                    $('input:checkbox:checked').each(function(){
+                        // alert("hi");
+                        $('.surface['+$(this).prop('name')+'*="'+$(this).val()+'"]' ).parent().parent().show();
+                    })
+                }
+                else
+                {
+                    $(".shoe_item").show();
+                }
+            })
+
+
+            /// radio button
+            $(".filter_check :radio").click(function(){
+                
+            })
+
+
+
+            ///
+
+            // $("#gender").click(function(){
+            // $("#gendercb").slideToggle("slow");
+            // });
+
+            $("#catalogy").click(function(){
+            $("#catalogycb").slideToggle("slow");
+            });
+
+            $("#price").click(function(){
+            $("#pricecb").slideToggle("slow");
+            });
+
+            $("#colour").click(function(){
+            $("#colourcb").slideToggle("slow");
+            });
+
+            $("#athleter").click(function(){
+            $("#athletercb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            $("#feature").click(function(){
+            $("#featurecb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            $("#surface").click(function(){
+            $("#surfacecb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            
+            var $divs = $("div.shoe_item");
+            $('#sort').on('change', function(){
+                if(this.value=="pricel"){
+                var opOrder = $divs.sort(function (a, b) {
+                return $(a).data('price') < $(b).data('price') ? -1 : 1;
+                });
+                $(".item").html(opOrder);}
+                else{
+                var opOrder = $divs.sort(function (a, b) {
+                return $(a).data('price') > $(b).data('price') ? -1 : 1;
+                });
+                $(".item").html(opOrder);
+                }
+            });
+//
+
+            $(".showhide").click(function()
+            {
+                $(".box_4color div:nth-child(n+4)").toggle();
+            });
+            
+            
+            $(".box_4color").each(function()
+            {
+                var number = $(this).children().length ;
+                // alert(number);
+                if( number > 3){
+                    $(this).append("<nav class='margin' style='line-height:50px;float:left;margin:8px,font-weight:600;'>+"+(number-3)+" Colour</nav>");
+                }
+            });
+        });
+        
+
+
+        // $('.box_4color').each(function() {
+        //     var $this = $(this);
+        //     if ($this.children('div').length > 3) { //length of item list
+
+        //         $(this).next('.box_color').show();
+        //     }
+        //     else if ($this.children('div').length < 4) { //length of item list
+
+        //         $(this).next('.box_color').hide();
+        //     }
+
+    //   });
+
+        // function update_more() {
+        //     $('.tile').each(function() {
+        //         var $this = $(this);
+        //         if ($this.find('.quickmark').length > 4) {
+        //             $this.find('.tile__more').show();
+        //         } else {
+        //             $this.find('.tile__more').hide();
+        //     }
+        // }
+        
+        // $(document).ready(function(){
+        // $(".shoe_item").click(function() {
+        //     $(this).hide()
+        // });
+        // });
+        function show_hidecb(id){
+            var target_id=id+'cb';
+            var status =document.getElementById(target_id).style.display;
+            if (status=="block")
+                {  
+                    //  alert(status);
+                    document.getElementById(target_id).style.display =" none";
+                }
+            else { 
+                //  alert(status);
+                    document.getElementById(target_id).style.display= "block";    
+            }
+        }
+
+        
+        function myFunction() {
+        var x = document.getElementById("filter_check");
+        if (x.className === "filter_check margin") {
+            x.className += " responsive";
+        } else {
+            x.className = "filter_check margin";
+        }
+        }
+
+        window.onscroll = function() {setHeader()};
+    
+        var header = document.getElementById("searchhd");
+        var sticky = header.offsetTop;
+        alert(sticky);
+        
+        function setHeader() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+        }      
+
+</script>
+
+
+<div class="col-a-12">
+    <div class="topnav">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+          </a>
+    </div>
+    <div class="">
+        <div class="col-3">
+            <div class="margin border_r" >
+                <div class="filter margin"  >
+                    <div class="type_s content_center" >
+                        <ul>    
+                            <li>
+                                <label class="type_shoe">
+                                    <a href="/index">All Shoes</a>
+                                </label>
+                            </li>
+                            {% for type_s in shoe_type%}
+                                {% if type_shoes == type_s['shoes_type'] %}
+                                <li class="bg_color_ddd">
+
+                                {% else %}
+                                <li>
+                                {% endif %}
+                                    <label class="type_shoe">
+                                        <a href="/shoes/{{type_s['shoes_type']}}">{{type_s['shoes_type']}}</a>
+                                    </label>
+                                    <label class="number_type">
+                                        ({{type_s['number']}})
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    
+                        
+                    </div>
+                </div>
+                <hr/>
+                <div class="filter_check margin" id="filter_check" style="min-height: 95%;" >
+                    
+                    <div class="filter_ct shoe padding_top50 margin_ct" style="max-width: 300px;">
+                        <div class="close" style="right: 10px;top: 10px;"  onclick="myFunction()"></div>
+                        <div class="gender checkbox padding_left" id="gender_check">
+                            <section >
+                                <div class="flex dp_flex shoe bg_color_ddd">
+                                    <div >
+                                            <h3 class="margin">Gender</h3>
+                                    </div>
+                                    <div id="gender">
+                                        <div class="icon_sh" id="gender">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="gendercb" class=" margin_t_20">
+                                    <label class="container">Man
+                                        <input type="checkbox" value="Man" name="gender">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Woman
+                                        <input type="checkbox" value="Woman" name="gender">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                        <!-- <input class="checkmark" id="man" type="checkbox" name="gender" value="Man">
+                                        <label class="filterlb" for="man">MAN</label>
+                                        <br/>
+                                        <input id="woman" type="checkbox" name="gender" value="Woman">
+                                        <label class="filterlb" for="woman">WOMAN</label> -->
+                                </div>
+                                <br/>
+
+                            </section>
+                        </div>
+                    
+                        <hr/>
+                        <div class="catalogy padding_left">
+                                <section >
+                                    <div class="flex dp_flex shoe bg_color_ddd">
+                                        <div>
+                                                <h3 class="margin">Catalogy</h3>
+                                        </div>
+                                        <div class="transition-duration" id="catalogy" >
+                                            <div class="icon_sh">
+                                                <i class="fa fa-angle-down rotate-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="catalogycb" class=" margin_t_20">
+                                        <label class="container">Boot
+                                            <input type="checkbox" value="Boot" name="catalog">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <!-- <input class="round" id="boot" type="checkbox" name="catalog" value="Boot">
+                                        <label for="boot">Boot</label>
+                                        <br/> -->
+                                        <label class="container">Snacker
+                                            <input type="checkbox" value="Snacker" name="catalog">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <!-- <input class="round" id="snacker" type="checkbox" name="catalog" value="Snacker">
+                                        <label for="snacker" > Snacker</label>
+                                        <br/> -->
+                                        <label class="container">Sandals
+                                            <input type="checkbox" value="Sandals" name="catalog">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                    
+                                </section>
+                        </div>
+                        <hr/>
+                        <div class="colour padding_left ">
+                            <section >
+                                <div class="flex dp_flex shoe bg_color_ddd">
+                                    <div>
+                                            <h3 class="margin">Colour</h3>
+                                    </div>
+                                    <div id="colour">
+                                        <div class="icon_sh" id="color">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="colourcb" class="margin_t_20">
+                                    <div class="dp_flex flex-wrap">
+                                        
+                                        {% for colour in shoes_color %}
+                                            {% if colour['color'] not in a %}
+                                                {% if colour['color'] == "White" %}
+                                                <div class="colour_cb content_center round white" >
+                                                    <input id="{{colour['color']}}" type="checkbox" name="color" value="{{colour['color']}}">
+                                                
+                                                    <label id="white" for="{{colour['color']}}" a="{{a.append(colour['color'])}}"></label>
+                                                    {% else %}
+                                                    <div class="colour_cb content_center round">
+                                                        <input id="{{colour['color']}}" type="checkbox" name="color" value="{{colour['color']}}">
+                                                    <label for="{{colour['color']}}" style="background-color: {{colour['color'].split()[0]}};" a="{{a.append(colour['color'])}}">
+                                                    {% endif %}
+                                                        <div class="colour_select">
+                                                            {{colour['color']}}
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                
+                                                <!-- {{ a }} -->
+                                                
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <hr/>
+                        <div class="padding_left athleter ">
+                            <section >
+                                <div class="flex dp_flex shoe bg_color_ddd">
+                                    <div>
+                                            <h3 class="margin">Athleter</h3>
+                                    </div>
+                                    <div id="athleter">
+                                        <div class="icon_sh" id="athleter">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="athletercb" class="hide margin_t_20">
+                                    <div class="athleter">
+                                        {% for shoe in shoes%}
+                                            {% if shoe['athleter']%}
+                                            <label class="container">{{shoe['athleter']}}
+                                                <input type="checkbox" value="{{shoe['athleter']}}" name="athleter">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            
+                                            {% endif %}
+                                        {% endfor %}
+            
+                                    </div>
+                                </div>
+                            </section>
+                            
+                        </div>
+                        <hr/>
+                        <div class="padding_left feature ">
+                            <section >
+                                <div class="flex dp_flex shoe bg_color_ddd">
+                                    <div>
+                                            <h3 class="margin">Feature</h3>
+                                    </div>
+                                    <div id="feature">
+                                        <div class="icon_sh" id="feature">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="featurecb" class="hide margin_t_20">
+                                    <div class="feature">
+                                        
+                                            <label class="container">Reflection
+                                                <input type="checkbox" value="Reflection" name="feature">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label class="container">Waterproof
+                                                <input type="checkbox" value="Waterproof" name="feature">
+                                                <span class="checkmark"></span>
+                                            </label>
+                    
+            
+                                    </div>
+                                </div>
+                            </section>
+                            
+                        </div>
+                        <hr/>
+                        <div class="padding_left feature ">
+                            <section >
+                                <div class="flex dp_flex shoe bg_color_ddd">
+                                    <div>
+                                            <h3 class="margin">Surface</h3>
+                                    </div>
+                                    
+                                    <div id="surface">
+                                        <div class="icon_sh" id="surface">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="surfacecb" class="hide margin_t_20">
+                                    <div class="surface">
+                                        {% for sf in surface%}
+                                        {% if sf['surface'] not in a %}
+                                            <label class="container" a="{{a.append(sf['surface'])}}">{{sf['surface']}}
+                                                <input type="checkbox" value="{{sf['surface']}}" name="surface">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        {% endif %}
+                                        {% endfor %}
+                    
+            
+                                    </div>
+                                </div>
+                            </section>
+                            
+                        </div>
+                        <hr/>
+                        <!-- <div class="padding_left">
+                            <section>
+                                <div class="flex dp_flex shoe">
+                                    <div>
+                                            <h3>Price</h3>
+                                    </div>
+                                    <div >
+                                        <div class="icon_sh" id="price">
+                                            <i class="fa fa-angle-down rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="margin price" id="pricecb">
+                                    <label class="container1">Up to 3.000.000<ins>đ</ins> 
+                                        <input type="radio"  name="r_price" min="0" max="3000000">
+                                        <span class="checkmark1"></span>
+                                    </label>
+                                    <label class="container1">3.000.000<ins>đ</ins> - 5.000.000<ins>đ</ins>
+                                        <input type="radio"  name="r_price" min="3000000" max="5000000">
+                                        <span class="checkmark1"></span>
+                                    </label>
+                                    <label class="container1">Over 5.000.000 <ins>đ</ins>
+                                        <input type="radio"  name="r_price" min="5000000" max="10000000">
+                                        <span class="checkmark1"></span>
+                                    </label>
+                                      
+                              
+
+                                </div>
+                            </section>
+                        </div> -->
+                    <div>
+                    
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-9 col-s-12">
+            <div id="searchhd" class="dp_flex">
+                <div class="search">
+                    <form action="/search" method="POST">
+                            <input name="searchbar" class="ipsearch padding_left" type="search" placeholder="Search for product name ... " value="{{search}}">
+                    </form>
+                    
+                </div>
+                
+            </div>
+            <div>
+                <!-- <button id="sort">Sort</button> -->
+                <select id="sort" style="padding: 10px;font-weight: 600;">
+                    <option value="pricel">Price(Low-Hight)</option>
+                    <option value="priceh">Price(Hight-Low)</option>
+                </select>
+
+            </div>
+            {% if search%}
+                <div>Result for:"{{search}}"</div>
+            {% endif %}
+            <div class="item">
+                
+                {% for shoe in shoes %}
+                <div class="col-s-6 col-m-4 shoe_item" catalog="{{shoe['catalogy']}}" gender="{{shoe['gender_shoes']}}" data-price="{{shoe['price']*(1-shoe['sale']/100)}}" athleter="{{shoe['athleter']}}" feature="{{shoe['feature']}}">
+                    <div class="col-s-12 ">
+                        <div class="margin shoe">
+                        {% if shoe['sale'] %}
+                            <div class="sale">Giảm {{shoe['sale']}}%</div>
+                        {% endif %}
+
+                            <div>
+                                <a href="/shoes_detail/{{shoe['id_shoes']}}">
+                                <img id="{{shoe['id_shoes']}}_1" src="/static/image/shoes_image/{{shoe['image']}}" width="100%" height="auto">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name col-s-12 margin"><h4>{{shoe['shoes_name']}}</h4></div>
+                    <div class="price col-s-12 margin">
+
+                        
+                        {% if shoe['sale'] %}
+                            <label class="origin">
+                                {{shoe['price']}}<ins>đ</ins>
+                            </label>
+                        {% endif %}
+                            <label class="price_sale">
+                                {{shoe['price']*(1-shoe['sale']/100)}}<ins>đ</ins>
+                            </label>
+                        
+                    </div>
+                    
+                    
+                    <div class="color col-s-12 margin">
+                        <div class="box_4color">
+                        {% for color in shoes_color %}
+                            {% if color['id_shoes']== shoe['id_shoes'] %}
+                                <div class="box_color" color="{{color['color']}}">
+                                    <div class="box_image margin">
+                                        <img src="/static/image/shoes_image/{{color['image']}}" id="{{color['id_shoes']}}" width="50px" height="50px" title="/static/image/shoes_image/{{color['image']}}" onmouseover="show_image(this.title,this.id)">
+                                    </div>
+                                </div>
+                                
+                            {% endif %}
+                        {% endfor %}
+                                <!-- <button class="showhide">Open</button>  -->
+                        </div>
+                    </div>
+                    <div class="hide">
+                        {% for surf in surface %}
+                        {% if surf['id_shoes']==shoe['id_shoes'] %}
+                        <div class="surface" surface="{{surf['surface']}}">
+                            
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div>
+        
+        <div class="top_signal hide"  style="text-align: center;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 4px;
+        font-size: 32px;
+        transform: rotate(180deg);" id="top_head">
+        <a href="#top" style="margin: 10px;">
+            <i class="fa fa-angle-down rotate-icon"></i>
+        </a>    
+        
+        </div>
+
+    </div>
+<script>
+    window.onscroll = function() {setHeader();
+    ontop()};
+    
+        var header = document.getElementById("searchhd");
+        var sticky = header.offsetTop;
+        // alert(sticky);
+        
+        function setHeader() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+        }      
+        $(document).ready(function(){
+            $(window).scroll(function(){
+                if($(window).scrollTop()==$(document).height()-$(window).height()){
+                    // ajax
+                }
+            });
+        });
+
+        var backtotop = document.getElementById("top_head");
+        // var sticky = header.offsetTop;
+        // alert(sticky);
+        
+        function ontop() {
+        if (window.pageYOffset > 350) {
+            backtotop.classList.remove("hide");
+        } else {
+            backtotop.classList.add("hide");
+        }
+        }  
+
+</script>
+</div>
+
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends "template.html" %}
+
+{% block header %}
+<div id="top" class="full">
+    <div class="top_menu col-12">
+        <div class="dp_flex top_heder">
+            <div class="">
+                
+                <div><a href="/"><img src="/static/icon/nike_swoosh_logo_black.png" width="auto" height="75px"></a></div>
+                
+            </div>
+            <div class="" style="width: 100%; margin: auto;"> 
+                <form class="search_db">
+                    <input class="search_inputt" type="text" placeholder="Search"
+                      aria-label="Search">
+                    <!-- <i class="fas fa-search" aria-hidden="true"></i> -->
+                    <button type="submit" class="searchbutton" ><i class="fa fa-search"></i></button>
+                  </form>
+            </div>
+        </div>
+
+        <div class="">
+            
+            <div class="wrapper">
+                <div class="topnav1" id="myTopnav1">
+                    <ul>
+                        <li><a href="#" class="active1">Home</a></li>
+                        <li>
+                            <a href="/index">Shopping</a>
+                        </li>
+                        <li> <a href="#contact">Contact</a></li>
+                        <li> <a href="#infor">About</a> </li>
+                        <li><a href="javascript:void(0);" class="icon1" onclick="myFunction1()">
+                            <i class="fa fa-bars"></i>
+                          </a>
+                        </li>
+                    </ul>
+                    
+                  </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="banner col-12" id="top"> 
+        <div class="slideshow-container">
+
+            <div class="mySlides fade">
+              <div class="numbertext">1 / 3</div>
+              <img src="/static/image/nike-just-do-it2.jpg" style="width:100%">
+              <div class="title_text">
+                  <div class="t_title">Stylist Woman Shoe</div>
+              </div>
+              <div class="text">New Product Arrive</div>
+            </div>
+            
+            <div class="mySlides fade">
+              <div class="numbertext">2 / 3</div>
+              <img src="/static/image/image3.jpg" style="width:100%">
+              <div class="title_text">
+                  <div class="t_title">Basketball Shoe</div>
+              </div>
+              <div class="text">Trending For Shoe</div>
+            </div>
+            
+            <div class="mySlides fade">
+              <div class="numbertext">3 / 3</div>
+              <img src="/static/image/technology2.jpg" style="width:100%">
+              <div class="title_text">
+                  <div class="t_title">Strong and Durable</div>
+              </div>
+              <div class="text">Feature For Shoe</div>
+            </div>
+            
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            <div class="slide_dot content_center">
+                <span class="dot" onclick="currentSlide(1)"></span> 
+                <span class="dot" onclick="currentSlide(2)"></span> 
+                <span class="dot" onclick="currentSlide(3)"></span> 
+            </div>
+            
+        </div>
+            
+    </div>
+    <div class="col-12">
+        <div class="qoutes content_center">
+            <p> It start with a simple ideal :</p>
+            <p>
+                Create quanlity well-designed products that I wanted myself.
+            </p>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    function myFunction1() {
+      var x = document.getElementById("myTopnav1");
+      if (x.className === "topnav1") {
+        x.className += " responsive1";
+      } else {
+        x.className = "topnav1";
+      }
+    }
+    </script>
+
+
+<script>
+    var slideIndex = 1;
+    showSlides(slideIndex);
+    
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("mySlides");
+      var dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}    
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+      }
+      for (i = 0; i < dots.length; i++) {
+          dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " active";
+    }
+</script>
+
+<script>
+    var myIndex = 0;
+    carousel();
+    
+    function carousel() {
+      var i;
+      var x = document.getElementsByClassName("mySlides");
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";  
+      }
+      myIndex++;
+      if (myIndex > x.length) {myIndex = 1}    
+      x[myIndex-1].style.display = "block";  
+      setTimeout(carousel, 3000);    
+    }
+    </script>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+<div class="" style="    margin-top: 150px;    ">
+    <div class="slideshow-container">
+        <div class="content_center title page_title"><ins>Feature Product</ins></div>
+        <div>
+            {%  for shoe in shoes %}
+            <div class="col-4 col-s-6">
+               <div class="outside_box_img">
+                    <div class="box_img">
+                        <img src="/static/image/shoes_image/{{shoe['image']}}" width="100%" height="auto" >
+                    </div>
+                    <div class="name_price">
+                        <div class="name_p">{{shoe['shoes_name']}}</div>
+                        <div class="price_p">{{shoe['price']}}<ins>đ</ins></div>
+                    </div>
+               </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+    
+</div>
+<div class="content_center col-12 margin_top_50"><a class="shop_all" href="/index">Shop All Product</a></div>
+<div class="top_signal hide"  style="text-align: center;
+position: fixed;
+bottom: 20px;
+right: 20px;
+border-radius: 4px;
+font-size: 32px;
+transform: rotate(180deg);" id="top_head">
+<a href="#top" style="margin: 10px;">
+    <i class="fa fa-angle-down rotate-icon"></i>
+</a>    
+
+</div>
+<!-- <div class="rate">
+    <input type="radio" id="star5" name="rate" value="5" />
+    <label for="star5" title="text">5 stars</label>
+    <input type="radio" id="star4" name="rate" value="4" />
+    <label for="star4" title="text">4 stars</label>
+    <input type="radio" id="star3" name="rate" value="3" />
+    <label for="star3" title="text">3 stars</label>
+    <input type="radio" id="star2" name="rate" value="2" />
+    <label for="star2" title="text">2 stars</label>
+    <input type="radio" id="star1" name="rate" value="1" />
+    <label for="star1" title="text">1 star</label>
+</div> -->
+<script>
+    window.onscroll = function() {ontop()};
+    
+        var backtotop = document.getElementById("top_head");
+        // var sticky = header.offsetTop;
+        // alert(sticky);
+        
+        function ontop() {
+        if (window.pageYOffset > 350) {
+            backtotop.classList.remove("hide");
+        } else {
+            backtotop.classList.add("hide");
+        }
+        }      
+
+</script>
+
+{% endblock %}
+
+
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

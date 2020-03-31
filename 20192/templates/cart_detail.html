@@ -1,0 +1,157 @@
+{% extends "template.html" %}
+{% block header%}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="link_title">
+    <p><a href="/index">Index</a>/<a href="/cart_detail">Cart Detail</a></p>
+</div>
+<div class="col-8 col-s-12 dp_flex ">
+    
+    <div class="information">
+        <div class="bag dp_flex sp_between margin" style="background-color: #eee;">
+            <div class="margin">
+                <h2>Cart</h2>
+            </div>
+            <div class="margin">
+                <a id="show" href="/index">Buy more</a>
+            </div>
+        </div>
+        {% if cart_detail %}
+        {% for item in cart_detail %}
+        <div class="image margin dp_flex">
+            <div>
+                    <img src="/static/image/shoes_image/{{item['image']}}" width="150px" height="150px">
+            </div>
+            
+            <div class="dp_flex sp_between flex_column ">
+                    <div class="dp_flex flex_column">
+                        <div class="dp_flex sp_between margin">
+                            <div class="title">
+                                {{item['shoes_name']}}
+                            </div>
+                            <div>
+                                {% if item['sale']%}
+                                <weak class="origin">{{item['price']}}<ins>đ</ins></weak>
+                                {% endif %}
+                                <label><strong>{{item['price']*(1-item['sale']/100)}}<ins>đ</ins></strong></label>
+                            </div>
+                        </div>
+                        <div class="light_color margin">
+                            <div>
+                                    <span class="title">Colour:</span>
+                                    <span>{{item['color']}}</span>
+                            </div>
+                            <div>
+                                <span class="title">Size:</span>
+                                <span>{{item['size']}}</span>
+                            </div>
+                            <div>
+                                <span class="title">Quantity:</span>
+                                <span>{{item['quantity']}}</span>
+                            </div>
+                        </div>
+                        
+        
+                    </div>
+                    <div class="delete margin">
+                            
+                            <a href="/cart_detail/delete/{{item['id_cart_detail']}}">Delete</a>
+                            
+                    </div>
+            </div>
+
+        </div>
+        <hr>
+        <br>
+        {% endfor %}
+        {% else %}
+            <div>You haven't item in cart</div>
+        {% endif %}
+    </div>
+    
+</div>
+<div class="col-3 col-s-12 min_width pd_l_20 border_left" >
+    <div class="margin"><h2>Sumary:</h2></div>
+    <div class="margin dp_flex sp_between">
+        <div><h3>Sub_total:</h3></div>
+        <div class="line_height pd_r_25"><strong>
+            {% if cart_detail %}
+            {{cart_detail[0]['cart_total_price']}}
+            {% else %}
+            0
+            {% endif %}
+        
+        </strong><ins>đ</ins></div>
+    </div>
+    <div class="margin dp_flex sp_between">
+        <div><h3>Delevery Cost:</h3></div>
+        <div class="line_height pd_r_25"><strong>Price</strong></div>
+    </div>
+    <hr/>
+    <div class="margin dp_flex sp_between">
+            <div><h3>Total Cost</h3></div>
+            <div class="total_cost line_height pd_r_25">
+                {% if cart_detail %}
+                {{cart_detail[0]['cart_total_price']}}
+                {% else %}
+                0
+                {% endif %}<ins>đ</ins></div>
+    </div>
+    <div>
+            <div class="element margin content_center">
+                {% if cart_detail %}
+                <button class="button" > <a  onclick="display('checkout_form')" style="color: white;">Check Out</a> </button>
+                {% else %}
+                <button class="button" > <a href="" aria-disabled="true" style="color: white;">Check Out</a> </button>
+                {% endif %}
+                          
+            </div>
+    </div>
+    <div id="checkout_form" class="login hide full">
+        <div class="login_main position_relative" style="height: 550px;">
+            <div>
+            <div class="element margin">
+                <div>
+                    <h2>Checkout Information</h2>
+                </div>
+                <div class="close" onclick="display('checkout_form')" style="display: block;"></div>
+                
+            </div>
+                <form action="/cart_detail/checkout" method="POST" class="content_center" style="margin-top:60px;">
+                    <div class="element  ">
+                        <p class="text_left pd_l_20 ps_textshow">Full Name:</p>
+                        <input class="input" type="text" id="name" name="name" placeholder="Name" value="{{session['name']}}" required />
+                    </div>
+                    <!-- <input type="text" placeholder="Name"> -->
+                    <br/>
+                    <div class="element  ">
+                        <p class="text_left pd_l_20 ps_textshow">Address Shipping:</p>
+                        <input class="input" type="text" id="address" name="address" placeholder="Address" value="{{session['address']}}" required />
+                    </div>
+                    <br>
+                    <div class="element ">
+                    <p class="text_left pd_l_20 ps_textshow">Phone Number:</p>
+                    <input class="input" type="text" placeholder="Phone number" name="phone_number" pattern="[0]{1}[0-9]{9}" value="0{{session['phone_number']}}" required>
+                    </div>
+                    <br>
+                    <button  type="submit" class="button">Payment</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-12"></div>
+<hr/>
+<div class="col-12 pd_l_20" style="background-color: #aaa;">
+    <h3>You Might Also Like !</h3>
+    <div></div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

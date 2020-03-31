@@ -1,0 +1,214 @@
+{% extends "template.html" %}
+
+
+{% block header%}
+    {% include "header.html" %}
+{% endblock %}
+
+
+{% block content %}
+<div>
+    <div class="link_title">
+        <p><a href="/index">Index</a>/<a href="/personal_infor">Personal_Information</a></p>
+    </div>
+    <div class="col-3 " style="min-width: 250px;border-right:1px solid #aaa">
+        <div class="shoe">
+            <div class="dp_flex just-sp-el">
+                <div class="">
+                    <img class="border-radius" style="border: 1px solid #000;" src="{{person[0]['cover_image']}}" width="50px" height="50px">
+                </div>
+                <div class="dp_flex flex_column">
+                    <div class="ps_textshow pd_l_10">{{session['name']}}</div>
+                    <div class="pd_l_10">
+                        <p class="st_textshow">Account setting</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="position_absolute dp_none menuicon">
+                <a href="javascript:void(0);" class="icon1" onclick="display('menu_bar')">
+                    <i class="fa fa-bars"></i>
+                </a>
+                
+            </div>
+            <hr/>
+            <div class="filter_check" id="menu_bar">
+                <div>
+                    <div class="head_title_ps pd_l_10">Manage Account</div>
+                    <div class="st_textshow" style="font-size: 18px;">
+                        <ul>
+                            <li class="active1">
+                                <a href="/personal_infor"><i class="fas fa-file"></i>Personal Information</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa-file"></i>Social Network</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <div class="head_title_ps pd_l_10">Manage Order</div>
+                    <div class="st_textshow" style="font-size: 18px;">
+                        <ul>
+                            <li>
+                                <a href="/history_order"><i class="fas fa-file"></i>History Order</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa-file"></i>Address Ship</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-8" style="float: right;">
+        <div class="dp_flex flex_column margin">
+            <div style="margin: 20px 0;">
+                <h4 class="active1">Notification</h4>
+                <hr/>
+                <div>
+                    Hello {{session['name']}} You haven't message !
+                </div>
+            </div>
+            <div>
+                <h4 class="active1">Personal Information</h4>
+                <hr/>
+            </div>
+            
+            <hr/>
+            <div class="dp_flex just-sp-el margin">
+                <div class="position_relative">
+                    <img class="border-radius input_ps" src="{{person[0]['cover_image']}}" width="100px" height="100px">
+                    <p class="change" style="color: white;background-color: black;" onclick="display('image_box')">Change</p>
+                </div>
+                <div class="sub_page" id="image_box" style="display: none;">
+                    <div class="sub_content_page" style="height: 400px;">
+                        <div id="" class="close" style="display: block;" onclick="display('image_box')"></div>
+                        <div>
+                            <div class="a margin"><h3>Choose Image Profile</h3></div>
+                            <form action="/personal_infor/upload_image" method="POST" enctype="multipart/form-data">
+                                <div class="image_chose position_relative">
+                                    
+                                    <input type=file id="img" name="image" accept="image/*" required>
+                                    
+                                    <img id="blah" src="#" class="upload_img" alt="your image" />
+                                    <button class="position_absolute button_upload" type="submit">Change Image Cover</button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <form action="/update_person_infor" method="POST">
+                    <div class="margin">
+                        
+                        <div>
+                            <div class="person_input dp_flex">
+                                <div class="lb_title">
+                                    <div>Email</div>
+                                </div>
+                                <div class="value_ip">
+                                    <div id="email" class="" style="background-color: #dddddd; width: 90%;padding-left: 15px;"> {{person[0]['email']}}</div>
+                                    <!-- <input id class="title hide" type="text" name="email" value="{{person[0]['email']}}" required> -->
+                                </div>
+                            </div>
+                            <div class="person_input dp_flex">
+                                <div class="lb_title">
+                                    <div class>Username</div>
+                                </div>
+                                <div class="value_ip">
+                                    <!-- <div id="username" onclick="show_input(this.id)" class="input ">{{person[0]['username']}}</div> -->
+                                    <input id="username_input" class="input margin " type="text" name="username" value="{{person[0]['username']}}" required>
+                                </div>
+                            </div>
+                            <div class="person_input dp_flex">
+                                <div class="lb_title">
+                                    <div>Phone Number</div>
+                                </div>
+                                <div class="value_ip">
+                                    <!-- <div id="phone_number" onclick="show_input(this.id)" class="input "> {{person[0]['phone_number']}}</div> -->
+                                    <input id="phone_number_input" class="input margin " type="text" name="phone_number" value="{{person[0]['phone_number']}}" required>
+                                    {% if error %}
+                                    <div>Phone number isn't legal, Please rewrite !</div>
+                                    {% endif%}
+                                </div>
+                            </div>
+                            <div class="person_input dp_flex">
+                                <div class="lb_title">
+                                    <div>Address</div>
+                                </div>
+                                <div class="value_ip">
+                                    <!-- <div id="address" onclick="show_input(this.id)" class="input">{{person[0]['address']}}</div> -->
+                                    <input id="address_input" class="input margin " type="text" name="address" value="{{person[0]['address']}}" required>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#">Change Password</a>
+                        </div>
+                        <div class="hide">
+                            <div>
+                                <div>
+
+                                    <input id="address_input" class="input margin " type="text" name="address" value="{{person[0]['address']}}" required>
+                                    <input id="address_input" class="input margin " type="text" name="address" value="{{person[0]['address']}}" required>
+                                    <input id="address_input" class="input margin " type="text" name="address" value="{{person[0]['address']}}" required>
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="login hide">
+                            <div class="login_main">
+
+                            </div>
+                        </div>
+                        <div><button class="button"> Update</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(200)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#img").change(function() {
+    readURL(this);
+    });
+</script>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <script>
+    var messages = {{ messages | safe }};
+    for (var i=0; i<messages.length; i++) {
+        alert(messages[i]);
+    }
+    </script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}

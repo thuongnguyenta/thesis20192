@@ -1,0 +1,44 @@
+.login{
+    display :flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgba(85, 83, 83, 0.5)
+
+}
+.login_form{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin :auto;
+    background-color:  rgba(255, 255, 255, 0.7);
+    width: 400px;
+    /* text-align: center; */
+    border-radius :2%;
+    /* height: 70%; */
+    
+}
+
+.login_form_element{
+    width: 90%;
+    min-height: 46px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+	margin :10px;
+}
+
+.form{
+    padding: 5px;
+}
+
+.link_login_register{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    text-align: center;
+}
+.link_login_register a{
+    color :grey;
+    font-size: 20px;
+    text-decoration: none;
+}

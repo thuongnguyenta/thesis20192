@@ -1,0 +1,285 @@
+<div class="bg-image full ">
+    <div class="dp_flex flex bg_color_ddd topbanner" style="font-size: 13px;">
+        <div class="pd_40">
+            <div>Nike Distribution System</div>
+        </div>
+        <div class="dp_flex flex pd_40">
+            <div class="pd_l_20">
+                <a  href="#infor">
+                Information
+                </a>
+            </div >
+            <div class="pd_l_20">
+                <a href="#contact"> About</a>
+               
+            </div>
+        </div>
+
+    </div>
+    <div class="flex dp_flex position_relative ">
+        <div class="" style="margin-left:80px;">
+            <!-- <img src="/static/image/desktop-top-banner-womens.jpg"> -->
+            <a href="/index">
+            <img src="/static/icon/nike_swoosh_logo_black.png" height="100px" width="auto">
+            </a>
+        </div>
+        <div class="dp_flex flex position_absolute hide_catalog select_catalog" style="font-size: 20px;">
+            <div class="pd_l_20">
+                Man
+            </div>
+            <div class="pd_l_20">Woman</div>
+        </div>
+        <div>
+            {% if session %}
+            <div class="dp_flex position_relative person">
+                <div class="iconimage" onclick="display('person_in4')">
+                    {% if session['cover_image'] %}
+                    <img src="{{session['cover_image']}}" width="50px" height="50px">
+                    {% else %}
+                    <img src="/static/image/people/tiep.jpg" width="50px" height="50px">
+                    {% endif %}
+                </div>
+                <div class="iconlog" style="color: white;text-shadow: 1px 1px 1px #000;">
+                    {{session['name']}}
+                </div>
+                <div class="hide" id="person_in4">
+                    <div class="square"></div>
+                    <div class=" person_in4 dp_flex flex_column sp_between " >
+                        <div>
+                            <div class="dp_flex ">
+                                <div class="margin"><img src="/static/image/people/unnamed.png" width="30px" height="30px"></div>
+                                <div class="lh35"><a href="/personal_infor">Personal Information</a></div>
+                            </div>
+                            <div  class="dp_flex ">
+                                    <div class="margin"><img src="/static/image/people/Cart-1-512.png" width="30px" height="30px"></div>
+                                    <div class="lh35"><a href="/cart_detail">Cart</a></div>
+                                </div>
+                            <div  class="dp_flex ">
+                                <div class="margin"><img src="/static/image/people/order_history.png" width="30px" height="30px"></div>
+                                <div class="lh35"><a href="/history_order">History Order</a></div>
+                            </div>
+                        </div>
+                        <hr/>
+
+                        <div class="dp_flex logout">
+                                <div class="margin"><img src="/static/image/people/logout.png" width="30px" height="30px"></div>
+                                <div class="lh35"><a href="/logout">Logout</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="iconlogin person content_center" style="flex-direction: column;">
+                <div class="iconimage " style="margin: auto;">
+                    <img src="/static/image/guest.png" width="50px" height="50px">
+                </div>
+                <div class="iconlog">
+                    <label onclick="display('login_form')" style="color: white;text-shadow: 1px 1px 1px #000;">
+                        <ins >LogIn/Register</ins>
+                    </label>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if error %}
+    <div id="login_form" class="login full">
+    {% else %}
+    <div id="login_form" class="login full hide">
+    {% endif %}
+        <div class="login_main">
+            <form action="/login" method="POST">
+                <legend class="login_form">
+                    <div class="element margin">
+                        <div>
+                            <h3>Login Form</h3>
+                        </div>
+                        <div class="close" onclick="display('login_form')" style="display: block;"></div>
+                        
+                    </div>
+                    <div class="center">
+                        <div class="element margin">
+                            <h5>Email:</h5>
+                        </div>
+                        <div class="element margin">
+                            <input class="input margin" type="text" name="email" placeholder="Email address" value="{{request.form.email}}" required/>
+                        </div>
+                        <div class="element margin">
+                            <h5>Password:</h5>
+                        </div>
+                        <div class="element margin">
+                            <input class="input" type="password" name="password" placeholder="Password" value="{{request.form.password}}" required />
+                        </div>
+                        <div class="element margin alert">
+                            {% if error %}
+                            Email or Password is incorrect !
+                            {% endif %}
+                        </div>
+                        <div class="element margin content_center">
+                            <button class="button" type="submit"> Login </button>
+                            <p class="font14" onclick="" style="cursor: pointer;"><label class="opacity">Not a member?</label><ins onclick="show_register()">Register</ins></p>
+                        </div>
+                    </div>
+                </legend>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="register" class="login hide full">
+        <div class="login_main">
+            <form id="register_form" action="/register" onsubmit="return ValidateEmail(document.register_form.email) && validate(); " name="register_form" method="POST">
+                <legend class="login_form">
+                    <div class="element margin">
+                        <div>
+                            <h3>Register</h3>
+                        </div>
+                        <div class="close" onclick="display('register')" style="display: block;"></div>
+                        
+                    </div>
+                    <div class="center">
+                        <!-- <div class="element margin">
+                            <h5>Email:</h5>
+                        </div> -->
+                        <div class="element margin20">
+                            <input class="input margin" id="email" type="text" name="email" onkeyup="ValidateEmail(document.register_form.email)" placeholder="Email address" value="{{request.form.email}}" required/>
+                            <div id="error_email" class="position_absolute alert">
+                            
+                            </div>
+                            <div id="email_check" class="position_absolute alert" >
+                            
+                            </div>
+                        </div>
+                        <!-- <div class="element margin">
+                            <h5>Password:</h5>
+                        </div> -->
+                        <div class="element margin20 ">
+                            <input class="input" type="password" id="password" name="password" placeholder="Password" value="{{request.form.password}}" required />
+                        </div>
+                        <!-- <div class="element margin">
+                            <h5>Comfirm Password:</h5>
+                        </div> -->
+                        <div class="element margin20 login_form">
+                            <input class="input" type="password" onkeyup="validate()" id="cf_password" name="cf_password" placeholder="Confirm Password"  value="{{request.form.cf_password}}" required />
+                            <div id="error_ps" class="position_absolute alert">
+                            
+                            </div>
+                            
+
+                        </div>
+                        
+                        
+                        <!-- <div class="element margin">
+                            <h5>User Name:</h5>
+                        </div> -->
+                        <div class="element margin20">
+                            <input class="input margin" type="text" name="user_name" value="{{request.form.user_name}}" placeholder="User name" required/>
+                        </div>
+                        <!-- <div class="element margin">
+                            <h5>Email:</h5>
+                        </div> -->
+                        <div class="element margin20">
+                            <input class="input margin" id="phone_number" type="text" name="phone_number" value="{{request.form.phone_number}}" pattern="[0]{1}[0-9]{9}" placeholder="Phone number( 10 digits): 0987654321" required/>
+                        </div>
+                        <div class="element margin20">
+                            <input class="input margin" type="text" name="address" placeholder="Address" value="{{request.form.address}}" required/>
+                        </div>
+                        <div class="element margin20 content_center">
+                            <button id="register_bt" class="button" type="submit" disabled> Register </button>
+                            <p class="font14" onclick="" style="cursor: pointer;"><label class="opacity">Already member?</label><ins onclick="show_login()">Login</ins></p>
+                        </div>
+                    </div>
+                </legend>
+            </form>
+        </div>
+    </div>
+</div>
+<hr style="border-top: 0px solid #aaa;">
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#email").on('input', function(e) {
+            $('#email_check').hide();
+            
+            if ($('#email').val() == null || $('#email').val() =="") {
+                // $('#email_check').show();
+                // $("#email_check").html("Email is required field.").css("color", "red");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:5000/user_check",
+                    data: $('#register_form').serialize(),
+                    dataType: "html",
+                    cache: false,
+                    success: function(msg) {
+                        
+                        // abv=$("#email_check").html(content);
+                        // alert(typeof(msg));
+                        // alert(null);
+                        // alert(msg==undefined );
+                        // var compare = String(msg).localeCompare("OK");
+                        temp=msg.substr(1, 2);
+                        // alert(temp);
+                        // alert(msg+" "+compare+" "+typeof(compare)+typeof(msg)+ " ");
+                        if(temp=="OK"){
+                            $("#register_bt").prop('disabled', false);
+                            
+                        
+                        }
+                        else {
+                            $('#email_check').show();
+                            $("#email_check").html(msg);
+                            $("#register_bt").prop('disabled', true);
+                        }
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#email_check').show();
+                        $("#email_check").html(textStatus + errorThrown);
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    function validate(){
+
+        var a = document.getElementById("password").value;
+        var b = document.getElementById("cf_password").value;
+        if (a!=b) {
+        //    alert("Passwords do no match");
+            document.getElementById("error_ps").innerHTML="Passwords do no match !"
+           return false;
+        }
+        else{
+            document.getElementById("error_ps").innerHTML=""
+            return true;
+            
+        }
+    }
+
+
+    // function ValidatePhone(){
+    //     var phone_number =document.getElementById("phone_number").value;
+    //     if
+    // }
+
+    function ValidateEmail(inputText)
+    {
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(inputText.value.match(mailformat))
+    {
+        document.getElementById("error_email").innerHTML=""
+    document.register_form.email.focus();
+    
+    return true;
+    }
+    else
+    {
+    document.getElementById("error_email").innerHTML="Invalid email !";
+    document.register_form.email.focus();
+    return false;
+    }
+    }
+ </script>

@@ -1,0 +1,232 @@
+{% extends "template.html" %}
+{% block header%}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<script>
+$(document).ready(function(){
+            $("input[type=radio]").change(function(){
+                // if ($('input:radio:checked').length) {
+                // $('.image_element').hide();
+                // $('input:radio:checked').each(function(){
+                        // alert("12");
+
+                        // hình như không có tác dụng
+                        // $('.shoe_item['+$(this).prop('name') +'*="'+$(this).val()+'"]' ).show();
+                        // alert($(this).prop('name'));
+                    
+                // });
+                // }
+                // else{
+                //     $(".shoe_item").show();
+                // }
+                var col= $('input[name="color"]:checked').prop('value');
+                $('.image_element').hide();
+                $('input[name="color"]:checked').each(function(){
+                    // alert($(this).val());
+                    $('.image_element[color="'+$(this).val()+'"]').show();
+                });
+            });
+
+
+            // alert("3");
+            $("input:radio[name=color]:first").attr('checked', true);
+            $("input:radio[name=size]:first").attr('checked', true);
+        });
+    
+
+
+</script>
+    <div><a href="/index"><h4>/Index</h4></a><a href=""><h4></h4></a></div>
+    <div class="" style="width: 90%;margin: auto;margin-top:20px"   >
+        <div class="col-2 col-s-12">
+            <div class="dp_flex flex-wrap">
+                    {% for shoe_element in shoe_detail %}
+                    {% if shoe_element['id_shoes_color']== shoe_detail[0]['id_shoes_color'] %}
+                        <div color="{{shoe_element['id_shoes_color']}}" class="image_element margin" style="margin:20px;">
+                            <img id="{{shoe}}" color="{{shoe_element['color']}}" title="/static/image/shoes_image/{{shoe_element['image']}}" src="/static/image/shoes_image/{{shoe_element['image']}}" onclick="change_image('main_image',this.title)" width="75px" height="75px">
+                        </div>
+                    {% else %}
+                        <div color="{{shoe_element['id_shoes_color']}}" class="image_element hide margin" style="margin:20px;">
+                            <img id="{{shoe}}" color="{{shoe_element['color']}}" title="/static/image/shoes_image/{{shoe_element['image']}}" src="/static/image/shoes_image/{{shoe_element['image']}}" onclick="change_image('main_image',this.title)" width="75px" height="75px">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-7 col-s-12">
+            <div class="image margin">
+                <img id="main_image" src="/static/image/shoes_image/{{shoe_detail[0]['image']}}" width="90%" height="auto">
+            </div>
+            <div class="margin"><h4>{{shoe_detail[0]['describe']}}</h4></div>
+        </div>
+        <div class="col-3 col-s-12">
+        
+            <div class="margin"><h3>{{shoe_detail[0]['shoes_name']}}</h3></div>
+            <div class="margin">{{shoe_detail[0]['price']}}<ins>đ</ins></div>
+            <div class="margin">
+                <form action="/add_to_cart" method="POST" class="radio-toolbar">
+                    <div id="#radiobt" class="margin">
+                    {% for c in color %}
+                        <input type="radio" id="{{c['color']}}" name="color" value="{{c['id_shoes_color']}}" >
+                        <label for="{{c['color']}}"> 
+                            <img title="/static/image/shoes_image/{{c['image']}}" src="/static/image/shoes_image/{{c['image']}}" width="40px" height="40px" onclick="change_image('main_image',this.title)">
+                        </label>
+                    {% endfor %}
+                    </div>
+                    <div class="margin">
+                        <div class="dp_flex flex">
+                            <div><h4>Size</h4></div>
+                            <div onclick=""><h4><ins>Size Guide</h4></div>
+                        </div>
+                        {% for i in range(36,45) %}
+                        <input id="{{i}}" value="{{i}}" class="size" type="radio" name="size" required>
+                        <label class="m" for={{i}}><strong>{{i}}</strong></label>
+                        {% endfor %}
+                    </div>
+                    <div class="margin">
+                        
+                        <input class="quantity" type="number" name="quantity" min="1" max="10" value="1"> 
+                    </div>
+                    <div >
+                        <button class="button content_center" type="submit">Add to Cart</button>
+                    </div>
+                </form>
+            </div>
+            <br/>
+            <hr/>
+            <div class="review">
+                <div class="overview">
+                    {% if comment %}
+                        <div class="dp_flex flex">
+                            <div><h3>Review({{star[0]['numb']}})</h3>
+                            </div>
+                            <div>
+                                <div class="results">
+                                    <div class="results-content">
+                                      <span class="stars">{{star[0]['St']}}</span> 
+                                    </div>
+                                </div>
+                                <!-- <div>{{star[0]['St']}}</div> -->
+                                <div class="text_right" id="show"><strong>Show</strong></div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div>
+                            <h3>No Rating</h3>
+                        </div>
+                    {% endif %}
+
+                </div>
+                <div class="detail_review max_height450" id="content_comment">
+                    {% for rv in comment %}
+                        <hr/>
+                        <div class="margin">
+                            <div class="dp_flex flex">
+                                <div>
+                                   <h4>{{rv['username']}}</h4>
+                                   <div class="" style="color:#aaa">{{rv['time_review'].time()}} {{rv['time_review'].date()}}</div>
+                                </div>
+                                <div>
+                                        {% for i in range(0,rv['star'])%}
+                                        <span class="fa fa-star checked"></span>
+                                        {% endfor %}
+                                        {% for i in range(rv['star'],5)%}
+                                        <span class="fa fa-star"></span>
+                                        {% endfor %}
+                                </div>
+                            </div>
+                            <div>
+                                {{rv['comments']}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-12">
+        <hr/>
+        <div class="shoe" style="width: 60%;margin:auto;">
+            <form action="/shoes_detail/comment/{{shoe_detail[0]['id_shoes']}}" method="POST" id="comment_form">
+                
+                <div><h3>Review Product</h3></div>
+                <br/>
+                <div class="margin">
+                <label class="position_absolute"><h4>Star:</h4></label>
+                <div  class="rate position_absolute comment">
+                    <input type="radio" id="star5" name="rate" value="5" checked="check"/>
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" />
+                    <label for="star1" title="text">1 star</label>
+                </div>
+                </div>
+                <br/>
+                <div  class="margin">
+                <label><h4>Review:</h4></label>
+                <textarea rows="4" cols="50" name="comment" form="comment_form" placeholder="Write your comment" required>
+                    </textarea>
+                </div>
+                <br/>
+                <button type="submit" value="">Send</button>
+        
+
+            </form>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+            var messages = {{ messages | safe }};
+            for (var i=0; i<messages.length; i++) {
+                alert(messages[i]);
+            }
+            </script>
+        {% endif %}
+        {% endwith %}
+    </div>
+<script>
+    $.fn.stars = function() { 
+  return this.each(function() {
+    // Get the value
+    var val = parseFloat($(this).html()); 
+    // Make sure that the value is in 0 - 5 range, multiply to get width
+    var size = Math.max(0, (Math.min(5, val))) * 36.5; 
+    // Create stars holder
+    var $span = $('<span> </span>').width(size); 
+    // Replace the numerical value with stars
+    $(this).empty().append($span);
+  });
+}
+
+$(function() {
+  console.log("Calling stars()");
+  $('.results-content span.stars').stars();
+});
+
+    $(document).ready(function(){
+        $("#show").click(function(){
+            $("#content_comment").slideToggle("slow");
+            if($("#show").text=="Show"){
+                $("#show").html("<strong>Hide</strong>");
+            }
+            else{
+                $("#show").html("<strong>Show</strong>");
+            }
+            });
+    })
+</script>
+{% endblock %}
+ 
+{% block footer %}
+{% include 'footer.html' %}
+{% endblock %}

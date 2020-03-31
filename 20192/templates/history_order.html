@@ -1,0 +1,307 @@
+{% extends "template.html" %}
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<script>
+    
+</script>
+<div class=" ">
+    <div class="link_title">
+        <p><a href="/index">Index</a>/<a href="/history_order">History_Order</a></p>
+    </div>
+    <div class="col-3" style="min-width: 250px;border-right:1px solid #aaa">
+        <div class="shoe">
+            <div class="dp_flex">
+                <div class="">
+                    <img class="border-radius" style="border: 1px solid #000;" src="/static/image/people/tiep.jpg" width="50px" height="50px">
+                </div>
+                <div class="dp_flex flex_column">
+                    <div class="ps_textshow pd_l_10">{{session['name']}}</div>
+                    <div class="pd_l_10">
+                        <p class="st_textshow">Account setting</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="position_absolute dp_none menuicon">
+                <a href="javascript:void(0);" class="icon1" onclick="display('menu_bar')">
+                    <i class="fa fa-bars"></i>
+                </a>
+                
+            </div>
+            <hr/>
+            <div class="filter_check" id="menu_bar">
+                <div>
+                    <div class="head_title_ps pd_l_10">Manage Account</div>
+                    <div class="st_textshow" style="font-size: 18px;">
+                        <ul>
+                            <li>
+                                <a href="/personal_infor"><i class="fas fa-file"></i>Personal Information</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa-file"></i>Social Network</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <div class="head_title_ps pd_l_10">Manage Order</div>
+                    <div class="st_textshow" style="font-size: 18px;">
+                        <ul>
+                            <li class="active1">
+                                <a href="/history_order"><i class="fas fa-file"></i>History Order</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa-file"></i>Address Ship</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="col-8">
+        <div>
+            <h4 class="active1">History Order</h4>
+        </div>
+        <hr/>
+        <div class="width100">
+        <input type="text" id="myInput" onkeyup="filter_table()" placeholder="Search for id order...">
+        </div>
+        <div>
+            <div>
+                
+            {% if order_history %}
+            <!-- <p><button onclick="sortTable()">Sort</button></p> -->
+            <div style="    margin-left: 10%;
+            margin-bottom: 30px;">
+                <p><h3>Option Order Sort:</h3></p>
+                <select id="sort" style="padding: 10px;">
+                <option value="timel">Time(Older-Newer)</option>
+                <option value="timeh" >Time(Newer-Older)</option>
+                <option value="pricel">Price(Low-Hight)</option>
+                <option value="priceh">Price(Hight-Low)</option>
+                
+              </select></div>
+                <table id="table" style="width: 95%;">
+                    <tr>
+                        <th onclick="sortTable(0)">Order Identify<div class="icon_sh">
+                            <i class="fa fa-angle-down rotate-icon"></i>
+                        </div></th>
+                        <th onclick="sortTable(1)">Quantity Order<div class="icon_sh">
+                            <i class="fa fa-angle-down rotate-icon"></i>
+                        </div></th>
+                        <th onclick="sortTable(2)">Total Price<div class="icon_sh">
+                            <i class="fa fa-angle-down rotate-icon"></i>
+                        </div></th>
+                        <th onclick="sortTable(3)">Status</th>
+                        <th></th>
+                    </tr>
+                {% for order in order_history %}
+                    <tr>
+                        <td>{{order['id_order']}}( <label>{{order['time_order'].strftime("%Y,%b-%d %H:%M:%S")}}</label>)</td>
+                        <td>{{order['order_quantity']}}</td>
+                        <td>{{order['total_price']}}<ins>đ</ins></td>
+                        <td>{{order['status']}}</td>
+                        <td id="{{order['id_order']}}" class="pointer" onclick="show_detail(this.id)">View detail</td>
+                    </tr>
+                
+
+                    
+                {% endfor %}
+                </table>  
+            </div>
+            <div>
+                {% for order in order_history %}
+                    <div class=" sub_page hide" id="{{order['id_order']}}_3">
+                        <div class="sub_content_page">
+                            <div id="{{order['id_order']}}" class="close" style="display: block;" onclick="show_detail(this.id)"></div>
+                            <div class="detail_content_element">
+                                {% for detail in details %}
+                                <div class="">
+                                    
+                                    {% if detail['id_order']==order['id_order'] %}
+                                    <div class="margin">
+                                        
+                                        <div class="dp_flex">
+                                            <div>
+                                                <img src="static/image/shoes_image/{{detail['image']}}" width="75px" height="75px">
+                                                
+                                            </div>
+                                            <div class="pd_l_10 width100">
+                                                <div class="dt_shoes_name">{{detail['shoes_name']}}</div>
+                                                <div class="dt_other"><label>Size: </label>{{detail['order_size']}}</div>
+                                                <div class="dt_other"><label>Quantity: </label>{{detail['order_detail_quantity']}}</div>
+                                                <div class="dt_other"><label>Price: </label>{{detail['price_per_order']}}<ins>đ</ins></div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                        <hr/>
+                                        
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="time_order">
+                                <div style="font-weight: 600;">Time Order( yy-mm-dd hh:mm:ss) :</div>
+                                <div class="margin">{{order['time_order'].strftime("%Y,%B-%d %H:%M:%S")}}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div>
+                You have not order yet !
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+        var messages = {{ messages | safe }};
+        for (var i=0; i<messages.length; i++) {
+            alert(messages[i]);
+        }
+        </script>
+    {% endif %}
+    {% endwith %}
+
+
+
+
+    <script>
+        function filter_table() {
+            // alert("1");
+            var input, filter, table,tr, td,  i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("table");
+            tr = table.getElementsByTagName("tr");
+            // td=tr.getElementsByTagName("td");
+            // alert(table,tr);
+            for (i = 0; i < tr.length; i++) {
+                
+                td=tr[i].getElementsByTagName("td")[0];
+                if (td){
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+        // function sortTable() {
+        // var table, rows, switching, i, x, y, shouldSwitch;
+        // table = document.getElementById("table");
+        // switching = true;
+        // /*Make a loop that will continue until
+        // no switching has been done:*/
+        // while (switching) {
+        //     //start by saying: no switching is done:
+        //     switching = false;
+        //     rows = table.rows;
+        //     /*Loop through all table rows (except the
+        //     first, which contains table headers):*/
+        //     for (i = 1; i < (rows.length - 1); i++) {
+        //     //start by saying there should be no switching:
+        //     shouldSwitch = false;
+        //     /*Get the two elements you want to compare,
+        //     one from current row and one from the next:*/
+        //     x = rows[i].getElementsByTagName("TD")[0];
+        //     y = rows[i + 1].getElementsByTagName("TD")[0];
+        //     //check if the two rows should switch place:
+        //     if (parseInt(x.innerHTML.toLowerCase()) < parseInt(y.innerHTML.toLowerCase())) {
+        //         //if so, mark as a switch and break the loop:
+        //         shouldSwitch = true;
+        //         break;
+        //     }
+        //     }
+        //     if (shouldSwitch) {
+        //     /*If a switch has been marked, make the switch
+        //     and mark that a switch has been done:*/
+        //     rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        //     switching = true;
+        //     }
+        // }
+        // }
+        function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc"; 
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+            //start by saying there should be no switching:
+            shouldSwitch = false;
+            /*Get the two elements you want to compare,
+            one from current row and one from the next:*/
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            /*check if the two rows should switch place,
+            based on the direction, asc or desc:*/
+            if (dir == "asc") {
+                if (parseInt(x.innerHTML.toLowerCase()) > parseInt(y.innerHTML.toLowerCase())) {
+                //if so, mark as a switch and break the loop:
+                shouldSwitch= true;
+                break;
+                }
+            } else if (dir == "desc") {
+                if (parseInt(x.innerHTML.toLowerCase()) < parseInt(y.innerHTML.toLowerCase())) {
+                //if so, mark as a switch and break the loop:
+                shouldSwitch = true;
+                break;
+                }
+            }
+            }
+            if (shouldSwitch) {
+            /*If a switch has been marked, make the switch
+            and mark that a switch has been done:*/
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            //Each time a switch is done, increase this count by 1:
+            switchcount ++;      
+            } else {
+            /*If no switching has been done AND the direction is "asc",
+            set the direction to "desc" and run the while loop again.*/
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+            }
+        }
+        }
+</script>
+        </script>
+</div>
+{% endblock %}
+
+
+
+{% block footer %}
+{% include "footer.html" %}
+{% endblock %}
