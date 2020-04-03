@@ -101,16 +101,16 @@
                         <a href="/profile" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i>Profile</a>
                     </li>
                     <li>
-                        <a href="/product" class="waves-effect"><i class="fa fa-table fa-fw" aria-hidden="true"></i>Basic Table</a>
+                        <a href="/product" class="waves-effect"><i class="fa fa-table fa-fw" aria-hidden="true"></i>Product</a>
                     </li>
                     <li>
-                        <a href="fontawesome.html" class="waves-effect"><i class="fa fa-font fa-fw" aria-hidden="true"></i>Icons</a>
+                        <a href="/customer" class="waves-effect"><i class="fa fa-group fa-fw" aria-hidden="true"></i>Customer</a>
                     </li>
                     <li>
                         <a href="map-google.html" class="waves-effect"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>Google Map</a>
                     </li>
                     <li>
-                        <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw" aria-hidden="true"></i>Blank Page</a>
+                        <a href="/order" class="waves-effect"><i class="fa fa-columns fa-fw" aria-hidden="true"></i>Order</a>
                     </li>
                     <li>
                         <a href="404.html" class="waves-effect"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>Error 404</a>
@@ -172,12 +172,12 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 col-xs-12">
                         <div class="white-box analytics-info">
-                            <h3 class="box-title">Member</h3>
+                            <h3 class="box-title">Income in Payment Process</h3>
                             <ul class="list-inline two-part">
                                 <li>
                                     <div id="sparklinedash3"></div>
                                 </li>
-                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">{{number_user}}</span></li>
+                                <li class="text-right"><i class="ti-arrow-up text-info"></i> <span class="counter text-info">{{user_income}}</span><ins>đ</ins></li>
                             </ul>
                         </div>
                     </div>
@@ -189,15 +189,9 @@
                     <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                         <div class="white-box">
                             <h3 class="box-title">Products Yearly Sales</h3>
-                            <ul class="list-inline text-right">
-                                <li>
-                                    <h5><i class="fa fa-circle m-r-5 text-info"></i>Mac</h5> </li>
-                                <li>
-                                    <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Windows</h5> </li>
-                            </ul>
                             <div class="col-md-3 col-sm-4 col-xs-6 pull-right ">
                                 
-                                <select class="form-control pull-right row b-none" id="chart_year">
+                                <select class="form-control pull-right row b-none" id="combochart_year">
                                     <option>2017</option>
                                     <option>2018</option>
                                     <option>2019</option>
@@ -205,12 +199,20 @@
                                     
                                 </select>
                             </div>
-                            <div id="{{combo_chart}}" onclick="alert(combo_chart)">{{combo_chart}}</div>
+                            <ul class="list-inline text-right">
+                                <li>
+                                    <h5><i class="fa fa-circle m-r-5 text-info"></i>Mac</h5> </li>
+                                <li>
+                                    <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Windows</h5> </li>
+                            </ul>
+                            
+                            <!-- <div id="{{combo_chart}}" onclick="alert(combo_chart)">{{combo_chart}}</div> -->
+                            <div id="chart" style="width:700px; height:400px; margin:auto;"></div> 
                             <!-- <div id="ct-visits" style="height: 405px;"></div> -->
-                            <div id="chart_div" style="width: 1000px; height: 500px;"></div>
+                            <!-- <div id="chart_div" style="width: 1000px; height: 500px;"></div> -->
                             
                              <!-- <canvas id="canvas" height="450" width="600"></canvas> -->
-                             <div id="piechart"></div>
+                             
                         </div>
                     </div>
                 </div>
@@ -221,21 +223,21 @@
                     <div class="col-md-12 col-lg-12 col-sm-12">
                         <div class="white-box">
                             <div class="col-md-3 col-sm-4 col-xs-6 pull-right dp_flex">
-                                <select class="form-control pull-right row b-none" style="margin-right:20px;" id="month">
-                                    <option>January</option>
+                                <select class="form-control pull-right row b-none" style="margin-right:20px;" name="month" id="month">
+                                    <option value="1">January</option>
                                     <option value="2">February</option>
-                                    <option value="3" selected>March</option>
-                                    <option>April</option>
-                                    <option>May</option>
-                                    <option>June</option>
-                                    <option>July</option>
-                                    <option>August</option>
-                                    <option>September</option>
-                                    <option>October</option>
-                                    <option>November</option>
-                                    <option>December</option>
+                                    <option value="3" >March</option>
+                                    <option value="4" selected>April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>>
                                 </select>
-                                <select class="form-control pull-right row b-none" id="year">
+                                <select class="form-control pull-right row b-none" name="year" id="year">
                                     <option>2017</option>
                                     <option>2018</option>
                                     <option>2019</option>
@@ -243,7 +245,8 @@
                                     
                                 </select>
                             </div>
-                            <h3 class="box-title">Recent sales</h3>
+                            <div id="piechart" style="padding: 50px 0 0 0;width: fit-content;margin: auto;"></div>
+                            <h3 class="box-title">Recent Sell:</h3>
                             <div class="table-responsive">
                                 
                                 <table class="table">
@@ -266,48 +269,37 @@
                                             <td><span class="text-success">{{pr['price']}}<ins>đ</ins></span></td>
                                         </tr>
                                         {% endfor %}
-                                        <!-- <tr>
-                                            <td>2</td>
-                                            <td class="txt-oflo">Real Homes WP Theme</td>
-                                            <td>EXTENDED</td>
-                                            <td class="txt-oflo">April 19, 2017</td>
-                                            <td><span class="text-info">$1250</span></td>
-                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h3 class="box-title">Product Hasn't Purchar:</h3>
+                            <div class="table-responsive">
+                                
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td>3</td>
-                                            <td class="txt-oflo">Ample Admin</td>
-                                            <td>EXTENDED</td>
-                                            <td class="txt-oflo">April 19, 2017</td>
-                                            <td><span class="text-info">$1250</span></td>
+                                            <th>#</th>
+                                            <th>Product</th>
+                                            <th>Status</th>
+                                            <th>Shoes Type</th>
+                                            <th>Feature </th>
+                                            <th>Price</th>
                                         </tr>
+                                    </thead>
+                                    <tbody id="body_product_not">
+                                        {% for temp in shoes_remain %}
                                         <tr>
-                                            <td>4</td>
-                                            <td class="txt-oflo">Medical Pro WP Theme</td>
-                                            <td>TAX</td>
-                                            <td class="txt-oflo">April 20, 2017</td>
-                                            <td><span class="text-danger">-$24</span></td>
+                                            <td>{{temp['id_shoes']}}</td>
+                                            <td class="txt-oflo">{{temp['shoes_name']}}</td>
+                                            <td>{% if temp['sale'] %}Sale: {{temp['sale']}}% {% else %} Avaiable {% endif %}</td>
+                                            <td class="txt-oflo">{{temp['shoes_type']}}</td>
+                                            <td>{{temp['feature']}}</td>
+                                            <td><span class="text-success">{{temp['price']}}<ins>đ</ins></span></td>
                                         </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td class="txt-oflo">Hosting press html</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 21, 2017</td>
-                                            <td><span class="text-success">$24</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td class="txt-oflo">Digital Agency PSD</td>
-                                            <td>SALE</td>
-                                            <td class="txt-oflo">April 23, 2017</td>
-                                            <td><span class="text-danger">-$14</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td class="txt-oflo">Helping Hands WP Theme</td>
-                                            <td>MEMBER</td>
-                                            <td class="txt-oflo">April 22, 2017</td>
-                                            <td><span class="text-success">$64</span></td>
-                                        </tr> -->
+                                        {% endfor %}
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -322,31 +314,29 @@
                     <div class="col-md-12 col-lg-8 col-sm-12">
                         <div class="white-box">
                             <h3 class="box-title">Recent Comments</h3>
-                            <div class="comment-center p-t-10">
-                                <div class="comment-body">
-                                    <div class="user-img"> <img src="../plugins/images/users/pawandeep.jpg" alt="user" class="img-circle">
+                            <div class="comment-center p-t-10" id="comment_10">
+                                {% for cm in comment %}
+                                <div class="comment-body" id="comment-body-{{cm['id_comment']}}">
+                                    <div class="user-img"> <img src="..{{cm['cover_image']}}"  alt="user" class="img-circle" style="border: 1px solid;width:50px; height:50px;">
                                     </div>
                                     <div class="mail-contnet">
-                                        <h5>Pavan kumar</h5><span class="time">10:20 AM   20  may 2016</span>
-                                        <br/><span class="mail-desc">Donec ac condimentum massa. Etiam pellentesque pretium lacus. Phasellus ultricies dictum suscipit. Aenean commodo dui pellentesque molestie feugiat. Aenean commodo dui pellentesque molestie feugiat</span> <a href="javacript:void(0)" class="btn btn btn-rounded btn-default btn-outline m-r-5"><i class="ti-check text-success m-r-5"></i>Approve</a><a href="javacript:void(0)" class="btn-rounded btn btn-default btn-outline"><i class="ti-close text-danger m-r-5"></i> Reject</a>
+                                        <h5>{{cm['username']}}</h5><span class="time">{{cm['time_review'].strftime("%H:%M %d,%B %Y")}}</span>
+                                        <br/><span class="mail-desc" >{{cm['comments']}}</span> <div id="comment_{{cm['id_comment']}}" class="btn btn btn-rounded btn-default btn-outline m-r-5 approve"><i class="ti-check text-success m-r-5"></i>Approve</div><div href="javacript:void(0)" class="btn-rounded btn btn-default btn-outline"><i class="ti-close text-danger m-r-5"></i> Reject</div>
                                     </div>
+                                    <div class="name_product">
+                                        {{cm['shoes_name']}}
+                                    </div>
+                                    <div class="star" id="{{cm['star']}}">
+                                        {% for i in range(0,cm['star'])%}
+                                        <span class="fa fa-star checked_star"></span>
+                                        {% endfor %}
+                                        {% for i in range(cm['star'],5)%}
+                                        <span class="fa fa-star uncheck_star"></span>
+                                        {% endfor %}
                                 </div>
-                                <div class="comment-body">
-                                    <div class="user-img"> <img src="../plugins/images/users/sonu.jpg" alt="user" class="img-circle">
-                                    </div>
-                                    <div class="mail-contnet">
-                                        <h5>Sonu Nigam</h5><span class="time">10:20 AM   20  may 2016</span>
-                                        <br/><span class="mail-desc">Donec ac condimentum massa. Etiam pellentesque pretium lacus. Phasellus ultricies dictum suscipit. Aenean commodo dui pellentesque molestie feugiat. Aenean commodo dui pellentesque molestie feugiat</span>
-                                    </div>
                                 </div>
-                                <div class="comment-body b-none">
-                                    <div class="user-img"> <img src="../plugins/images/users/arijit.jpg" alt="user" class="img-circle">
-                                    </div>
-                                    <div class="mail-contnet">
-                                        <h5>Arijit singh</h5><span class="time">10:20 AM   20  may 2016</span>
-                                        <br/><span class="mail-desc">Donec ac condimentum massa. Etiam pellentesque pretium lacus. Phasellus ultricies dictum suscipit. Aenean commodo dui pellentesque molestie feugiat. Aenean commodo dui pellentesque molestie feugiat</span>
-                                    </div>
-                                </div>
+                                {% endfor %}
+                                
                             </div>
                         </div>
                     </div>
@@ -359,55 +349,18 @@
                                     </div>
                                     <div class="panel-body">
                                         <ul class="chatonline">
+                                            {% for ac in account %}
                                             <li>
                                                 <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
+                                                    <button class="btn btn-success btn-circle btn-lg" type="button" ><i class="fa fa-phone"></i></button>
+                                                    
                                                     <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
+                                                    
                                                 </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
+                                                <a href="javascript:void(0)"><img src="..{{ac['cover_image']}}" alt="user-img" width="50px" height="50px" class="img-circle" style="width: 50px;height: 50px;"> <span>{{ac['username']}} <small class="text-success">online</small></span></a>
                                             </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/genu.jpg" alt="user-img" class="img-circle"> <span>Genelia Deshmukh <small class="text-warning">Away</small></span></a>
-                                            </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/ritesh.jpg" alt="user-img" class="img-circle"> <span>Ritesh Deshmukh <small class="text-danger">Busy</small></span></a>
-                                            </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/arijit.jpg" alt="user-img" class="img-circle"> <span>Arijit Sinh <small class="text-muted">Offline</small></span></a>
-                                            </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/govinda.jpg" alt="user-img" class="img-circle"> <span>Govinda Star <small class="text-success">online</small></span></a>
-                                            </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/hritik.jpg" alt="user-img" class="img-circle"> <span>John Abraham<small class="text-success">online</small></span></a>
-                                            </li>
-                                            <li>
-                                                <div class="call-chat">
-                                                    <button class="btn btn-success btn-circle btn-lg" type="button"><i class="fa fa-phone"></i></button>
-                                                    <button class="btn btn-info btn-circle btn-lg" type="button"><i class="fa fa-comments-o"></i></button>
-                                                </div>
-                                                <a href="javascript:void(0)"><img src="../plugins/images/users/varun.jpg" alt="user-img" class="img-circle"> <span>Varun Dhavan <small class="text-success">online</small></span></a>
-                                            </li>
+                                            {% endfor %}
+                                            
                                         </ul>
                                     </div>
                                 </div>
@@ -490,42 +443,122 @@
         // alert(data);
         // console.log(data);
         });
+/// NOT PURCHAR
+        $.ajax({
+          data: {
+            month : $("#month").val(),
+            year :$("#year").val()
+          },
+          type:"POST",
+          url : "/dashboard/product_not_purchase"
+        })
+        .done(function(data){
+        //   $("#site1").attr("href",data.site1);
+        //   $("#image1").attr("src", data.image1);
+        $("#body_product_not").html(data);
+
+        // alert(data);
+        // console.log(data);
+        });
+
+///Draw chart 
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawMonthChart);
       });
+
+      
+      
     });
+
+    
     </script>
     <script type="text/javascript">
         // Load google charts
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
         
-        // Draw the chart and set the chart values
-        function drawChart() {
-          var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work', 8],
-          ['Friends', 2],
-          ['Eat', 2],
-          ['TV', 3],
-          ['Gym', 2],
-          ['Sleep', 7]
-        ]);
-        
+        // Visualization API with the 'corechart' package.
+    // google.charts.load('visualization', { packages: ['corechart'] });
+    // google.charts.setOnLoadCallback(drawLineChart);
 
-        
+    function drawChart() {
+        $.ajax({
+            url: "/getdata_shoes",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var arrSales = [['Product Name', 'Quantity Purchase']];    // Define an array and assign columns for the chart.
 
-          // Optional; add a title and set the width and height of the chart  
-          var options = {'title':'My Average Day', 'width':400, 'height':300};
+                // Loop through each data and populate the array.
+                $.each(data, function (index, value) {
+                    arrSales.push([value.shoes_name, value.number]);
+                    // alert(arrSales);
+                });
+                var options = {'title':'Product Has Purchar', 'width':600, 'height':400};
+                var figures = google.visualization.arrayToDataTable(arrSales);
         
           // Display the chart inside the <div> element with id="piechart"  
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-          chart.draw(data, options);
+          chart.draw(figures, options);
         console.log();
         
-        }
+        },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Got an Error');
+            }
+    });
+}
+function drawMonthChart() {
+            // alert($("#month").val());
+            // alert($("#year").val());
+            var month=$("#month").val();
+            alert(month);
+          $.ajax({
+            url: "/updatedata_shoes",
+            dataType: "json",
+            type: "POST",
+            // contentType: "application/json; charset=utf-8",
+            data :{
+                'month': month,
+                'year' :$("#year").val()
+            }
+            })
+            .done( function (data) {
+                var temp=data
+                var arrShoes = [['Product Name', 'Quantity Purchase']];    // Define an array and assign columns for the chart.
+                // alert([['Product Name', 'Quantity Purchase']]);
+                // alert(data)
+                // alert(data.length);
+                // alert(arrShoes.length);
+                // Loop through each data and populate the array.
+                $.each(data, function (index, value) {
+                    // alert
+                    arrShoes.push([value.shoes_name, value.number]);
+                });
+                // $.each(temp, function(i, item) {
+                //     alert(item.shoes_name);
+                // });
+                // $.each(data, function (index, value) {
+                //     arrShoes.push([value.shoes_name, value.number]);
+                //     // alert(arrSales);
+                // });
+                var options = {'title':'Product Has Purchar', 'width':600, 'height':400};
+                var figures = google.visualization.arrayToDataTable(arrShoes);
+        
+          // Display the chart inside the <div> element with id="piechart"  
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(figures, options);
+        
+        
+        });
+        
+    }
+
        
         </script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawVisualization);
 
@@ -545,14 +578,14 @@
                 });
 
 
-    //   var data = google.visualization.arrayToDataTable([
-    //     ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-    //     ['2004/05',  165,      938,         522,             998,           450,      614.6],
-    //     ['2005/06',  135,      1120,        599,             1268,          288,      682],
-    //     ['2006/07',  157,      1167,        587,             807,           397,      623],
-    //     ['2007/08',  139,      1110,        615,             968,           215,      609.4],
-    //     ['2008/09',  136,      691,         629,             1026,          366,      569.6]
-    //   ]);
+      var data = google.visualization.arrayToDataTable([
+        ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+        ['2004/05',  165,      938,         522,             998,           450,      614.6],
+        ['2005/06',  135,      1120,        599,             1268,          288,      682],
+        ['2006/07',  157,      1167,        587,             807,           397,      623],
+        ['2007/08',  139,      1110,        615,             968,           215,      609.4],
+        ['2008/09',  136,      691,         629,             1026,          366,      569.6]
+      ]);
 
       var options = {
         title : 'Monthly Coffee Production by Country',
@@ -564,7 +597,81 @@
       var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
-  </script>
+      });
+    }
+  </script> -->
+
+  <script>
+    // Visualization API with the 'corechart' package.
+    google.charts.load('visualization', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawLineChart);
+
+    function drawLineChart() {
+        $.ajax({
+            url: "/getdata",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                var arrSales = [['Month','Total Value','Not Payment', 'Order_Quantity']];    // Define an array and assign columns for the chart.
+                // alert(data);
+                // Loop through each data and populate the array.
+                $.each(data, function (index, value) {
+                    arrSales.push([value.month,value.total, value.income, value.quantity]);
+                });
+
+                // Set chart Options.
+                // var options = {
+                //     title: 'Monthly Income',
+                //     curveType: 'function',
+                //     legend: { position: 'bottom', textStyle: { color: '#555', fontSize: 14} }  // You can position the legend on 'top' or at the 'bottom'.
+                // };
+                var options = {
+                    title : 'The total value of products sold',
+                    vAxis: {title: 'Total Income(đ)'},
+                    hAxis: {title: 'Month'},
+                    seriesType: 'bars',
+                    series: {2: {type: 'line'}} ,
+                    legend: { position: 'bottom', textStyle: { color: '#555', fontSize: 14} }
+                   };
+
+                // Create DataTable and add the array to it.
+                var figures = google.visualization.arrayToDataTable(arrSales);
+
+                // Define the chart type (LineChart) and the container (a DIV in our case).
+                // var chart = new google.visualization.ComboChart(document.getElementById('chart'));
+                // chart.draw(figures, options);      // Draw the chart with Options.
+                var chart = new google.visualization.ComboChart(document.getElementById('chart'));
+                chart.draw(figures, options);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Got an Error');
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function() {
+          $(".approve").click(function(){
+              alert("1");
+            var _this = this;
+            var temp=_this.id;
+            var id_comment= temp.substr(8,temp.length);
+            // alert(id_comment);
+            $.ajax({
+              data: {'id_comment':id_comment},
+              type:"POST",
+              url : "/dashboard/comment"
+            })
+            .done(function(data){
+                // alert("Done");
+                // alert("#comment_body_"+id_comment);
+            $("#comment_10").html(data);
+            // alert("#comment-body-"+id_comment);
+            });
+          });
+    });
+</script>
 
     
 </body>

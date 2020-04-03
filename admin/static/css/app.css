@@ -12,7 +12,7 @@
     overflow: auto;
     position: relative;
     width: 90%;
-    height: 95%;
+    height: 97%;
     margin: auto;
     background-color: #fff;
 }
@@ -47,6 +47,12 @@
     margin-left: 40px;
 }
 
+.name_product{
+  font-weight: 400;
+    position: absolute;
+    width: 200px;
+    right: 15%;
+}
 .possition_relative{
     position: relative;
 }
@@ -218,3 +224,65 @@ opacity: 1;
   transform: rotate(-45deg);
 }
 /*  */
+
+
+.chose_image input[type="checkbox"]:checked+label {
+  opacity: 0.5;
+  background-color: #000;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.chose_image label {
+  display: inline-block;
+  /* background-color: #eee; */
+  padding: 4px;
+  /* font-family: Arial; */
+  font-size: 16px;
+  cursor: pointer;
+  margin: 2px;
+  border-radius: 2px;
+}
+.delete_img_color{
+  z-index: 99999;
+  position: absolute;
+  right: 43px;
+  top: 15px;
+}
+.notification{
+  z-index: 999999;
+  height: 100px;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid;
+  border-radius: 2px;
+  position: absolute;
+  top: 65px;
+  right: 10px;
+  background-color:white;
+}
+.square_trans{
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border: 1px solid;
+  position: absolute;
+  top: -9px;
+  right: 21px;
+  transform: rotate(45deg);
+  z-index: -5;
+  border-bottom: none;
+  border-right: none;
+}
+.star{
+  position: absolute;
+    width: fit-content;
+    left: 230px;
+}
+.checked_star{
+  color: #F7F632;
+}
+.uncheck_star{
+  color: #ccc;
+}

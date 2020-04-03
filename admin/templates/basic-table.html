@@ -105,19 +105,19 @@
                     </li>
                     <li>
                         <a href="/product" class="waves-effect"><i class="fa fa-table fa-fw"
-                                aria-hidden="true"></i>Basic Table</a>
+                                aria-hidden="true"></i>Product</a>
                     </li>
                     <li>
-                        <a href="fontawesome.html" class="waves-effect"><i class="fa fa-font fa-fw"
-                                aria-hidden="true"></i>Icons</a>
+                        <a href="/customer" class="waves-effect"><i class="fa fa-group fa-fw"
+                            aria-hidden="true"></i>Customer</a>
                     </li>
                     <li>
                         <a href="map-google.html" class="waves-effect"><i class="fa fa-globe fa-fw"
                                 aria-hidden="true"></i>Google Map</a>
                     </li>
                     <li>
-                        <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw"
-                                aria-hidden="true"></i>Blank Page</a>
+                        <a href="/order" class="waves-effect"><i class="fa fa-columns fa-fw"
+                                aria-hidden="true"></i>Order</a>
                     </li>
                     <li>
                         <a href="404.html" class="waves-effect"><i class="fa fa-info-circle fa-fw"
@@ -140,7 +140,7 @@
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Basic Table</h4>
+                        <h4 class="page-title">Product Page</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <button href="#" target="_blank"
@@ -149,7 +149,7 @@
                     </button>
                         <ol class="breadcrumb">
                             <li><a href="#">Dashboard</a></li>
-                            <li class="active">Basic Table</li>
+                            <li class="active">Product Page</li>
 
                         </ol>
                         
@@ -403,8 +403,8 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box">
-                            <h3 class="box-title">Basic Table</h3>
-                            <p class="text-muted">Add class <code>.table</code></p>
+                            <h3 class="box-title">Product Page</h3>
+                            <p class="text-muted">Add Product <code>new</code></p>
                             <div style="    position: absolute;right: 15%;top: 15px;">
                                 <ul class="nav navbar-top-links navbar-right pull-right">
                                     <!-- <li>
@@ -770,12 +770,15 @@
                                         <div id="{{shoe['id_shoes']}}" class="close" style="display: block;" onclick="hide_color(this.id)"></div>
                                         <div>
                                             <div class="white-box">
-                                                <form action="/update_product/{{shoe['id_shoes']}}" class="form-horizontal form-material" method="POST">
+                                                <form action="/update_product/color/{{shoe['id_shoes']}}" class="form-horizontal form-material" method="POST" id="register_form_{{shoe['id_shoes']}}" enctype = "multipart/form-data">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="col-md-12">Shoes Name</label>
                                                             <div class="col-md-12">
                                                                 <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line" value="{{shoe['shoes_name']}}" id="shoes_name_for_color" name="shoes_name" required> 
+                                                            </div>
+                                                            <div class="col-md-12" style="display:none;">
+                                                                <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line" value="{{shoe['id_shoes']}}" id="id_shoes_color_image"  name="id_shoes" > 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -784,8 +787,8 @@
                                                             <label class="col-md-12">Color</label>
                                                             
                                                             <div class="col-md-12">
-                                                                <select class="form-control form-control-line" name="catalogy" id="color_image">
-                                                                    <option >Select Color</option>
+                                                                <select class="form-control form-control-line color_selector" name="color" id="color_image_{{shoe['id_shoes']}}">
+                                                                    <!-- <option >Select Color</option> -->
                                                                     {% for color in colors %}
                                                                     {% if color['id_shoes']== shoe['id_shoes'] %}
                                                                     <option >{{color['color']}}</option>
@@ -797,8 +800,10 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="col-md-12">Present Image</label>
-                                                            <div class="col-md-12" id="area_image">
+                                                            <label class="col-md-12">Present Image (<ins style="color: grey; font-size: 13px;font-weight: 100;">Select to delete</ins>)</label>
+                                                            <div class='btn btn-danger delete_img_color'   id='delete_color_image_{{shoe["id_shoes"]}}'>Delete Selected</div>
+                                                            <div class="col-md-12 chose_image" id="area_image_{{shoe['id_shoes']}}">
+                                                                
                                                                  
                                                             </div>
                                                         </div>
@@ -808,14 +813,15 @@
                                                         <div class="form-group">
                                                             <label class="col-md-12">Chose New Image File</label>
                                                             <div class="col-md-12">
-                                                                <input type="file"  class="form-control form-control-line" value="{{shoe['shoes_name']}}" name="file_image" required> 
+                                                                <!-- <input type=file id="img" name="image" accept="image/*" required> -->
+                                                                <input type=file  class="form-control form-control-line"  name="file" accept="image/*" required /> 
                                                             </div>
                                                         </div>
 
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-12">
-                                                            <button class="btn btn-success" type="submit">Save Information</button>
+                                                            <button class="btn btn-success" type="submit">Upload Image</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -824,6 +830,8 @@
                                     </div>
                                 </div>
                                 {% endfor %}
+                                
+                                
                                
                                
                                <!-- hahahah -->
@@ -833,6 +841,7 @@
                 </div>
                 <!-- /.row -->
             </div>
+            {% include 'notification.html' %}
             <!-- /.container-fluid -->
             <footer class="footer text-center"> 2017 &copy; Ample Admin brought to you by wrappixel.com</footer>
         </div>
@@ -901,30 +910,78 @@
     </script>
 
     <!-- ajax for update color-image -->
+   
     <script>
     
-        $(function() {
-      $("#color_image").on("change", function(event){
-        $.ajax({
-          data: {
-            color : $("#color_image").val(),
-            // year :$("#year").val()
-            name : $("#shoes_name_for_color").val()
-          },
+    $(document).ready(function() {
+          $(".delete_img_color").click(function(){
+            var _this = this;
+            var temp=_this.id;
+            var id_shoes= temp.substr(19,temp.length);
+            // alert(id_shoes);
+            $.ajax({
+              data: $('#register_form_'+id_shoes).serialize(),
+              type:"POST",
+              url : "/delete/color_image"
+            })
+            .done(function(data){
+            $("#area_image_"+id_shoes).html(data);
+            });
+          });
+
+        /// display in fisrt
+        $(".color_selector").each(function(){
+        var _this = this;
+        // alert(_this.id);
+        var temp=_this.id;
+        var id_shoes= temp.substr(12,temp.length);
+         $.ajax({
+          data: $('#register_form_'+id_shoes).serialize(),
           type:"POST",
           url : "/product/color_image"
         })
         .done(function(data){
-        //   $("#site1").attr("href",data.site1);
-        //   $("#image1").attr("src", data.image1);
-        $("#area_image").html(data);
-
-        // alert(data);
-        // console.log(data);
+        $("#area_image_"+id_shoes).html(data);
         });
       });
+
+      /// change when select
+      $(".color_selector").on("change", function(event){
+        var _this = this;
+        // alert(_this.id);
+        var temp=_this.id;
+        var id_shoes= temp.substr(12,temp.length);
+         $.ajax({
+          data: $('#register_form_'+id_shoes).serialize(),
+          type:"POST",
+          url : "/product/color_image"
+        })
+        .done(function(data){
+        $("#area_image_"+id_shoes).html(data);
+        });
+      });
+
     });
-    </script>
+
+
+
+            // var isOpen = false;
+
+            // $("#s1").blur(function(){
+            //     isOpen = false;
+            // });
+
+            // $("#s1").click(function(){
+            //     isOpen = !isOpen;
+            //     if(isOpen)return;
+            //     if(this.value == loadedOption){
+            //     //window.location = $(this).val();
+            //     alert($(this).val());
+            //     }
+            // });
+    
+        // });
+        </script>
 
     <!-- search -->
 
