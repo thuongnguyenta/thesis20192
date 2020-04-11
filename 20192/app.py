@@ -29,6 +29,7 @@ app.config['MYSQL_DB'] = '20192'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # app.config['UPLOAD_FOLDER'] ="./static/image/people"
 uploads_dir = './static/image/people'
+
 # os.makedirs(uploads_dir, exists_ok=True)
 
 mysql = MySQL(app)

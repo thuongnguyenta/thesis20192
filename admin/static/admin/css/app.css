@@ -30,7 +30,8 @@
 .body_fix_2{
   overflow: auto;
   position: relative;
-  width: 80%;
+  top: 50px;
+  width: 700px;
   height: 85%;
   margin: auto;
   background-color: #fff;
@@ -248,7 +249,7 @@ opacity: 1;
   z-index: 99999;
   position: absolute;
   right: 43px;
-  top: 15px;
+  top: -8px;
 }
 .notification{
   z-index: 999999;
@@ -285,4 +286,12 @@ opacity: 1;
 }
 .uncheck_star{
   color: #ccc;
+}
+.reject{
+  color: red;
+}
+.approve_all{
+  position: absolute;
+    right: 200px;
+    top: 22px;
 }

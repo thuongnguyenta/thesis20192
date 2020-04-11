@@ -30,6 +30,9 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 uploads_dir = './static/image/shoes_image/'
 
+
+uploads_dir_account = './static/image/people'
+
 mysql = MySQL(app)
 
 @app.route('/')
@@ -55,7 +58,7 @@ def login():
             session['address']=rows[0]['address']
             session['phone_number']=rows[0]['phone_number']
             session['cover_image']=rows[0]['cover_image']
-            return redirect(url_for('product'))
+            return redirect(url_for('dashboard'))
     return render_template('login.html')
 
 @app.route('/logout')
@@ -63,7 +66,7 @@ def logout():
     session.clear()
     # session.pop('id',None)
     # session.pop('role',None)
-    return render_template('login.html')
+    return render_template('user_login.html')
 
 @app.route('/product')
 def product():
@@ -125,6 +128,28 @@ def update_profile():
             cur.execute("UPDATE account SET username=%s,phone_number=%s,address=%s WHERE id_account =%s ",[username,phone_number,address,session['id']])
             mysql.connection.commit()
             return redirect(url_for('profile'))
+        return redirect(url_for('profile'))
+    return render_template("login.html")
+
+@app.route('/profile/change_password',methods=['POST','GET'])
+def change_password():
+    if 'id' in session:
+        if request.method=='POST':
+            cur= mysql.connection.cursor()
+            old_password=request.form['old_password']
+            new_password=request.form['new_password']
+            cf_new_password =request.form['cf_new_password']
+            if new_password!=cf_new_password:
+                return "Confirm password not match !"
+            else:
+                cur.execute("SELECT * FROM account WHERE id_account=%s",[session['id']])
+                password =cur.fetchall()
+                if old_password==password[0]['password']:
+                    cur.execute("UPDATE account SET password =%s WHERE id_account = %s",[new_password,session['id']])
+                    mysql.connection.commit()
+                    return "Done"
+                else :
+                    return "Password isn't correct !"
         return redirect(url_for('profile'))
     return render_template("login.html")
 
@@ -192,9 +217,9 @@ def dashboard():
 
 @app.route('/dashboard/comment',methods=['POST'])
 def comment_ap():
-    print("1")
+    # print("1")
     if request.method=='POST':
-        print("2")
+        # print("2")
         id_comment=request.form['id_comment']
         print(id_comment)
         cur=mysql.connection.cursor()
@@ -219,9 +244,9 @@ def comment_ap():
             # resp+=div1+div2+div3+div4+div5
             div1="<div class='comment-body' id='comment-body-"+str(cm['id_comment'])+"'>"
             div2="<div class='user-img'> <img src='.."+cm['cover_image']+"' alt='user' class='img-circle' style='border: 1px solid;width:50px; height:50px;'></div>"
-            div3="<div class='mail-contnet'><h5>"+cm['username']+"</h5><span class='time'>"+cm['time_review'].strftime("%H:%M %D,%B %Y")+"</span><br/><span class='mail-desc' >"+cm['comments']+"</span> <div id='comment_"+str(cm['id_comment'])+"' class='btn btn btn-rounded btn-default btn-outline m-r-5 approve'><i class='ti-check text-success m-r-5'></i>Approve</div><div href='javacript:void(0)' class='btn-rounded btn btn-default btn-outline'><i class='ti-close text-danger m-r-5'></i> Reject</div></div>"
+            div3="<div class='mail-contnet'><h5>"+cm['username']+"</h5><span class='time'>"+(cm['time_review'].strftime("%H:%M %d,%B %Y"))+"</span><br/><span class='mail-desc' >"+cm['comments']+"</span> <div id='comment_"+str(cm['id_comment'])+"' class='btn btn btn-rounded btn-default btn-outline m-r-5 approve_div'><i class='ti-check text-success m-r-5'></i>Approve</div><div href='javacript:void(0)' id='reject_"+str(cm['id_comment'])+"' class='btn-rounded btn btn-default btn-outline reject_div'><i class='ti-close text-danger m-r-5'></i> Reject</div></div>"
             div4="<div class='name_product'>"+cm['shoes_name']+"</div>"
-            div5="<div class='star' id='"+str(cm['star'])+"'>"
+            div5="<div class='star' id='star_"+str(cm['star'])+"'>"
             for i in range(0,cm['star']):
                 div5+="<span class='fa fa-star checked_star'></span>"
             for i in range(cm['star'],5):
@@ -331,7 +356,7 @@ def color_image():
         sp=cur.fetchall()
         reps=""
         for idx,pr in enumerate(sp):
-            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='50px' height='50px'></label>"
+            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='120px' height='120px'></label>"
         print (reps)
         return reps
 # @app.route('/product/color_image/delete',methods=['POST'])
@@ -480,6 +505,10 @@ def update_color_image(id_shoes):
         if not os.path.exists(path_save): 
             os.makedirs(path_save)
         shoes_image.save(os.path.join(path_save, secure_filename(shoes_image.filename)))
+
+         # save each "charts" file
+        # for file in request.files.getlist('charts'):
+        #     file.save(os.path.join(uploads_dir, secure_filename(file.name)))
         
         link=str(id_shoes)+"/"+str(shoes_color)+"/"+shoes_image.filename
         # print("4")
@@ -535,3 +564,436 @@ def username_check():
         resp = jsonify('<span style=\'color:red;\'>Email is required field.</span>')
         resp.status_code = 200
         return resp
+
+
+
+
+
+# 
+# 
+# USER APP ROUTE
+# 
+# 
+
+
+
+
+@app.route('/user_index')
+def user_index():
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes LIMIT 4")
+    shoes=cur.fetchall()
+
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes ORDER BY shoes.id_shoes DESC LIMIT 4")
+    shoes_new=cur.fetchall()
+
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes.sale!=0 AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes LIMIT 8")
+    shoes_sale=cur.fetchall()
+
+    return render_template('user_index.html',shoes=shoes,shoes_new=shoes_new,shoes_sale=shoes_sale)
+
+
+
+
+@app.route('/user_product')
+def user_product():
+    a=[]
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes")
+    shoes=cur.fetchall()
+
+
+    cur.execute("SELECT * FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes_surface AND shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color= shoes_color_image.id_shoes_color GROUP BY shoes_color.id_shoes_color")
+    color =cur.fetchall()  
+
+    cur.execute("SELECT * FROM shoes,shoes_surface WHERE shoes.id_shoes=shoes_surface.id_shoes")
+    surface=cur.fetchall()
+    
+    cur.execute("SELECT shoes_type,COUNT(*) as number FROM `shoes` GROUP BY shoes_type")
+    shoe_type = cur.fetchall()
+
+    return render_template('user_category.html',shoes=shoes,colors=color,shoe_type=shoe_type,surface=surface,a=a)
+
+
+@app.route('/user_search',methods=['GET','POST'])
+def search():
+    if request.method == 'POST':
+        cur=mysql.connection.cursor()
+        search_in4 = request.form['search_input']
+        string = "%"+search_in4+"%"
+        a=[]
+
+        cur.execute("SELECT * FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes_surface AND shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color= shoes_color_image.id_shoes_color AND shoes.shoes_name LIKE %s GROUP BY shoes.id_shoes",[string])
+        rows= cur.fetchall()
+
+        cur.execute("SELECT * FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes_surface AND shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color= shoes_color_image.id_shoes_color GROUP BY shoes_color.id_shoes_color")
+        color =cur.fetchall()    
+
+        cur.execute("SELECT shoes_type,COUNT(*) as number FROM `shoes` GROUP BY shoes_type")
+        shoe_type = cur.fetchall()
+
+        cur.execute("SELECT * FROM shoes,shoes_surface WHERE shoes.id_shoes=shoes_surface.id_shoes")
+        surface=cur.fetchall()
+
+        return render_template('user_category.html',shoes=rows, colors=color, shoe_type=shoe_type,surface=surface,a=a,search=search_in4)
+@app.route('/user_productdetail/<id_shoes>')
+def detail_product(id_shoes):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM shoes,shoes_color_image,shoes_color WHERE shoes.id_shoes=shoes_color.id_shoes and shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=%s ORDER BY shoes_color.id_shoes_color",[id_shoes])
+    shoe= cur.fetchall()
+
+    cur.execute("SELECT * FROM shoes,shoes_color_image,shoes_color WHERE shoes.id_shoes=shoes_color.id_shoes and shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=%s GROUP BY shoes_color.id_shoes_color ORDER BY shoes_color.id_shoes_color",[id_shoes])
+    color=cur.fetchall()
+    
+    cur.execute("SELECT * FROM comment,account WHERE comment.id_user=account.id_account AND id_shoes=%s",[id_shoes])
+    comment=cur.fetchall()
+
+    cur.execute("SELECT ROUND(AVG(star),2) as St,count(*) as numb FROM comment WHERE id_shoes=%s GROUP BY id_shoes",[id_shoes])
+    star=cur.fetchall()
+
+    cur.execute("SELECT count(*) as number,star FROM comment WHERE id_shoes=%s GROUP BY star",[id_shoes])
+    count_cm=cur.fetchall()
+
+    cur.execute("SELECT * FROM shoes_surface WHERE id_shoes=%s",[id_shoes])
+    surface=cur.fetchall()
+
+    return render_template("user_productdetail.html",shoe_detail=shoe,color=color,comment=comment,star=star,count_cm=count_cm,surface=surface)
+
+@app.route('/user_login', methods=['POST','GET'])
+def user_login():
+    if 'id' in session:
+        return redirect(url_for('user_index'))
+    if request.method=='POST':
+        email=request.form['email']
+        password=request.form['password']
+        admin = request.form.getlist('admin_check')
+        temp=2
+        if admin:
+            temp=1
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM account WHERE email=%s AND password =%s AND role=%s",[email,password,temp])
+        rows=cur.fetchall()
+        if len(rows) ==0:
+            error="Incorrect email or password"
+            return render_template('user_login.html',error=error)
+        else:
+            session['id'] = rows[0]['id_account']
+            session['name'] = rows[0]['username']
+            session["email"] =rows[0]['email']
+            session['role'] =rows[0]['role']
+            session['address']=rows[0]['address']
+            session['phone_number']=rows[0]['phone_number']
+            session['cover_image']=rows[0]['cover_image']
+            if session['role']==1:
+                return redirect(url_for('dashboard'))
+            else :
+                return redirect(url_for('user_index'))
+
+    else:
+        return render_template('user_login.html')
+
+@app.route('/user_check', methods=['POST'])
+def email_check():
+	# conn = None
+	# cursor = None
+    cur =mysql.connection.cursor()
+    print("1")
+    email = request.form['email']
+    print("2")
+    
+    # validate the received values
+    if email and request.method == 'POST':		
+        # conn = mysql.connect()
+        # cursor = conn.cursor(pymysql.cursors.DictCursor)
+        
+        cur.execute("SELECT * FROM account WHERE email=%s", [email])
+        row = cur.fetchall()
+        
+        if row:
+            resp = jsonify('<span style=\'color:red;\'>Email unavailable</span>')
+            resp.status_code = 200
+            return resp
+        else:
+            resp = jsonify('OK')
+            resp.status_code = 200
+            return resp
+    else:
+        resp = jsonify('<span style=\'color:red;\'>Email is required field.</span>')
+        resp.status_code = 200
+        return resp
+
+
+@app.route('/user_register',methods=['GET','POST'])
+def register():
+    if request.method == 'POST':
+        email=request.form['email']
+        password=request.form['password']
+        user_name=request.form['user_name']
+        phone_number=request.form['phone_number']
+        address=request.form['address']
+        cur=mysql.connection.cursor()
+        # cur.execute("SELECT * FROM account WHERE email=%s",[email])
+        # row=cur.fetchall()
+        
+        cur.execute("INSERT INTO account(id_account,email,username,password,phone_number,address,cover_image,role) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",["NULL",email,user_name,password,phone_number,address,"NULL","2"])
+        mysql.connection.commit()
+        flash("Complete Register")
+        # login()
+        return render_template('user_login.html')
+    return  redirect(url_for('user_index'))
+
+@app.route('/user_productdetail/comment/<id_shoes>', methods=['GET','POST'])
+def comment(id_shoes):
+    if 'id' in session:
+        if request.method == 'POST':
+            id_user=session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM user_order,order_detail WHERE user_order.id_order=order_detail.id_order AND user_order.id_user=%s AND order_detail.id_shoes=%s",[id_user,id_shoes])
+            temp=cur.fetchall()
+            if temp:
+                print("1")
+                star=request.form['rate']
+                print("2")
+                comment=request.form['comment']
+                print("3")
+                cur_time=datetime.datetime.now()
+                
+                cur.execute("INSERT INTO comment(id_comment,id_user,id_shoes,star,comments,time_review) VALUES(%s,%s,%s,%s,%s,%s)",["NULL",id_user,id_shoes,star,comment,cur_time])
+                mysql.connection.commit()
+                return redirect(url_for('detail_product',id_shoes=id_shoes))
+            else :
+                flash("You haven't purchase product to review !")
+                return redirect(url_for("detail_product",id_shoes=id_shoes))
+    else:
+        flash('You are not login !')
+        return redirect(url_for('detail_product',id_shoes=id_shoes))
+
+@app.route('/user_cart')
+def user_cart():
+    if 'id' in session:
+        id_account= session['id']
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM cart,cart_detail,shoes_color_image,shoes_color,shoes WHERE cart.id_cart=cart_detail.id_cart AND shoes_color_image.id_shoes_color=cart_detail.id_color AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=cart_detail.id_shoes AND cart.id_user =%s GROUP BY cart_detail.id_cart_detail",[id_account])
+        temp=cur.fetchall()
+        return render_template('user_cart.html',cart_detail=temp)
+    return redirect(url_for('user_login'))
+
+
+@app.route('/add_to_cart', methods= ['GET','POST'] )
+def add_to_cart():
+    if 'id' in session:
+        if request.method == 'POST':
+            print("Av")
+            id_account =session['id']
+        
+            id_shoes_color=request.form['color']
+            size=request.form['size']
+            quantity=request.form['quantity']
+            cur =mysql.connection.cursor()
+            cur.execute("SELECT * FROM shoes_color,shoes_color_image,shoes WHERE shoes.id_shoes= shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes_color.id_shoes_color =%s GROUP BY shoes_color.id_shoes_color",[id_shoes_color])
+            rows =cur.fetchall()
+            id_shoes =rows[0]['id_shoes']
+            price_per_product = round( rows[0]['price']*(1-rows[0]['sale']/100))
+
+            # cart exist ?
+
+            cur =mysql.connection.cursor()
+            cur.execute("SELECT * FROM cart WHERE id_user=%s",[id_account])
+            cart =cur.fetchall()
+            if len(cart)==0 :
+                # add cart if not exist
+                print("aaaa")
+                cur.execute("INSERT INTO cart(id_cart,id_user,cart_quantity,cart_total_price) VALUES(%s,%s,%s,%s)",["NULL",id_account,"1","0"])
+                mysql.connection.commit()
+
+            # query id_cart
+            cur.execute("SELECT id_cart FROM cart WHERE id_user = %s",[id_account])
+            temp = cur.fetchall()
+            id_cart = temp[0]['id_cart']
+            # add product
+            cur.execute("INSERT INTO cart_detail(id_cart_detail,id_shoes,id_color,size,id_cart,quantity,price_per_product) VALUES(%s,%s,%s,%s,%s,%s,%s)",["NULL",id_shoes,id_shoes_color,size,id_cart,quantity,price_per_product])
+            mysql.connection.commit()
+
+
+
+            cur.execute("SELECT * FROM `cart_detail` WHERE id_cart=%s",[id_cart])
+            temp2= cur.fetchall()
+            total_price=0
+            total_sp=0
+            for item in temp2:
+                total_price+=item['price_per_product']*item['quantity']
+                total_sp+=item['quantity']
+            cur.execute("UPDATE cart SET cart_quantity=%s,cart_total_price=%s WHERE id_cart=%s",[total_sp,total_price,id_cart])
+            mysql.connection.commit()
+            return redirect(url_for("user_cart"))
+        return redirect(url_for("user_cart"))
+    return redirect(url_for('dashboard'))
+
+@app.route('/user_cart/delete/<id_cart_detail>')
+def delete_cart_detail(id_cart_detail):
+    if 'id' in session:
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT id_cart FROM cart_detail WHERE id_cart_detail =%s",[id_cart_detail])
+        rows=cur.fetchall()
+        id_cart=rows[0]['id_cart']
+        cur.execute("DELETE FROM cart_detail WHERE id_cart_detail=%s",[id_cart_detail])
+        mysql.connection.commit()
+        update_cart(id_cart)
+    
+        return redirect(url_for("user_cart"))
+    return redirect(url_for('user_index'))
+
+def update_cart(id_cart):
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT * FROM cart_detail WHERE id_cart=%s",[id_cart])
+    temp2= cur.fetchall()
+    total_price=0
+    total_sp=0
+    for item in temp2:
+        total_price+=item['price_per_product']*item['quantity']
+        total_sp+=item['quantity']
+    cur.execute("UPDATE cart SET cart_quantity=%s,cart_total_price=%s WHERE id_cart=%s",[total_sp,total_price,id_cart])
+    mysql.connection.commit()
+
+@app.route('/user_update/cart',methods= ['GET','POST'])
+def update_usercart():
+    if 'id' in session:
+        if request.method=='POST':
+            number=request.form['number']
+            id_cart_detail =request.form['id_cart_detail']
+            cur=mysql.connection.cursor()
+            cur.execute('UPDATE cart_detail SET quantity= %s  WHERE id_cart_detail=%s',[number,id_cart_detail])
+            mysql.connection.commit()
+            cur.execute("SELECT id_cart FROM cart_detail WHERE id_cart_detail =%s",[id_cart_detail])
+            temp=cur.fetchall()
+            id_cart=temp[0]['id_cart']
+            update_cart(id_cart)
+            # return "1"
+            cur.execute("SELECT * FROM cart WHERE id_cart=%s",[id_cart])
+            # cur.execute("SELECT * FROM cart_detail WHERE id_cart_detail=%s",[id_cart_detail])
+            temp2=cur.fetchall()
+            total_price = temp2[0]['cart_total_price']
+            resp="<td></td><td></td><td><h5>Subtotal</h5></td> <td><h5>"+str(total_price)+"<ins>đ</ins></h5></td><td></td>"
+            
+            cur.execute("SELECT * FROM cart_detail,shoes WHERE shoes.id_shoes=cart_detail.id_shoes AND id_cart_detail=%s",[id_cart_detail])
+            temp3=cur.fetchall()
+            factor = temp3[0]['quantity']*(temp3[0]['price']*(1-temp3[0]['sale']/100))
+            resp2= "<h5>"+str(factor)+"<ins>đ</ins></h5>"
+            return json.dumps({"resp1":resp,"resp2":resp2})
+        return redirect(url_for('user_cart'))
+    return redirect(url_for('user_login'))
+
+@app.route('/user_cart/checkout',methods=['POST','GET'])
+def checkout():
+    if 'id' in session:
+        if request.method== 'POST':
+            print('ahihi')
+            name= request.form['receiver']
+            address_order =request.form['address_ship']
+            phone=request.form['phone_number']
+
+
+            id_user=session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM cart,cart_detail WHERE cart.id_cart=cart_detail.id_cart AND cart.id_user=%s",[id_user])
+            rows=cur.fetchall()
+            total_price = rows[0]['cart_total_price']
+            order_quantity =rows[0]['cart_quantity']
+            time_order=datetime.datetime.now()
+            print(time_order)
+            cur.execute ("INSERT INTO user_order(id_order,id_user,order_quantity,total_price,time_order) VALUES(%s,%s,%s,%s,%s)",["NULL",id_user,order_quantity,total_price,time_order])
+            mysql.connection.commit()
+            cur.execute ("SELECT * FROM user_order WHERE id_user=%s ORDER BY time_order DESC LIMIT 1",[id_user])
+            temp=cur.fetchall()
+            id_user_order = temp[0]['id_order']
+
+            for item_cart in rows:
+                id_shoes = item_cart['id_shoes']
+                id_shoes_color =item_cart['id_color']
+                order_size =item_cart['size']
+                order_detail_quantity=item_cart['quantity']
+                price_per_order=item_cart['price_per_product']
+                cur.execute("INSERT INTO order_detail(id_order_detail,id_shoes,id_shoes_color,order_detail_quantity,order_size,id_order,price_per_order) VALUES(%s,%s,%s,%s,%s,%s,%s)",["NULL",id_shoes,id_shoes_color,order_detail_quantity,order_size,id_user_order,price_per_order])
+                mysql.connection.commit()
+            
+            cur.execute("DELETE FROM cart_detail WHERE id_cart=(SELECT cart.id_cart FROM cart WHERE cart.id_user=%s)",[id_user])
+            mysql.connection.commit()
+            cur.execute("DELETE FROM cart WHERE id_user=%s",[id_user])
+            mysql.connection.commit()
+
+            cur.execute("INSERT INTO ship(id_ship,id_order,address_order,phone,name,status) VALUES(%s,%s,%s,%s,%s,%s)",["NULL",id_user_order,address_order,phone,name,"Giao Hàng"])
+            mysql.connection.commit()
+
+            cur.execute("SELECT * FROM user_order WHERE user_order.id_user=%s ORDER BY user_order.id_order DESC LIMIT 1",[id_user])
+            done=cur.fetchall()
+            id_new_order= done[0]['id_order']
+            print(id_new_order)
+            flash("Your order is complete! Your id_order is: ",id_new_order)
+
+            return redirect(url_for('user_cart'))
+        return redirect(url_for('user_cart'))
+    return redirect(url_for('user_login')) 
+
+@app.route('/user_profile')
+def user_profile():
+    if 'id' in session:
+        id_account = session['id']
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM account WHERE id_account =%s" ,[id_account])
+        rows=cur.fetchall()
+        return render_template('user_profile.html',person=rows)
+    return redirect(url_for('user_login'))
+
+@app.route('/user_update_infor', methods= ['GET','POST'])
+def update_person_infor():
+    if 'id' in session:
+        if request.method == 'POST':
+            id_account = session['id']
+            username= request.form['username']
+            phone_number =request.form['phone_number']
+            address=request.form['address']
+            cur=mysql.connection.cursor()
+            cur.execute("UPDATE account SET username=%s,phone_number=%s,address=%s WHERE id_account=%s",[username,phone_number,address,id_account])
+            mysql.connection.commit()
+            flash("Complete")
+            return redirect(url_for('user_profile'))
+        return redirect(url_for('user_login'))
+    return redirect(url_for('user_login'))
+
+@app.route('/personal_infor/upload_image',methods=['GET','POST'])
+def upload():
+    if 'id' in session:
+        if request.method =='POST':
+            # print("ahihi")
+            # file = request.form['img']
+            # print("ahihi1")
+            # f = request.files['image']
+            # f.save(f.filename)
+            # print("ahihi3")
+                # filename = secure_filename(file.filename)
+                # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            profile = request.files['image']
+            profile.save(os.path.join(uploads_dir_account, secure_filename(profile.filename)))
+            link="/static/image/people/"+profile.filename
+            id_account =session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("UPDATE account SET cover_image=%s WHERE id_account=%s",[link,id_account])
+            mysql.connection.commit()
+
+
+            # save each "charts" file
+            # for file in request.files.getlist('charts'):
+            #     file.save(os.path.join(uploads_dir, secure_filename(file.name)))
+            return redirect(url_for('user_profile'))
+        return redirect(url_for('user_profile'))
+    return redirect(url_for('user_login'))
+
+@app.route('/user+history_order')
+def user_history():
+    if 'id' in session:
+        id_account = session['id']
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM account WHERE id_account =%s" ,[id_account])
+        rows=cur.fetchall()
+        return render_template('user_historyorder.html',person=rows)
+    return redirect(url_for('user_login'))

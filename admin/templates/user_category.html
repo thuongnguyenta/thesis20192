@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+
+
+	<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+	<meta charset=utf-8 />
+	<script src="/static/user/js/jquery-3.4.1.min.js"></script>
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="../static/user/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Karma Shop</title>
+
+	<!--
+            CSS
+            ============================================= -->
+	<link rel="stylesheet" href="../static/user/css/linearicons.css">
+	<link rel="stylesheet" href="../static/user/css/owl.carousel.css">
+	<link rel="stylesheet" href="../static/user/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/user/css/themify-icons.css">
+	<link rel="stylesheet" href="../static/user/css/nice-select.css">
+	<link rel="stylesheet" href="../static/user/css/nouislider.min.css">
+	<link rel="stylesheet" href="../static/user/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/user/css/main.css">
+
+	<link rel="stylesheet" href="../static/user/css/app.css">
+</head>
+
+<body id="category">
+
+	<script>
+        
+        $(document).ready(function(){
+            $('.filter_check :checkbox').click(function(){
+				// alert("1");
+                if ($('input:checkbox:checked').length) {
+				
+                $('.shoe_item').hide();
+                $('input:checkbox:checked').each(function(){
+                        // alert()
+                       $('.shoe_item['+$(this).prop('name') +'*="'+$(this).val()+'"]' ).show();
+                    
+                });
+                }
+                else{
+                    $(".shoe_item").show();
+                }
+            });
+            
+
+            $('#gender_check :checkbox').click(function(){
+                if ($('input:checkbox:checked').length) {
+                $('.shoe_item').hide();
+                $('input:checkbox:checked').each(function(){
+                        // alert()
+                       $('.shoe_item['+$(this).prop('name') +'*="'+$(this).val()+'"]' ).show();
+                       $('.shoe_item['+$(this).prop('name') +'*="Both"]' ).show();
+                    
+                });
+                }
+                else{
+                    $(".shoe_item").show();
+                }
+            });
+
+            $('#colourcb :checkbox').click(function(){
+                if($('input:checkbox:checked').length){
+                    $('.shoe_item').hide();
+                    $('input:checkbox:checked').each(function(){
+                        // alert("hi");
+                        $('.box_color['+$(this).prop('name')+'*="'+$(this).val()+'"]' ).parent().parent().parent().parent().show();
+                    })
+                }
+                else
+                {
+                    $(".shoe_item").show();
+                }
+            });
+
+            $('#surfacecb :checkbox').click(function(){
+                if($('input:checkbox:checked').length){
+                    $('.shoe_item').hide();
+                    $('input:checkbox:checked').each(function(){
+                        // alert("hi");
+                        $('.surface['+$(this).prop('name')+'*="'+$(this).val()+'"]' ).parent().parent().parent().show();
+                    })
+                }
+                else
+                {
+                    $(".shoe_item").show();
+                }
+            })
+
+
+            /// radio button
+            $(".filter_check :radio").click(function(){
+                
+            })
+
+
+
+            ///
+
+            $("#gender").click(function(){
+            $("#gendercb").slideToggle("slow");
+            });
+
+            $("#catalogy").click(function(){
+            $("#catalogycb").slideToggle("slow");
+            });
+
+            $("#price").click(function(){
+            $("#pricecb").slideToggle("slow");
+            });
+
+            $("#colour").click(function(){
+            $("#colourcb").slideToggle("slow");
+            });
+
+            $("#athleter").click(function(){
+            $("#athletercb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            $("#feature").click(function(){
+            $("#featurecb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            $("#surface").click(function(){
+            $("#surfacecb").slideToggle("slow");
+            // $('#athleter').css('transform', 'rotate(' + 180+'deg' + ')');
+            });
+
+            
+            var $divs = $("div.shoe_item");
+            $('#sort').on('change', function(){
+                if(this.value=="pricel"){
+                var opOrder = $divs.sort(function (a, b) {
+                return $(a).data('price') < $(b).data('price') ? -1 : 1;
+                });
+                $(".item").html(opOrder);}
+                else{
+                var opOrder = $divs.sort(function (a, b) {
+                return $(a).data('price') > $(b).data('price') ? -1 : 1;
+                });
+                $(".item").html(opOrder);
+                }
+            });
+//
+
+            $(".showhide").click(function()
+            {
+                $(".box_4color div:nth-child(n+4)").toggle();
+            });
+            
+            
+            $(".box_4color").each(function()
+            {
+                var number = $(this).children().length ;
+                // alert(number);
+                if( number > 3){
+                    $(this).append("<nav class='margin' style='line-height:50px;float:left;margin:8px,font-weight:600;'>+"+(number-3)+" Colour</nav>");
+                }
+            });
+        });
+        
+
+
+        
+        function show_hidecb(id){
+            var target_id=id+'cb';
+            var status =document.getElementById(target_id).style.display;
+            if (status=="block")
+                {  
+                    //  alert(status);
+                    document.getElementById(target_id).style.display =" none";
+                }
+            else { 
+                //  alert(status);
+                    document.getElementById(target_id).style.display= "block";    
+            }
+        }
+
+        
+        function myFunction() {
+        var x = document.getElementById("filter_check");
+        if (x.className === "filter_check margin") {
+            x.className += " responsive";
+        } else {
+            x.className = "filter_check margin";
+        }
+        }
+
+        // window.onscroll = function() {setHeader()};
+    
+        // var header = document.getElementById("searchhd");
+        // var sticky = header.offsetTop;
+        // alert(sticky);
+        
+        // function setHeader() {
+        // if (window.pageYOffset > sticky) {
+        //     header.classList.add("sticky");
+        // } else {
+        //     header.classList.remove("sticky");
+        // }
+		// }      
+		document.getElementById("category").classList.add("active");
+		// document.getElementById("person").classList.remove("active");
+		// document.getElementById("home").classList.remove("active");
+
+</script>
+
+
+
+	{% include 'header.html' %}
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Shop Category Page</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="#">Shop<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Fashon Category</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-3 col-lg-4 col-md-5">
+				<div class="sidebar-categories">
+					<div class="head">Browse Categories</div>
+					<ul class="main-categories">
+						{% for shoe_t in shoe_type %}
+						<li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable"><span
+								 class="lnr lnr-arrow-right"></span>{{shoe_t['shoes_type']}}<span class="number">({{shoe_t['number']}})</span></a>
+							<!-- <ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false" aria-controls="fruitsVegetable">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul> -->
+						</li>
+						{% endfor %}
+						<!-- <li class="main-nav-list"><a data-toggle="collapse" href="#meatFish" aria-expanded="false" aria-controls="meatFish"><span
+								 class="lnr lnr-arrow-right"></span>Meat and Fish<span class="number">(53)</span></a>
+							<ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false" aria-controls="meatFish">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#cooking" aria-expanded="false" aria-controls="cooking"><span
+								 class="lnr lnr-arrow-right"></span>Cooking<span class="number">(53)</span></a>
+							<ul class="collapse" id="cooking" data-toggle="collapse" aria-expanded="false" aria-controls="cooking">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#beverages" aria-expanded="false" aria-controls="beverages"><span
+								 class="lnr lnr-arrow-right"></span>Beverages<span class="number">(24)</span></a>
+							<ul class="collapse" id="beverages" data-toggle="collapse" aria-expanded="false" aria-controls="beverages">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#homeClean" aria-expanded="false" aria-controls="homeClean"><span
+								 class="lnr lnr-arrow-right"></span>Home and Cleaning<span class="number">(53)</span></a>
+							<ul class="collapse" id="homeClean" data-toggle="collapse" aria-expanded="false" aria-controls="homeClean">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a href="#">Pest Control<span class="number">(24)</span></a></li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#officeProduct" aria-expanded="false" aria-controls="officeProduct"><span
+								 class="lnr lnr-arrow-right"></span>Office Products<span class="number">(77)</span></a>
+							<ul class="collapse" id="officeProduct" data-toggle="collapse" aria-expanded="false" aria-controls="officeProduct">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#beauttyProduct" aria-expanded="false" aria-controls="beauttyProduct"><span
+								 class="lnr lnr-arrow-right"></span>Beauty Products<span class="number">(65)</span></a>
+							<ul class="collapse" id="beauttyProduct" data-toggle="collapse" aria-expanded="false" aria-controls="beauttyProduct">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#healthProduct" aria-expanded="false" aria-controls="healthProduct"><span
+								 class="lnr lnr-arrow-right"></span>Health Products<span class="number">(29)</span></a>
+							<ul class="collapse" id="healthProduct" data-toggle="collapse" aria-expanded="false" aria-controls="healthProduct">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a href="#">Pet Care<span class="number">(29)</span></a></li>
+						<li class="main-nav-list"><a data-toggle="collapse" href="#homeAppliance" aria-expanded="false" aria-controls="homeAppliance"><span
+								 class="lnr lnr-arrow-right"></span>Home Appliances<span class="number">(15)</span></a>
+							<ul class="collapse" id="homeAppliance" data-toggle="collapse" aria-expanded="false" aria-controls="homeAppliance">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li>
+						<li class="main-nav-list"><a class="border-bottom-0" data-toggle="collapse" href="#babyCare" aria-expanded="false"
+							 aria-controls="babyCare"><span class="lnr lnr-arrow-right"></span>Baby Care<span class="number">(48)</span></a>
+							<ul class="collapse" id="babyCare" data-toggle="collapse" aria-expanded="false" aria-controls="babyCare">
+								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
+								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
+								<li class="main-nav-list child"><a href="#" class="border-bottom-0">Meat<span class="number">(11)</span></a></li>
+							</ul>
+						</li> -->
+					</ul>
+				</div>
+				
+				<div class="position_absolute dp_none " >
+					<a href="javascript:void(0);" class="icon1" onclick="myFunction()">
+						<i class="fa fa-bars list_filter"></i>
+					</a>
+					
+				</div>
+				<div class="sidebar-filter mt-50">
+					<div class="top-filter-head hidden_div">Product Filters</div>
+					<div class="filter_check margin" id="filter_check" style="min-height: 95%;"  onclick="myFunction()">
+						
+						<div class="filter_ct shoe padding_top50 margin_ct" style="max-width: 300px;">
+							<div class="close" style="right: 10px;top: 10px;"  onclick="myFunction()"></div>
+							<div class="gender checkbox padding_left" style="margin-top:15px" id="gender_check">
+								<section class="filter_square" style="margin-bottom:-20px">
+									<div class="flex dp_flex shoe bg_color_ddd">
+										<div >
+												<h4 class="margin">Gender</h4>
+										</div>
+										<div id="gender">
+											<div class="icon_sh" id="gender">
+												<i class="fa fa-angle-down rotate-icon"></i>
+											</div>
+										</div>
+									</div>
+									<div id="gendercb" class=" margin_t_20">
+										<label class="container2">Man
+											<input type="checkbox" value="Man" name="gender">
+											<span class="checkmark"></span>
+										</label>
+										<label class="container2">Woman
+											<input type="checkbox" value="Woman" name="gender">
+											<span class="checkmark"></span>
+										</label>
+											<!-- <input class="checkmark" id="man" type="checkbox" name="gender" value="Man">
+											<label class="filterlb" for="man">MAN</label>
+											<br/>
+											<input id="woman" type="checkbox" name="gender" value="Woman">
+											<label class="filterlb" for="woman">WOMAN</label> -->
+									</div>
+									<br/>
+
+								</section>
+							</div>
+						
+							<hr/>
+							<div class="catalogy padding_left">
+									<section class="filter_square">
+										<div class="flex dp_flex shoe bg_color_ddd">
+											<div>
+													<h4 class="margin">Catalogy</h4>
+											</div>
+											<div class="transition-duration" id="catalogy" >
+												<div class="icon_sh">
+													<i class="fa fa-angle-down rotate-icon"></i>
+												</div>
+											</div>
+										</div>
+										<div id="catalogycb" class=" margin_t_20">
+											<label class="container2">Boot
+												<input type="checkbox" value="Boot" name="catalog">
+												<span class="checkmark"></span>
+											</label>
+											<!-- <input class="round" id="boot" type="checkbox" name="catalog" value="Boot">
+											<label for="boot">Boot</label>
+											<br/> -->
+											<label class="container2">Snacker
+												<input type="checkbox" value="Snacker" name="catalog">
+												<span class="checkmark"></span>
+											</label>
+											<!-- <input class="round" id="snacker" type="checkbox" name="catalog" value="Snacker">
+											<label for="snacker" > Snacker</label>
+											<br/> -->
+											<label class="container2">Sandals
+												<input type="checkbox" value="Sandals" name="catalog">
+												<span class="checkmark"></span>
+											</label>
+										</div>
+						
+									</section>
+							</div>
+							<hr/>
+							<div class="colour padding_left ">
+								<section class="filter_square">
+									<div class="flex dp_flex shoe bg_color_ddd">
+										<div>
+												<h4 class="margin">Colour</h4>
+										</div>
+										<div id="colour">
+											<div class="icon_sh" id="color">
+												<i class="fa fa-angle-down rotate-icon"></i>
+											</div>
+										</div>
+									</div>
+									<div id="colourcb" class="margin_t_20">
+										<div class="dp_flex flex-wrap">
+											
+											{% for colour in colors %}
+												{% if colour['color'] not in a %}
+													{% if colour['color'] == "White" %}
+													<div class="colour_cb content_center round white" >
+														<input id="{{colour['color']}}" type="checkbox" name="color" value="{{colour['color']}}">
+													
+														<label id="white" for="{{colour['color']}}" a="{{a.append(colour['color'])}}"></label>
+														{% else %}
+														<div class="colour_cb content_center round">
+															<input id="{{colour['color']}}" type="checkbox" name="color" value="{{colour['color']}}">
+														<label for="{{colour['color']}}" style="background-color: {{colour['color'].split()[0]}};" a="{{a.append(colour['color'])}}">
+														{% endif %}
+															<div class="colour_select">
+																{{colour['color']}}
+															</div>
+														</label>
+													</div>
+													
+													<!-- {{ a }} -->
+													
+												{% endif %}
+											{% endfor %}
+										</div>
+									</div>
+								</section>
+							</div>
+							<hr/>
+							<div class="padding_left athleter ">
+								<section class="filter_square">
+									<div class="flex dp_flex shoe bg_color_ddd">
+										<div>
+												<h4 class="margin">Athleter</h4>
+										</div>
+										<div id="athleter">
+											<div class="icon_sh" id="athleter">
+												<i class="fa fa-angle-down rotate-icon"></i>
+											</div>
+										</div>
+									</div>
+									<div id="athletercb" class="hide margin_t_20">
+										<div class="athleter">
+											{% for shoe in shoes%}
+												{% if shoe['athleter'] %}
+												<label class="container2">{{shoe['athleter']}}
+													<input type="checkbox" value="{{shoe['athleter']}}" name="athleter">
+													<span class="checkmark"></span>
+												</label>
+												
+												{% endif %}
+											{% endfor %}
+				
+										</div>
+									</div>
+								</section>
+								
+							</div>
+							<hr/>
+							<div class="padding_left feature ">
+								<section class="filter_square">
+									<div class="flex dp_flex shoe bg_color_ddd">
+										<div>
+												<h4 class="margin">Feature</h4>
+										</div>
+										<div id="feature">
+											<div class="icon_sh" id="feature">
+												<i class="fa fa-angle-down rotate-icon"></i>
+											</div>
+										</div>
+									</div>
+									<div id="featurecb" class="hide margin_t_20">
+										<div class="feature">
+											
+												<label class="container2">Reflection
+													<input type="checkbox" value="Reflection" name="feature">
+													<span class="checkmark"></span>
+												</label>
+												<label class="container2">Waterproof
+													<input type="checkbox" value="Waterproof" name="feature">
+													<span class="checkmark"></span>
+												</label>
+						
+				
+										</div>
+									</div>
+								</section>
+								
+							</div>
+							<hr/>
+							<div class="padding_left feature ">
+								<section class="filter_square">
+									<div class="flex dp_flex shoe bg_color_ddd">
+										<div>
+												<h4 class="margin">Surface</h4>
+										</div>
+										
+										<div id="surface">
+											<div class="icon_sh" id="surface">
+												<i class="fa fa-angle-down rotate-icon"></i>
+											</div>
+										</div>
+									</div>
+									<div id="surfacecb" class="hide margin_t_20">
+										<div class="surface">
+											{% for sf in surface%}
+											{% if sf['surface'] not in a %}
+												<label class="container2" a="{{a.append(sf['surface'])}}">{{sf['surface']}}
+													<input type="checkbox" value="{{sf['surface']}}" name="surface">
+													<span class="checkmark"></span>
+												</label>
+											{% endif %}
+											{% endfor %}
+						
+				
+										</div>
+									</div>
+								</section>
+								
+							</div>
+							<hr/>
+							
+						<div>
+						
+						</div>
+						</div>
+					</div>
+				</div>
+				
+
+				<!-- END FILTER -->
+			</div>
+			<div class="col-xl-9 col-lg-8 col-md-7">
+				<!-- Start Filter Bar -->
+				<div class="filter-bar d-flex flex-wrap align-items-center">
+					<div class="sorting">
+						<select id="sort">
+							<option value="pricel">Price(Low-Hight)</option>
+                    		<option value="priceh">Price(Hight-Low)</option>
+							
+						</select>
+					</div>
+					<!-- <div class="sorting mr-auto">
+						<select>
+							<option value="1">Show 12</option>
+							<option value="1">Show 12</option>
+							<option value="1">Show 12</option>
+						</select>
+					</div> -->
+					<!-- <div class="pagination">
+						<a href="#" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+						<a href="#" class="active">1</a>
+						<a href="#">2</a>
+						<a href="#">3</a>
+						<a href="#" class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+						<a href="#">6</a>
+						<a href="#" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+					</div> -->
+				</div>
+				<!-- End Filter Bar -->
+				<!-- Start Best Seller -->
+				<section class="lattest-product-area pb-40 category-list">
+					<div class="row item">
+						<!-- single product -->
+						{% for shoe in  shoes %}
+						<div class="col-lg-4 col-md-6 shoe_item" catalog="{{shoe['catalogy']}}" gender="{{shoe['gender_shoes']}}" data-price="{{shoe['price']*(1-shoe['sale']/100)}}" athleter="{{shoe['athleter']}}" feature="{{shoe['feature']}}">
+							<div class="single-product">
+								<a href="/user_productdetail/{{shoe['id_shoes']}}">
+								<img  id ="{{shoe['id_shoes']}}_1" class="img-fluid" src="../static/image/shoes_image/{{shoe['image']}}" alt="" >
+								</a>
+								<div class="product-details">
+									<h6 style="min-height: 50px;">{{shoe['shoes_name']}}</h6>
+									<div class="price">
+										<h6 >{{shoe['price']*(1-shoe['sale']/100)}}<ins>đ</ins></h6>
+										{% if shoe['sale'] %}
+										<h6 class="l-through">{{shoe['price']}}<ins>đ</ins></h6>
+										{% endif %}
+									</div>
+									<div class="prd-bottom dp_flex box_4color">
+										{% for color in colors %}
+										{% if color['id_shoes'] == shoe['id_shoes'] %}
+										<div class="color_menu margin_5 box_color" color="{{color['color']}}">
+											<img id="{{color['id_shoes']}}" src="../static/image/shoes_image/{{color['image']}}" width="50px" height="50px" title="../static/image/shoes_image/{{color['image']}}" onmouseover="show_image(this.title,this.id)">
+										</div>
+										{% endif %}
+										{% endfor %}
+
+										
+									</div>
+								</div>
+								<div class="hide">
+									{% for surf in surface %}
+									{% if surf['id_shoes']==shoe['id_shoes'] %}
+									<div class="surface" surface="{{surf['surface']}}">
+										
+									</div>
+									{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+						<!-- single product -->
+						<!-- <div class="col-lg-4 col-md-6">
+							<div class="single-product">
+								<img class="img-fluid" src="img/product/p2.jpg" alt="">
+								<div class="product-details">
+									<h6>addidas New Hammer sole
+										for Sports person</h6>
+									<div class="price">
+										<h6>$150.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+									<div class="prd-bottom">
+
+										<a href="" class="social-info">
+											<span class="ti-bag"></span>
+											<p class="hover-text">add to bag</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">Wishlist</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- single product -->
+						<!-- <div class="col-lg-4 col-md-6">
+							<div class="single-product">
+								<img class="img-fluid" src="img/product/p3.jpg" alt="">
+								<div class="product-details">
+									<h6>addidas New Hammer sole
+										for Sports person</h6>
+									<div class="price">
+										<h6>$150.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+									<div class="prd-bottom">
+
+										<a href="" class="social-info">
+											<span class="ti-bag"></span>
+											<p class="hover-text">add to bag</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">Wishlist</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- single product -->
+						<!-- <div class="col-lg-4 col-md-6">
+							<div class="single-product">
+								<img class="img-fluid" src="img/product/p4.jpg" alt="">
+								<div class="product-details">
+									<h6>addidas New Hammer sole
+										for Sports person</h6>
+									<div class="price">
+										<h6>$150.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+									<div class="prd-bottom">
+
+										<a href="" class="social-info">
+											<span class="ti-bag"></span>
+											<p class="hover-text">add to bag</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">Wishlist</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- single product -->
+						<!-- <div class="col-lg-4 col-md-6">
+							<div class="single-product">
+								<img class="img-fluid" src="img/product/p5.jpg" alt="">
+								<div class="product-details">
+									<h6>addidas New Hammer sole
+										for Sports person</h6>
+									<div class="price">
+										<h6>$150.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+									<div class="prd-bottom">
+
+										<a href="" class="social-info">
+											<span class="ti-bag"></span>
+											<p class="hover-text">add to bag</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">Wishlist</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- single product -->
+						<!-- <div class="col-lg-4 col-md-6">
+							<div class="single-product">
+								<img class="img-fluid" src="img/product/p6.jpg" alt="">
+								<div class="product-details">
+									<h6>addidas New Hammer sole
+										for Sports person</h6>
+									<div class="price">
+										<h6>$150.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+									<div class="prd-bottom">
+
+										<a href="" class="social-info">
+											<span class="ti-bag"></span>
+											<p class="hover-text">add to bag</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">Wishlist</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div> -->
+					</div>
+				</section>
+				<!-- End Best Seller -->
+				<!-- Start Filter Bar -->
+				<!-- <div class="filter-bar d-flex flex-wrap align-items-center">
+					<div class="sorting mr-auto">
+						<select>
+							<option value="1">Show 12</option>
+							<option value="1">Show 12</option>
+							<option value="1">Show 12</option>
+						</select>
+					</div>
+					<div class="pagination">
+						<a href="#" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+						<a href="#" class="active">1</a>
+						<a href="#">2</a>
+						<a href="#">3</a>
+						<a href="#" class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+						<a href="#">6</a>
+						<a href="#" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+					</div>
+				</div> -->
+				<!-- End Filter Bar -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Start related-product Area -->
+	<section class="related-product-area section_gap">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Deals of the Week</h1>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+							magna aliqua.</p>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="row">
+				<div class="col-lg-9">
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r1.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r2.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r3.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r5.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r6.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r7.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r9.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r10.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="single-related-product d-flex">
+								<a href="#"><img src="img/r11.jpg" alt=""></a>
+								<div class="desc">
+									<a href="#" class="title">Black lace Heels</a>
+									<div class="price">
+										<h6>$189.00</h6>
+										<h6 class="l-through">$210.00</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="ctg-right">
+						<a href="#" target="_blank">
+							<img class="img-fluid d-block mx-auto" src="img/category/c5.jpg" alt="">
+						</a>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</section>
+	<!-- End related-product Area -->
+
+	<!-- start footer Area -->
+	{% include 'footer.html' %}
+	<!-- End footer Area -->
+
+	<!-- Modal Quick Product View -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="container relative">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<div class="product-quick-view">
+					<div class="row align-items-center">
+						<div class="col-lg-6">
+							<div class="quick-view-carousel">
+								<div class="item" style="background: url(../static/user/img/organic-food/q1.jpg);">
+
+								</div>
+								<div class="item" style="background: url(../static/user/img/organic-food/q1.jpg);">
+
+								</div>
+								<div class="item" style="background: url(../static/user/img/organic-food/q1.jpg);">
+
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="quick-view-content">
+								<div class="top">
+									<h3 class="head">Mill Oil 1000W Heater, White</h3>
+									<div class="price d-flex align-items-center"><span class="lnr lnr-tag"></span> <span class="ml-10">$149.99</span></div>
+									<div class="category">Category: <span>Household</span></div>
+									<div class="available">Availibility: <span>In Stock</span></div>
+								</div>
+								<div class="middle">
+									<p class="content">Mill Oil is an innovative oil filled radiator with the most modern technology. If you are
+										looking for something that can make your interior look awesome, and at the same time give you the pleasant
+										warm feeling during the winter.</p>
+									<a href="#" class="view-full">View full Details <span class="lnr lnr-arrow-right"></span></a>
+								</div>
+								<div class="bottom">
+									<div class="color-picker d-flex align-items-center">Color:
+										<span class="single-pick"></span>
+										<span class="single-pick"></span>
+										<span class="single-pick"></span>
+										<span class="single-pick"></span>
+										<span class="single-pick"></span>
+									</div>
+									<div class="quantity-container d-flex align-items-center mt-15">
+										Quantity:
+										<input type="text" class="quantity-amount ml-15" value="1" />
+										<div class="arrow-btn d-inline-flex flex-column">
+											<button class="increase arrow" type="button" title="Increase Quantity"><span class="lnr lnr-chevron-up"></span></button>
+											<button class="decrease arrow" type="button" title="Decrease Quantity"><span class="lnr lnr-chevron-down"></span></button>
+										</div>
+
+									</div>
+									<div class="d-flex mt-20">
+										<a href="#" class="view-btn color-2"><span>Add to Cart</span></a>
+										<a href="#" class="like-btn"><span class="lnr lnr-layers"></span></a>
+										<a href="#" class="like-btn"><span class="lnr lnr-heart"></span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+        
+        <div class="top_signal hide"  style="text-align: center;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 4px;
+		font-size: 32px;
+		background-color: #aaa;
+        transform: rotate(180deg);" id="top_head">
+        <a href="#top" style="margin: 10px;">
+            <i class="fa fa-angle-down rotate-icon"></i>
+        </a>    
+        
+        </div>
+
+	</div>
+	<script>
+		window.onscroll = function() {
+		ontop()};
+		
+			// var header = document.getElementById("searchhd");
+			// var sticky = header.offsetTop;
+			// // alert(sticky);
+			
+			// function setHeader() {
+			// if (window.pageYOffset > sticky) {
+			// 	header.classList.add("sticky");
+			// } else {
+			// 	header.classList.remove("sticky");
+			// }
+			// }      
+			// $(document).ready(function(){
+			// 	$(window).scroll(function(){
+			// 		if($(window).scrollTop()==$(document).height()-$(window).height()){
+			// 			// ajax
+			// 		}
+			// 	});
+			// });
+	
+			var backtotop = document.getElementById("top_head");
+			// var sticky = header.offsetTop;
+			// alert(sticky);
+			
+			function ontop() {
+			if (window.pageYOffset > 350) {
+				backtotop.classList.remove("hide");
+			} else {
+				backtotop.classList.add("hide");
+			}
+			}  
+	
+	</script>
+
+	
+
+	<script src="../static/user/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="../static/user/js/vendor/bootstrap.min.js"></script>
+	<script src="../static/user/js/jquery.ajaxchimp.min.js"></script>
+	<script src="../static/user/js/jquery.nice-select.min.js"></script>
+	<script src="../static/user/js/jquery.sticky.js"></script>
+	<script src="../static/user/js/nouislider.min.js"></script>
+	<script src="../static/user/js/jquery.magnific-popup.min.js"></script>
+	<script src="../static/user/js/owl.carousel.min.js"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="../static/user/js/gmaps.min.js"></script>
+	<script src="../static/user/js/main.js"></script>
+	<script src="../static/user/js/user.js"></script>
+	<!-- <script language="JavaScript" type="text/javascript" src="../static/user/js/jquery-3.4.1.min.js"></script> -->
+</body>
+
+</html>

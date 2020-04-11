@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+
+
+	<link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+	<meta charset=utf-8 />
+	<script src="/static/user/js/jquery-3.4.1.min.js"></script>
+
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="../static/user/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Karma Shop</title>
+
+	<!--
+            CSS
+            ============================================= -->
+	<link rel="stylesheet" href="../static/user/css/linearicons.css">
+	<link rel="stylesheet" href="../static/user/css/owl.carousel.css">
+	<link rel="stylesheet" href="../static/user/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/user/css/themify-icons.css">
+	<link rel="stylesheet" href="../static/user/css/nice-select.css">
+	<link rel="stylesheet" href="../static/user/css/nouislider.min.css">
+	<link rel="stylesheet" href="../static/user/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/user/css/main.css">
+
+	<link rel="stylesheet" href="../static/user/css/app.css">
+</head>
+
+<body>
+
+    {% include 'header.html' %}
+
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Shopping Cart</h1>
+                    <nav class="d-flex align-items-center">
+                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="category.html">Cart</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <form action="/user_cart/checkout" method="POST">
+                <div class="table-responsive">
+                    {% if not cart_detail  %}
+                    <h3>You haven't product in cart !</h3>
+                    {% endif %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_detail %}
+                            <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img src="../static/image/shoes_image/{{item['image']}}" width="120px" height="120px" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <p>{{item['shoes_name']}}</p>
+                                            <p>Color: {{item['color']}}</p>
+                                            <p>Size: {{item['size']}}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>{{item['price']*(1-item['sale']/100)}}<ins>đ</ins></h5>
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <!-- <input type="text" name="qty" id="sst" maxlength="12" value="{{item['quantity']}}" disabled
+                                            class="input-text qty">
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button> -->
+                                        <select class="shoe_quantity nice-select" id="id_cart_detail_{{item['id_cart_detail']}}">
+                                            {% for i in range(1,11) %}
+                                            <option value="{{i}}" {% if i == item['quantity'] %} selected {% endif %}>{{i}}</option>
+                                            {% endfor %}
+                                        </select>
+
+
+                                    </div>
+                                </td>
+                                <td id="factor_price_{{item['id_cart_detail']}}">
+                                    <h5>{{item['price']*(1-item['sale']/100)*item['quantity']}}<ins>đ</ins></h5>
+                                </td>
+                                <td >
+                                    <a href="/user_cart/delete/{{item['id_cart_detail']}}" class="">
+                                        Remove
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img src="img/cart.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <p>Minimalistic shop for multipurpose use</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>$360.00</h5>
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
+                                            class="input-text qty">
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>$720.00</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img src="img/cart.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <p>Minimalistic shop for multipurpose use</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>$360.00</h5>
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
+                                            class="input-text qty">
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>$720.00</h5>
+                                </td>
+                            </tr>
+                            <tr class="bottom_button">
+                                <td>
+                                    <a class="gray_btn" href="#">Update Cart</a>
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <div class="cupon_text d-flex align-items-center">
+                                        <input type="text" placeholder="Coupon Code">
+                                        <a class="primary-btn" href="#">Apply</a>
+                                        <a class="gray_btn" href="#">Close Coupon</a>
+                                    </div>
+                                </td>
+                            </tr> -->
+                            <tr id="total_price">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                
+                                <td>
+                                    <h5>Subtotal</h5>
+                                </td>
+                                {% if cart_detail %}
+                                <td>
+                                    <h5>{{cart_detail[0]['cart_total_price']}}<ins>đ</ins></h5>
+                                </td>
+                                {% else%}
+                                <td>
+                                    <h5>0<ins>đ</ins></h5>
+                                </td>
+                                {% endif %}
+                                <td></td>
+                                
+                            </tr>
+                            <tr class="shipping_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td></td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <div class="shipping_box" style="width:unset;">
+                                        <ul class="list">
+                                            <!-- <li><a href="#">Flat Rate: $5.00</a></li> -->
+                                            <li class="active"><a  href="#">Free Shipping</a></li>
+                                            <!-- <li><a href="#">Flat Rate: $10.00</a></li>
+                                            <li class="active"><a href="#">Local Delivery: $2.00</a></li> -->
+                                        </ul>
+                                        <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
+                                        <!-- <select class="shipping_select">
+                                            <option value="1">Bangladesh</option>
+                                            <option value="2">India</option>
+                                            <option value="4">Pakistan</option>
+                                        </select>
+                                        <select class="shipping_select">
+                                            <option value="1">Select a State</option>
+                                            <option value="2">Select a State</option>
+                                            <option value="4">Select a State</option>
+                                        </select> -->
+                                        <input type="text" placeholder="Name..." name="receiver" value="{{session['name']}}" >
+                                        <input type="text" placeholder="Address Shipping..." name="address_ship" value="{{session['address']}}">
+                                        <input type="text" placeholder="Phone Number..." name="phone_number" value="{{session['phone_number']}}">
+                                        <!-- <a class="gray_btn" href="#">Update Details</a> -->
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="out_button_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div class="checkout_btn_inner d-flex align-items-center">
+                                        <a class="gray_btn" href="/user_product">Continue Shopping</a>
+                                        <button class="primary-btn" type="submit">Proceed to checkout</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+    <!-- start footer Area -->
+    {% include 'footer.html' %}
+    <!-- End footer Area -->
+    <script type="text/javascript">
+     $(document).ready(function() {
+          $(".shoe_quantity").on("change", function(event){
+            //   alert("1");
+            var _this = this;
+            var number= this.value;
+            var temp= this.id;
+            var id_cart_detail= temp.substr(15,temp.length)
+            // alert(id_cart_detail);
+            // alert(this.value);
+            // var temp=_this.id;
+            // var id_shoes= temp.substr(19,temp.length);
+            // alert(id_shoes);
+            $.ajax({
+            data: {
+            number : number,
+            id_cart_detail : id_cart_detail
+            },
+              type:"POST",
+              url : "/user_update/cart"
+            })
+            .done(function(data){
+                var myObj = JSON.parse(data)
+            $("#total_price").html(myObj.resp1);
+            // $("#notification").show();
+            $("#factor_price_"+id_cart_detail).html(myObj.resp2);
+            });
+          });
+        });
+    
+    </script>
+	
+	<script src="../static/user/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="../static/user/js/vendor/bootstrap.min.js"></script>
+	<script src="../static/user/js/jquery.ajaxchimp.min.js"></script>
+	<script src="../static/user/js/jquery.nice-select.min.js"></script>
+	<script src="../static/user/js/jquery.sticky.js"></script>
+	<script src="../static/user/js/nouislider.min.js"></script>
+	<script src="../static/user/js/countdown.js"></script>
+	<script src="../static/user/js/jquery.magnific-popup.min.js"></script>
+	<script src="../static/user/js/owl.carousel.min.js"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="../static/user/js/gmaps.min.js"></script>
+	<script src="../static/user/js/main.js"></script>
+    
+</body>
+
+</html>

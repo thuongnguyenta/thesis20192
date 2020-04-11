@@ -1,0 +1,552 @@
+.form-group
+  {margin-bottom:25px;}
+
+  .form-material .form-control, .form-material .form-control.focus, .form-material .form-control:focus {
+    background-image: linear-gradient(#707cd2,#707cd2),linear-gradient(rgba(120,130,140,.13),rgba(120,130,140,.13));
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    float: none;
+}
+.form-material .form-control {
+  background-color: rgba(0,0,0,0);
+  background-position: center bottom,center calc(99%);
+  background-repeat: no-repeat;
+  background-size: 0 2px,100% 1px;
+  padding: 0;
+  transition: background 0s ease-out 0s;
+}
+form-control:focus{box-shadow:none;border-color:#263238}
+
+.fix_1{
+  top:0;
+  left: 0;
+  z-index:9999;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.body_fix_1{
+  overflow: auto;
+  position: relative;
+  width: 90%;
+  height: 97%;
+  margin: auto;
+  background-color: #fff;
+}
+
+/* Dấu x đóng */
+
+.close {
+  display: none;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+  z-index: 99999;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 33px;
+  width: 2px;
+  background-color: #333;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+/*  */
+
+.white-box {
+  background: #fff;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+.color_menu img{
+width: 50px;
+}
+.error{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: red;
+}
+.hide{
+    display: none;
+}
+
+.position_relative{
+  position: relative;
+}
+.position_absolute{
+  position: absolute;
+}
+.input_ps{
+  border :1px solid #000;
+  border-radius: 50%;
+}
+.change{
+  padding: 2px 10px;
+  text-align: center;
+  position: absolute;
+  top: 110px;
+  left: 30%;
+  cursor: pointer;
+}
+.bg_img{
+  /* background-image: url('/static/user/img/blog/feature-img1.jpg'); */
+  background-repeat: no-repeat,
+}
+
+.person_input{
+  min-height: 40px;
+  margin: 5px;
+  line-height: 50px;
+}
+.value_ip{
+  min-width: 350px;
+}
+.lb_title{
+  min-width: 120px;
+}
+.input {
+  padding-left: 15px;
+  font-size: 14px;
+  border-color: transparent;
+  width: 95%;
+  min-height: 40px;
+  border-radius: 5px;
+  margin: auto;
+  border: 1px solid;
+
+}
+.menu_icon{
+    position: absolute;
+    top: -48px;
+    font-size: 25px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 2px;
+}
+
+.filter_square{
+    width: 90%;
+    margin: auto;
+}
+.flex{
+    justify-content: space-between;
+}
+.image_element{
+    margin:10px;
+}
+.margin{
+    margin: 5px;
+}
+.flex-wrap{
+    flex-wrap: wrap;
+}
+.dp_flex{
+    display: flex;
+}
+.margin_5{
+    margin: 0px 5px 0 0;
+}
+
+.colour_cb{
+    width: 50px;
+    height: 70px;
+    min-width: 60px;
+}
+.content_center{
+    text-align: center;
+  }
+
+  .colour_select{
+    position: absolute;
+    /* line-height: 80px; */
+    top: 30px;
+}
+.margin_t_20{
+margin-top:20px;
+}
+.container2 {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Hide the browser's default checkbox */
+  .container2 input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .container2:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .container2 input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .container2 input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .container2 .checkmark:after {
+    left: 9px;
+    top: 6px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+/* Hết */
+
+
+
+
+
+.round {
+    position: relative;
+  }
+  
+  .round label {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 28px;
+  }
+  
+  .round label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
+  }
+  .white label:after{
+    border: 2px solid #000;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
+  }
+  
+  .round input[type="checkbox"] {
+    visibility: hidden;
+  }
+  
+  .round input[type="checkbox"]:checked + label {
+    /* background-color: #66bb6a; */
+    /* border-color: #66bb6a; */
+  }
+  
+  .round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+  }
+
+
+
+/* The container */
+.container1 {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  .container1 input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Create a custom radio button */
+  .checkmark1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .container1:hover input ~ .checkmark1 {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .container1 input:checked ~ .checkmark1 {
+    background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark1:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .container1 input:checked ~ .checkmark1:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .container1 .checkmark1:after {
+       top: 9px;
+      left: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;}
+
+/* STAR */
+.rate {
+  position: absolute;
+  top: 77px;
+  left: 124px;
+  padding: 0 10px;
+}
+.rate:not(:checked) > input {
+  position:absolute;
+  display: none;
+}
+.rate:not(:checked) > label {
+  float:right;
+  width:1em;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:30px;
+  color:#ccc;
+}
+.rate:not(:checked) > label:before {
+  content: '★ ';
+}
+.rate > input:checked ~ label {
+  color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+
+/* */
+
+/* .close {
+display: none;
+position: absolute;
+right: 32px;
+top: 32px;
+width: 32px;
+height: 32px;
+opacity: 0.3;
+}
+.close:hover {
+opacity: 1;
+}
+.close:before, .close:after {
+position: absolute;
+left: 15px;
+content: ' ';
+height: 33px;
+width: 2px;
+background-color: #333;
+}
+.close:before {
+transform: rotate(45deg);
+}
+.close:after {
+transform: rotate(-45deg);
+} */
+
+.list_filter{
+    position: absolute;
+    top: -50px;
+    font-size: 25px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 2px;
+}
+.box_4color div:nth-child(n+4) 
+{
+    display: none;
+}
+.size:not(:checked) > label{
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    color: #000;
+}
+.quantity{
+    height: 40px;
+    width: 100px;
+    padding-left: 10px;
+    font-size: 20px;
+    text-align: center;
+}
+.radio-toolbar input[type="radio"] {
+    display: none;
+}
+.radio-toolbar label {
+    display: inline-block;
+    background-color: #eee;
+    padding: 6px 6px;
+    font-family: Arial;
+    font-size: 16px;
+    cursor: pointer;
+    margin:2px;
+    border-radius: 2px;
+  }
+  
+.radio-toolbar input[type="radio"]:checked+label {
+background-color: #666;
+color: #ffffff;
+font-size: 16px;
+font-weight:bold;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+
+input[type="file"]{
+  display: none;
+}
+.image_chose{
+  border: 2px dotted;
+  height: 200px;
+}
+.button_upload{
+  bottom: -63px;
+  position: absolute;
+  left: 27%;
+}
+.label_file{
+  position: absolute;
+  bottom: 10px;
+  left: 44%;
+}
+@media screen and (max-width: 768px) {
+    .responsive_page{
+      display: block;
+    }
+
+    div .filter_check {
+        display: none;
+    }
+    .hidden_div{
+        display: none;
+    }
+    .filter_check.responsive {
+        background-color: rgba(0,0,0,0.2);
+        z-index: 9999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        float: none;
+        text-align: left;
+        overflow: auto;
+        /* margin: unset; */
+      }
+      .filter_ct{
+        
+        padding: 10px;
+        background-color: #ffffff;
+        margin: 10px;
+        width: 60%;
+        height: 95%;
+        overflow: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+.dp_none{
+    display: none;
+}
+}

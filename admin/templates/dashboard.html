@@ -7,20 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../static/plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/admin/plugins/images/favicon.png">
     <title>Ample Admin Template - The Ultimate Multipurpose admin template</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/admin/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
-    <link href="../static/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../static/admin/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../static/css/animate.css" rel="stylesheet">
+    <link href="../static/admin/css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../static/admin/css/style.css" rel="stylesheet">
 
-    <link href="../static/css/app.css" rel="stylesheet">
+    <link href="../static/admin/css/app.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../static/css/colors/default.css" id="theme" rel="stylesheet">
+    <link href="../static/admin/css/colors/default.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -51,15 +51,15 @@
                     <!-- Logo -->
                     <a class="logo" href="dashboard.html">
                         <!-- Logo icon image, you can use font-icon also --><b>
-                            <!--This is dark logo icon--><img src="../static/plugins/images/admin-logo.png" alt="home"
+                            <!--This is dark logo icon--><img src="../static/admin/plugins/images/admin-logo.png" alt="home"
                                 class="dark-logo" />
-                            <!--This is light logo icon--><img src="../static/plugins/images/admin-logo-dark.png" alt="home"
+                            <!--This is light logo icon--><img src="../static/admin/plugins/images/admin-logo-dark.png" alt="home"
                                 class="light-logo" />
                         </b>
                         <!-- Logo text image you can use text also --><span class="hidden-xs">
-                            <!--This is dark logo text--><img src="../static/plugins/images/admin-text.png" alt="home"
+                            <!--This is dark logo text--><img src="../static/admin/plugins/images/admin-text.png" alt="home"
                                 class="dark-logo" />
-                            <!--This is light logo text--><img src="../static/plugins/images/admin-text-dark.png" alt="home"
+                            <!--This is light logo text--><img src="../static/admin/plugins/images/admin-text-dark.png" alt="home"
                                 class="light-logo" />
                         </span> </a>
                 </div>
@@ -75,7 +75,7 @@
                                     class="fa fa-search"></i></a> </form>
                     </li>
                     <li>
-                        <a class="profile-pic" href="#"> <img src="../static/plugins/images/users/varun.jpg" alt="user-img"
+                        <a class="profile-pic" href="#"> <img src="../static/admin/plugins/images/users/varun.jpg" alt="user-img"
                                 width="36" class="img-circle"><b class="hidden-xs">{{session['name']}}</b></a>
                     </li>
                 </ul>
@@ -209,7 +209,7 @@
                             <!-- <div id="{{combo_chart}}" onclick="alert(combo_chart)">{{combo_chart}}</div> -->
                             <div id="chart" style="width:700px; height:400px; margin:auto;"></div> 
                             <!-- <div id="ct-visits" style="height: 405px;"></div> -->
-                            <!-- <div id="chart_div" style="width: 1000px; height: 500px;"></div> -->
+                            
                             
                              <!-- <canvas id="canvas" height="450" width="600"></canvas> -->
                              
@@ -314,14 +314,14 @@
                     <div class="col-md-12 col-lg-8 col-sm-12">
                         <div class="white-box">
                             <h3 class="box-title">Recent Comments</h3>
-                            <div class="comment-center p-t-10" id="comment_10">
+                            <div class="comment-center p-t-10" id="ct_comment_all">
                                 {% for cm in comment %}
                                 <div class="comment-body" id="comment-body-{{cm['id_comment']}}">
                                     <div class="user-img"> <img src="..{{cm['cover_image']}}"  alt="user" class="img-circle" style="border: 1px solid;width:50px; height:50px;">
                                     </div>
                                     <div class="mail-contnet">
                                         <h5>{{cm['username']}}</h5><span class="time">{{cm['time_review'].strftime("%H:%M %d,%B %Y")}}</span>
-                                        <br/><span class="mail-desc" >{{cm['comments']}}</span> <div id="comment_{{cm['id_comment']}}" class="btn btn btn-rounded btn-default btn-outline m-r-5 approve"><i class="ti-check text-success m-r-5"></i>Approve</div><div href="javacript:void(0)" class="btn-rounded btn btn-default btn-outline"><i class="ti-close text-danger m-r-5"></i> Reject</div>
+                                        <br/><span class="mail-desc" >{{cm['comments']}}</span> <div id="comment_{{cm['id_comment']}}" class="btn btn btn-rounded btn-default btn-outline m-r-5 approve_div"><i class="ti-check text-success m-r-5"></i>Approve</div><div href="javacript:void(0)" id="reject_{{cm['id_comment']}}" class="btn-rounded btn btn-default btn-outline reject_div"><i class="ti-close text-danger m-r-5"></i> Reject</div>
                                     </div>
                                     <div class="name_product">
                                         {{cm['shoes_name']}}
@@ -333,9 +333,23 @@
                                         {% for i in range(cm['star'],5)%}
                                         <span class="fa fa-star uncheck_star"></span>
                                         {% endfor %}
+                                        
+                                        
                                 </div>
                                 </div>
                                 {% endfor %}
+                                <!-- <div class='comment-body' id='comment-body-3'>
+                                    <div class='user-img'> <img src='../static/image/people/download.jfif' alt='user' class='img-circle' style='border: 1px solid;width:50px; height:50px;'>
+                                    </div>
+                                    <div class='mail-contnet'><h5>Mạnh</h5><span class='time'>21:06 17,March 2020</span><br/><span class='mail-desc' >Cũng bình thường</span> 
+                                        <div id='comment_3' class='btn btn btn-rounded btn-default btn-outline m-r-5 approve'><i class='ti-check text-success m-r-5'></i>Approve</div>
+                                        <div href='javacript:void(0)' class='btn-rounded btn btn-default btn-outline reject'><i class='ti-close text-danger m-r-5'></i> Reject</div>
+                                    </div>
+                                    <div class='name_product'>Nike React Infinity Run Flyknit</div>
+                                    <div class='star' id='star_3'><span class='fa fa-star checked_star'></span><span class='fa fa-star checked_star'></span><span class='fa fa-star checked_star'></span><span class='fa fa-star uncheck_star'></span><span class='fa fa-star uncheck_star'></span>
+                                    </div>
+                                </div> -->
+                                
                                 
                             </div>
                         </div>
@@ -383,46 +397,31 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="../static/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
-    <script src="../static/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../static/admin/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Menu Plugin JavaScript -->
-    <script src="../static/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
     <!--slimscroll JavaScript -->
-    <script src="../static/js/jquery.slimscroll.js"></script>
+    <script src="../static/admin/js/jquery.slimscroll.js"></script>
     <!--Wave Effects -->
-    <script src="../static/js/waves.js"></script>
+    <script src="../static/admin/js/waves.js"></script>
     <!--Counter js -->
-    <script src="../static/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
-    <script src="../static/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+    <script src="../static/admin/plugins/bower_components/counterup/jquery.counterup.min.js"></script>
     <!-- chartist chart -->
-    <script src="../static/plugins/bower_components/chartist-js/dist/chartist.min.js"></script>
-    <script src="../static/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/chartist-js/dist/chartist.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
     <!-- Sparkline chart JavaScript -->
-    <script src="../static/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
     <!-- Custom Theme JavaScript -->
-    <script src="../static/js/custom.min.js"></script>
-    <script src="../static/js/dashboard1.js"></script>
-    <script src="../static/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+    <script src="../static/admin/js/custom.min.js"></script>
+    <script src="../static/admin/js/dashboard1.js"></script>
+    <script src="../static/admin/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
 
-    <script src="../static/js/Chart.min.js"></script>
+    <script src="../static/admin/js/Chart.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <!-- <script>
-        var BarChart = {
-            labels: ["Ruby", "jQuery", "Java", "ASP.Net", "PHP"],
-            datasets: [{
-                fillColor: "rgba(151,249,190,0.5)",
-                strokeColor: "rgba(255,255,255,1)",
-                data: [13, 20, 30, 40, 50]
-            }, {
-                fillColor: "rgba(252,147,65,0.5)",
-                strokeColor: "rgba(255,255,255,1)",
-                data: [28, 68, 40, 19, 96]
-            }]
-        }
-        var myBarChart = new Chart(document.getElementById("canvas").getContext("2d")).Bar(BarChart, {scaleFontSize: 14, scaleFontColor: "#ff8540"});
-        
-    </script> -->
+    
     <script>
     
         $(function() {
@@ -436,12 +435,9 @@
           url : "/dashboard/product_purchase"
         })
         .done(function(data){
-        //   $("#site1").attr("href",data.site1);
-        //   $("#image1").attr("src", data.image1);
+       
         $("#body_product").html(data);
 
-        // alert(data);
-        // console.log(data);
         });
 /// NOT PURCHAR
         $.ajax({
@@ -453,12 +449,8 @@
           url : "/dashboard/product_not_purchase"
         })
         .done(function(data){
-        //   $("#site1").attr("href",data.site1);
-        //   $("#image1").attr("src", data.image1);
+       
         $("#body_product_not").html(data);
-
-        // alert(data);
-        // console.log(data);
         });
 
 ///Draw chart 
@@ -510,10 +502,9 @@
     });
 }
 function drawMonthChart() {
-            // alert($("#month").val());
-            // alert($("#year").val());
+            
             var month=$("#month").val();
-            alert(month);
+            // alert(month);
           $.ajax({
             url: "/updatedata_shoes",
             dataType: "json",
@@ -527,22 +518,12 @@ function drawMonthChart() {
             .done( function (data) {
                 var temp=data
                 var arrShoes = [['Product Name', 'Quantity Purchase']];    // Define an array and assign columns for the chart.
-                // alert([['Product Name', 'Quantity Purchase']]);
-                // alert(data)
-                // alert(data.length);
-                // alert(arrShoes.length);
-                // Loop through each data and populate the array.
+               
                 $.each(data, function (index, value) {
                     // alert
                     arrShoes.push([value.shoes_name, value.number]);
                 });
-                // $.each(temp, function(i, item) {
-                //     alert(item.shoes_name);
-                // });
-                // $.each(data, function (index, value) {
-                //     arrShoes.push([value.shoes_name, value.number]);
-                //     // alert(arrSales);
-                // });
+                
                 var options = {'title':'Product Has Purchar', 'width':600, 'height':400};
                 var figures = google.visualization.arrayToDataTable(arrShoes);
         
@@ -558,49 +539,6 @@ function drawMonthChart() {
        
         </script>
 
-<!-- <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawVisualization);
-
-    function drawVisualization() {
-      // Some raw data (not necessarily accurate)
-      var jsonData = $.ajax({
-            url: "/getdata",
-            dataType: "json",
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                var arrSales = [['Month', 'Sales Figure', 'Perc. (%)']];    // Define an array and assign columns for the chart.
-
-                // Loop through each data and populate the array.
-                $.each(data, function (index, value) {
-                    arrSales.push([value.Month, value.Sales_Figure, value.Perc]);
-                });
-
-
-      var data = google.visualization.arrayToDataTable([
-        ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-        ['2004/05',  165,      938,         522,             998,           450,      614.6],
-        ['2005/06',  135,      1120,        599,             1268,          288,      682],
-        ['2006/07',  157,      1167,        587,             807,           397,      623],
-        ['2007/08',  139,      1110,        615,             968,           215,      609.4],
-        ['2008/09',  136,      691,         629,             1026,          366,      569.6]
-      ]);
-
-      var options = {
-        title : 'Monthly Coffee Production by Country',
-        vAxis: {title: 'Cups'},
-        hAxis: {title: 'Month'},
-        seriesType: 'bars',
-        series: {5: {type: 'line'}}        };
-
-      var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
-      });
-    }
-  </script> -->
-
   <script>
     // Visualization API with the 'corechart' package.
     google.charts.load('visualization', { packages: ['corechart'] });
@@ -614,8 +552,7 @@ function drawMonthChart() {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 var arrSales = [['Month','Total Value','Not Payment', 'Order_Quantity']];    // Define an array and assign columns for the chart.
-                // alert(data);
-                // Loop through each data and populate the array.
+            
                 $.each(data, function (index, value) {
                     arrSales.push([value.month,value.total, value.income, value.quantity]);
                 });
@@ -638,9 +575,6 @@ function drawMonthChart() {
                 // Create DataTable and add the array to it.
                 var figures = google.visualization.arrayToDataTable(arrSales);
 
-                // Define the chart type (LineChart) and the container (a DIV in our case).
-                // var chart = new google.visualization.ComboChart(document.getElementById('chart'));
-                // chart.draw(figures, options);      // Draw the chart with Options.
                 var chart = new google.visualization.ComboChart(document.getElementById('chart'));
                 chart.draw(figures, options);
             },
@@ -650,11 +584,32 @@ function drawMonthChart() {
         });
     }
 </script>
+
+
 <script>
-    $(document).ready(function() {
-          $(".approve").click(function(){
-              alert("1");
-            var _this = this;
+    $(document).on("click",".reject_div",function(e){
+        var _this = this;
+            var temp=_this.id;
+            var id_comment= temp.substr(7,temp.length);
+            // alert(id_comment);
+            $.ajax({
+              data: {'id_comment':id_comment},
+              type:"POST",
+              url : "/dashboard/comment"
+            })
+            .done(function(data){
+                // alert("Done");
+                // alert("#comment_body_"+id_comment);
+                
+            $("#ct_comment_all").html(data);
+            });
+ //your code
+});
+</script>
+
+<script>
+    $(document).on("click",".approve_div",function(e){
+        var _this = this;
             var temp=_this.id;
             var id_comment= temp.substr(8,temp.length);
             // alert(id_comment);
@@ -666,12 +621,13 @@ function drawMonthChart() {
             .done(function(data){
                 // alert("Done");
                 // alert("#comment_body_"+id_comment);
-            $("#comment_10").html(data);
-            // alert("#comment-body-"+id_comment);
+                
+            $("#ct_comment_all").html(data);
             });
-          });
-    });
+ //your code
+});
 </script>
+
 
     
 </body>

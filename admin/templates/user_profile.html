@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="../static/user/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Karma Shop</title>
+	<!--
+			CSS
+			============================================= -->
+	<link rel="stylesheet" href="../static/user/css/linearicons.css">
+	<link rel="stylesheet" href="../static/user/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/user/css/themify-icons.css">
+	<link rel="stylesheet" href="../static/user/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/user/css/owl.carousel.css">
+	<link rel="stylesheet" href="../static/user/css/nice-select.css">
+	<link rel="stylesheet" href="../static/user/css/nouislider.min.css">
+	<link rel="stylesheet" href="../static/user/css/ion.rangeSlider.css" />
+	<link rel="stylesheet" href="../static/user/css/ion.rangeSlider.skinFlat.css" />
+	<link rel="stylesheet" href="../static/user/css/main.css">
+	<link rel="stylesheet" href="../static/user/css/app.css">
+	<script src="/static/user/js/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+	<script>
+		function myFunction() {
+			var x = document.getElementById("hidden_div");
+			if (x.className === "col-lg-4 hidden_div") {
+				x.className += " responsive_page";
+			} else {
+				x.className = "col-lg-4 hidden_div";
+			}
+			}
+	</script>
+
+	{% include 'header.html' %}
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Profile</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/user_index">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="#">Account<span class="lnr lnr-arrow-right"></span></a>
+						<a href="single-product.html">Personal Infor</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+    <!-- End Banner Area -->
+    <!--================Single Product Area =================-->
+
+	<section class="blog_area single-post-area section_gap">
+    <div class="container">
+		<div class="row">
+			<div class="position_absolute dp_none " >
+				<a href="javascript:void(0);" class="icon1" onclick="myFunction()">
+					<i class="fa fa-bars list_filter"></i>
+				</a>
+				
+			</div>
+			<div class="col-lg-4 hidden_div" id="hidden_div">
+				<div class="blog_right_sidebar">
+					<!-- <aside class="single_sidebar_widget search_widget">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search Posts" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Posts'">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><i class="lnr lnr-magnifier"></i></button>
+							</span>
+						</div>
+						<div class="br"></div>
+					</aside> -->
+					<aside class="single_sidebar_widget author_widget">
+						<img class="author_img rounded-circle" src="{{person[0]['cover_image']}}" width="100px" height="100px" alt="">
+						<h4>{{session['name']}}</h4>
+						<p>Member Account</p>
+						<div class="social_icon">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-github"></i></a>
+							<a href="#"><i class="fa fa-behance"></i></a>
+						</div>
+						<!-- <p>Boot camps have its supporters andit sdetractors. Some people do not understand why you
+							should have to spend money on boot camp when you can get. Boot camps have itssuppor
+							ters andits detractors.</p> -->
+						<div class="br"></div>
+					</aside>
+					<aside class="single_sidebar_widget popular_post_widget">
+						<h3 class="widget_title">Catalogy</h3>
+						<div class="media post_item">
+							<img src="../static/user/img/blog/popular-post/post1.jpg" width="75px" height="75px"  alt="post">
+							<div class="media-body active">
+								<a href="#">
+									<h3>Personal Information</h3>
+								</a>
+								<!-- <p>02 Hours ago</p> -->
+							</div>
+						</div>
+						<div class="media post_item">
+							<img src="../static/user/img/blog/popular-post/post2.jpg" width="75px" height="75px" alt="post">
+							<div class="media-body">
+								<a href="#">
+									<h3>History Order</h3>
+								</a>
+								<!-- <p>02 Hours ago</p> -->
+							</div>
+						</div>
+						<!-- <div class="media post_item">
+							<img src="img/blog/popular-post/post3.jpg" alt="post">
+							<div class="media-body">
+								<a href="blog-details.html">
+									<h3>Astronomy Or Astrology</h3>
+								</a>
+								<p>03 Hours ago</p>
+							</div>
+						</div>
+						<div class="media post_item">
+							<img src="img/blog/popular-post/post4.jpg" alt="post">
+							<div class="media-body">
+								<a href="blog-details.html">
+									<h3>Asteroids telescope</h3>
+								</a>
+								<p>01 Hours ago</p>
+							</div>
+						</div> -->
+						<div class="br"></div>
+					</aside>
+					<!-- <aside class="single_sidebar_widget ads_widget">
+						<a href="#"><img class="img-fluid" src="img/blog/add.jpg" alt=""></a>
+						<div class="br"></div>
+					</aside> -->
+					<!-- <aside class="single_sidebar_widget post_category_widget">
+						<h4 class="widget_title">Post Catgories</h4>
+						<ul class="list cat-list">
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Technology</p>
+									<p>37</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Lifestyle</p>
+									<p>24</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Fashion</p>
+									<p>59</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Art</p>
+									<p>29</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Food</p>
+									<p>15</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Architecture</p>
+									<p>09</p>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="d-flex justify-content-between">
+									<p>Adventure</p>
+									<p>44</p>
+								</a>
+							</li>
+						</ul>
+						<div class="br"></div>
+					</aside>
+					<aside class="single-sidebar-widget newsletter_widget">
+						<h4 class="widget_title">Newsletter</h4>
+						<p>
+							Here, I focus on a range of items and features that we use in life without
+							giving them a second thought.
+						</p>
+						<div class="form-group d-flex flex-row">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></div>
+								</div>
+								<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email"
+									onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email'">
+							</div>
+							<a href="#" class="bbtns">Subcribe</a>
+						</div>
+						<p class="text-bottom">You can unsubscribe at any time</p>
+						<div class="br"></div>
+					</aside>
+					<aside class="single-sidebar-widget tag_cloud_widget">
+						<h4 class="widget_title">Tag Clouds</h4>
+						<ul class="list">
+							<li><a href="#">Technology</a></li>
+							<li><a href="#">Fashion</a></li>
+							<li><a href="#">Architecture</a></li>
+							<li><a href="#">Fashion</a></li>
+							<li><a href="#">Food</a></li>
+							<li><a href="#">Technology</a></li>
+							<li><a href="#">Lifestyle</a></li>
+							<li><a href="#">Art</a></li>
+							<li><a href="#">Adventure</a></li>
+							<li><a href="#">Food</a></li>
+							<li><a href="#">Lifestyle</a></li>
+							<li><a href="#">Adventure</a></li>
+						</ul>
+					</aside> -->
+				</div>
+			</div>
+			<div class="col-lg-8 posts-list">
+				<div class="single-post row bg_img">
+					<div class="col-lg-12">
+						<div class="feature-img">
+							<img class="img-fluid" src="" alt="">
+						</div>
+					</div>
+					<div class="col-lg-3  col-md-3 ">
+						<div class="blog_info text-right">
+							<!-- <div class="post_tag">
+								<a href="#">Food,</a>
+								<a class="active" href="#">Technology,</a>
+								<a href="#">Politics,</a>
+								<a href="#">Lifestyle</a>
+							</div>
+							<ul class="blog_meta list">
+								<li><a href="#">Mark wiens<i class="lnr lnr-user"></i></a></li>
+								<li><a href="#">12 Dec, 2018<i class="lnr lnr-calendar-full"></i></a></li>
+								<li><a href="#">1.2M Views<i class="lnr lnr-eye"></i></a></li>
+								<li><a href="#">06 Comments<i class="lnr lnr-bubble"></i></a></li>
+							</ul> -->
+							<div >
+								<div class="position_relative" style="width:150px;margin:auto">
+									<img class="border-radius input_ps" src="{{person[0]['cover_image']}}" width="150px" height="150px">
+									<div class="change" style="color: white;background-color: black;" onclick="display('image_box')">Change</div>
+								</div>
+								
+							</div>
+							<div class="fix_1" id="image_box" style="display: none;">
+								<div class="body_fix_1" style="    height: 340px;width: 450px;margin-top: 50px;text-align: center;">
+									<div id="" class="close" style="display: block;" onclick="display('image_box')"></div>
+									<div style="padding: 20px 50px;">
+										<div class="a margin"><h3>Choose Image Profile</h3></div>
+										<form action="/personal_infor/upload_image" method="POST" enctype="multipart/form-data">
+											<div class="image_chose position_relative">
+												
+												<input type=file id="img" name="image" accept="image/*" required>
+												<label class="label_file" for="img">Image</label>
+												
+												<img id="blah" src="#" class="upload_img" style="margin:2px; border-radius:50%" alt="your image" />
+												<button class=" genric-btn success radius position_absolute button_upload" type="submit">Change Image Cover</button>
+											</div>
+											
+										</form>
+									</div>
+								</div>
+							</div>
+							<ul class="social-links">
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-github"></i></a></li>
+								<li><a href="#"><i class="fa fa-behance"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-9 col-md-9 blog_details">
+						<h2>Customer Information </h2>
+						<div class="br">
+							<hr/>
+						</div>
+						<p class="excert">
+							<form action="/user_update_infor" method="POST">
+								<div class="margin">
+									
+									<div>
+										<!-- <div class="person_input dp_flex">
+											<div class="lb_title">
+												<div>Email</div>
+											</div>
+											<div class="value_ip margin">
+												<div id="email" class="" style="background-color: #dddddd; width: 95%;padding-left: 15px;"> {{person[0]['email']}}</div>
+												
+											</div>
+										</div> -->
+										<div class="form-group">
+											<label class="col-md-12">Email</label>
+											<div class="col-md-12">
+												<input type="text" placeholder="Johnathan Doe" class="form-control form-control-line" value="{{person[0]['email']}}" id="shoes_name_for_color" name="shoes_name" disabled required> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-12">Username</label>
+											<div class="col-md-12">
+												<input type="text" placeholder="Johnathan Doe" name="username" class="form-control form-control-line" value="{{person[0]['username']}}" id="shoes_name_for_color" name="shoes_name" required> 
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-12">Phone Number</label>
+											<div class="col-md-12">
+												<input type="text" placeholder="0987654321" class="form-control form-control-line" name="phone_number" pattern="[0]{1}[0-9]{9}" value="0{{person[0]['phone_number']}}" required>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-12">Address</label>
+											<div class="col-md-12">
+												<input type="text" placeholder="Mù Căng Chải" class="form-control form-control-line" name="address" value="{{person[0]['address']}}" required> 
+											</div>
+										</div>
+
+										<!-- <div class="person_input dp_flex">
+											<div class="lb_title">
+												<div class>Username</div>
+											</div>
+											<div class="value_ip">
+												
+												<input id="username_input" class="input margin " type="text" name="username" value="{{person[0]['username']}}" required>
+											</div>
+										</div> -->
+										<!-- <div class="person_input dp_flex">
+											<div class="lb_title">
+												<div>Phone Number</div>
+											</div>
+											<div class="value_ip">
+												
+												<input id="phone_number_input" class="input margin " type="text" name="phone_number" pattern="[0]{1}[0-9]{9}" value="0{{person[0]['phone_number']}}" required>
+												{% if error %}
+												<div>Phone number isn't legal, Please rewrite !</div>
+												{% endif%}
+											</div>
+										</div>
+										<div class="person_input dp_flex">
+											<div class="lb_title">
+												<div>Address</div>
+											</div>
+											<div class="value_ip">
+												
+												<input id="address_input" class="input margin " type="text" name="address" value="{{person[0]['address']}}" required>
+												
+											</div>
+										</div> -->
+										<!-- <div class="form-group">
+											<label class="col-md-12">Shoes Name</label>
+											<div class="col-md-12">
+												<input type="text" placeholder="Johnathan Doe" class="form-control form-control-line" value="{{person[0]['address']}}" id="shoes_name_for_color" name="shoes_name" required> 
+											</div>
+											<div class="col-md-12" style="display:none;">
+												<input type="text" placeholder="Johnathan Doe" class="form-control form-control-line" value="{{person[0]['address']}}" id="id_shoes_color_image"  name="id_shoes" > 
+											</div>
+										</div> -->
+									</div>
+									<div>
+										<div onclick="show('password_change')" style="cursor:pointer;">Change Password</div>
+									</div>
+									<div class="fix_1" id="id_password_change" style="display:none;">
+										<div class="body_fix_1" style="width: 450px;height: 550px;top: 35px;">
+											<div id="" class="close" style="display: block;" onclick="hide('password_change')"></div>
+											<div style="margin-top:50px;">
+												<div class="white-box">
+													<form class="form-horizontal form-material" action="/profile/change_password" style="margin-top:50px" method="POST">
+													<div class="form-group">
+														<label class="col-md-12">Current Password</label>
+														<div class="col-md-12">
+															<input type="password" value="" placeholder="old password ..." id="old_password" name="old_password"  class="form-control form-control-line" required>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">New Password</label>
+														<div class="col-md-12">
+															<input type="password" value="" placeholder="new password ..." id="new_password" name="new_password"  class="form-control form-control-line" required>
+														</div>
+													</div>
+													<div class="form-group">
+														<label class="col-md-12">Retype New Password</label>
+														<div class="col-md-12">
+															<input type="password" value="" placeholder="confirm new password ..." id="cf_new_password" name="cf_new_password"  class="form-control form-control-line" required>
+														</div>
+													</div>
+													<div id="notify_ajax" style="color:red;"></div>
+												
+													
+													<div class="form-group">
+														<div class="col-sm-12">
+															<div class="btn btn-danger change_pw">Change Password</div>
+														</div>
+													</div>
+													</form>
+											</div>
+						
+										</div>
+									</div>
+									</div>
+									
+									<div class="login hide">
+										<div class="login_main">
+			
+										</div>
+									</div>
+									<div><button class="genric-btn success radius"> Update</button></div>
+								</div>
+							</form>
+						</p>
+						<!-- <p>
+							Boot camps have its supporters and its detractors. Some people do not understand why
+							you should have to spend money on boot camp when you can get the MCSE study materials
+							yourself at a fraction of the camp price. However, who has the willpower to actually
+							sit through a self-imposed MCSE training. who has the willpower to actually sit through
+							a self-imposed
+						</p>
+						<p>
+							Boot camps have its supporters and its detractors. Some people do not understand why
+							you should have to spend money on boot camp when you can get the MCSE study materials
+							yourself at a fraction of the camp price. However, who has the willpower to actually
+							sit through a self-imposed MCSE training. who has the willpower to actually sit through
+							a self-imposed
+						</p> -->
+					</div>
+					<div class="col-lg-12">
+						<div class="quotes">
+							MCSE boot camps have its supporters and its detractors. Some people do not understand
+							why you should have to spend money on boot camp when you can get the MCSE study
+							materials yourself at a fraction of the camp price. However, who has the willpower to
+							actually sit through a self-imposed MCSE training.
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<img class="img-fluid" src="img/blog/post-img1.jpg" alt="">
+							</div>
+							<div class="col-6">
+								<img class="img-fluid" src="img/blog/post-img2.jpg" alt="">
+							</div>
+							<div class="col-lg-12 mt-25">
+								<p>
+									MCSE boot camps have its supporters and its detractors. Some people do not
+									understand why you should have to spend money on boot camp when you can get the
+									MCSE study materials yourself at a fraction of the camp price. However, who has
+									the willpower.
+								</p>
+								<p>
+									MCSE boot camps have its supporters and its detractors. Some people do not
+									understand why you should have to spend money on boot camp when you can get the
+									MCSE study materials yourself at a fraction of the camp price. However, who has
+									the willpower.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	</section>
+
+
+
+
+
+
+
+
+    
+
+    <!-- start footer Area -->
+	{% include 'footer.html' %}
+	<!-- End footer Area -->
+	
+	<script>
+		$(document).on("click",".change_pw",function(e){
+		   // $("#notification").show();
+	   // var _this = this;
+	   //     var temp=_this.id;
+	   //     var id_comment= temp.substr(8,temp.length);
+		   alert("Thưởng");
+		   $.ajax({
+			 data: {
+			   'old_password':$("#old_password").val(),
+			   'new_password':$("#new_password").val(),
+			   'cf_new_password':$("#cf_new_password").val()
+			   },
+			 type:"POST",
+			 url : "/profile/change_password"
+		   })
+		   .done(function(data){
+			   // alert(data);
+			   // alert("Done");
+			   // alert("#comment_body_"+id_comment);
+			   if(data!="Done"){
+				   // $("#old_password").value("");
+				$("#notify_ajax").html(data);
+			   //  $("#old_password").html="";
+			   }
+			   else{
+				   // alert("Xoan");
+				   $("#old_password").val("");
+				   $("#new_password").val("");
+				   $("#cf_new_password").val("");
+				   $("#id_password_change").hide();
+				   $("#notification").show();
+			   }
+			
+			});
+	//your code
+	});
+   </script>
+   <script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150)
+					.height(150);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#img").change(function() {
+    readURL(this);
+	});
+	
+
+	
+</script>
+	<script src="../static/user/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="../static/user/js/vendor/bootstrap.min.js"></script>
+	<script src="../static/user/js/jquery.ajaxchimp.min.js"></script>
+	<script src="../static/user/js/jquery.nice-select.min.js"></script>
+	<script src="../static/user/js/jquery.sticky.js"></script>
+	<script src="../static/user/js/nouislider.min.js"></script>
+	<script src="../static/user/js/jquery.magnific-popup.min.js"></script>
+	<script src="../static/user/js/owl.carousel.min.js"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="../static/user/js/gmaps.min.js"></script>
+	<script src="../static/user/js/main.js"></script>
+	<script src="../static/user/js/user.js"></script>
+	<!-- <script language="JavaScript" type="text/javascript" src="../static/user/js/jquery-3.4.1.min.js"></script> -->
+</body>
+
+</html>

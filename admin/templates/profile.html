@@ -7,21 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../static/plugins/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/admin/plugins/images/favicon.png">
     <title>Ample Admin Template - The Ultimate Multipurpose admin template</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../static/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/admin/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Menu CSS -->
-    <link href="../static/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+    <link href="../static/admin/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
     <!-- animation CSS -->
-    <link href="../static/css/animate.css" rel="stylesheet">
+    <link href="../static/admin/css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../static/admin/css/style.css" rel="stylesheet">
     <!-- color CSS -->
-    <link href="../static/css/colors/default.css" id="theme" rel="stylesheet">
+    <link href="../static/admin/css/colors/default.css" id="theme" rel="stylesheet">
+
+    <link href="../static/admin/css/app.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
+    
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -49,15 +52,15 @@
                     <!-- Logo -->
                     <a class="logo" href="dashboard.html">
                         <!-- Logo icon image, you can use font-icon also --><b>
-                            <!--This is dark logo icon--><img src="../static/plugins/images/admin-logo.png" alt="home"
+                            <!--This is dark logo icon--><img src="../static/admin/plugins/images/admin-logo.png" alt="home"
                                 class="dark-logo" />
-                            <!--This is light logo icon--><img src="../static/plugins/images/admin-logo-dark.png" alt="home"
+                            <!--This is light logo icon--><img src="../static/admin/plugins/images/admin-logo-dark.png" alt="home"
                                 class="light-logo" />
                         </b>
                         <!-- Logo text image you can use text also --><span class="hidden-xs">
-                            <!--This is dark logo text--><img src="../static/plugins/images/admin-text.png" alt="home"
+                            <!--This is dark logo text--><img src="../static/admin/plugins/images/admin-text.png" alt="home"
                                 class="dark-logo" />
-                            <!--This is light logo text--><img src="../static/plugins/images/admin-text-dark.png" alt="home"
+                            <!--This is light logo text--><img src="../static/admin/plugins/images/admin-text-dark.png" alt="home"
                                 class="light-logo" />
                         </span> </a>
                 </div>
@@ -73,7 +76,7 @@
                                     class="fa fa-search"></i></a> </form>
                     </li>
                     <li>
-                        <a class="profile-pic" href="#"> <img src="../static/plugins/images/users/varun.jpg" alt="user-img"
+                        <a class="profile-pic" href="#"> <img src="../static/admin/plugins/images/users/varun.jpg" alt="user-img"
                                 width="36" class="img-circle"><b class="hidden-xs">{{session['name']}}</b></a>
                     </li>
                 </ul>
@@ -231,9 +234,16 @@
                                         </select>
                                     </div>
                                 </div> -->
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <button class="btn btn-success">Update Profile</button>
+                                <div class="dp_flex" style="justify-content: space-around;">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <button class="btn btn-success">Update Profile</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <div class="btn btn-danger" onclick="show('password_change')">Change Password</div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -242,24 +252,103 @@
                 </div>
                 <!-- /.row -->
             </div>
+            <div class="fix_1" id="id_password_change" style="display:none;">
+                <div class="body_fix_1" style="width: 450px;height: 550px;top: 35px;">
+                    <div id="" class="close" style="display: block;" onclick="hide('password_change')"></div>
+                    <div>
+                        <div class="white-box">
+                            <form class="form-horizontal form-material" action="/profile/change_password" style="margin-top:50px" method="POST">
+                            <div class="form-group">
+                                <label class="col-md-12">Current Password</label>
+                                <div class="col-md-12">
+                                    <input type="password" value="" placeholder="old password ..." id="old_password" name="old_password"  class="form-control form-control-line" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">New Password</label>
+                                <div class="col-md-12">
+                                    <input type="password" value="" placeholder="new password ..." id="new_password" name="new_password"  class="form-control form-control-line" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">Retype New Password</label>
+                                <div class="col-md-12">
+                                    <input type="password" value="" placeholder="confirm new password ..." id="cf_new_password" name="cf_new_password"  class="form-control form-control-line" required>
+                                </div>
+                            </div>
+                            <div id="notify_ajax" style="color:red;"></div>
+                        
+                            
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="btn btn-danger change_pw">Change Password</div>
+                                </div>
+                            </div>
+                            </form>
+                    </div>
+
+                </div>
+            </div>
+            </div>
             <!-- /.container-fluid -->
+            {% include "notification.html"%}
             <footer class="footer text-center"> 2017 &copy; Ample Admin brought to you by wrappixel.com </footer>
         </div>
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
-    <script src="../static/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
-    <script src="../static/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../static/admin/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Menu Plugin JavaScript -->
-    <script src="../static/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
+    <script src="../static/admin/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
     <!--slimscroll JavaScript -->
-    <script src="../static/js/jquery.slimscroll.js"></script>
+    <script src="../static/admin/js/jquery.slimscroll.js"></script>
     <!--Wave Effects -->
-    <script src="../static/js/waves.js"></script>
+    <script src="../static/admin/js/waves.js"></script>
     <!-- Custom Theme JavaScript -->
-    <script src="../static/js/custom.min.js"></script>
+    <script src="../static/admin/js/custom.min.js"></script>
+
+    <script src="../static/admin/js/app.js"></script>
+    <script>
+         $(document).on("click",".change_pw",function(e){
+            // $("#notification").show();
+        // var _this = this;
+        //     var temp=_this.id;
+        //     var id_comment= temp.substr(8,temp.length);
+            // alert(id_comment);
+            $.ajax({
+              data: {
+                'old_password':$("#old_password").val(),
+                'new_password':$("#new_password").val(),
+                'cf_new_password':$("#cf_new_password").val()
+                },
+              type:"POST",
+              url : "/profile/change_password"
+            })
+            .done(function(data){
+                // alert(data);
+                // alert("Done");
+                // alert("#comment_body_"+id_comment);
+                if(data!="Done"){
+                    // $("#old_password").value("");
+                 $("#notify_ajax").html(data);
+                //  $("#old_password").html="";
+                }
+                else{
+                    // alert("Xoan");
+                    $("#old_password").val("");
+                    $("#new_password").val("");
+                    $("#cf_new_password").val("");
+                    $("#id_password_change").hide();
+                    $("#notification").show();
+                }
+            
+            });
+ //your code
+});
+    </script>
 </body>
 
 </html>

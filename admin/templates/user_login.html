@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="../static/user/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Karma Shop</title>
+
+	<!--
+		CSS
+		============================================= -->
+	<link rel="stylesheet" href="../static/user/css/linearicons.css">
+	<link rel="stylesheet" href="../static/user/css/owl.carousel.css">
+	<link rel="stylesheet" href="../static/user/css/themify-icons.css">
+	<link rel="stylesheet" href="../static/user/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../static/user/css/nice-select.css">
+	<link rel="stylesheet" href="../static/user/css/nouislider.min.css">
+	<link rel="stylesheet" href="../static/user/css/bootstrap.css">
+	<link rel="stylesheet" href="../static/user/css/main.css">
+	<link rel="stylesheet" href="../static/user/css/app.css">
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Login/Register</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Login/Register</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Login Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="../static/user/img/login.jpg" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+							<div class="primary-btn" id="login_register" onclick="show_hide()">Create an Account</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6" id="login_form" style="display: block;">
+					<div class="login_form_inner">
+						<h3>Log in to enter</h3>
+						<form class="row login_form" action="/user_login" method="POST"  novalidate="novalidate">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="name" name="email" value="{{request.form.email}}" placeholder="Email"  onfocus="this.placeholder = ''" onblur="this.placeholder = '1235@gmail.com'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="name" name="password" value="{{request.form.password}}" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							</div>
+							{% if error %}
+							<div class="col-md-12 form-group" style="    padding: 10px;
+							color: red;
+							text-shadow: 0px 1px 0px #fff;">{{error}}</div>
+							{% endif %}
+							<div class="col-md-12 form-group">
+								<div class="creat_account">
+									<input type="checkbox" id="f-option2" name="admin_check" value="1">
+									<label for="f-option2">Login as Admin</label>
+								</div>
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="primary-btn">Log In</button>
+								<a href="#">Forgot Password?</a>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- Register -->
+
+
+
+				<div class="col-lg-6" id="register_form" style="display:none;">
+					<div class="login_form_inner">
+						<h3>Register Form:</h3>
+						<form class="row login_form" action="/user_register" onsubmit="return ValidateEmail() && validate(); " method="POST" id="form_register" >
+							<div class="col-md-12 form-group" style="position: relative;">
+								<input type="text" class="form-control" id="email" type="text" name="email" onkeyup="ValidateEmail()" placeholder="Email address" value="{{request.form.email}}" required/>
+								<div id="email_check" class="error"></div>
+								<div id="error_email" class="error"></div>
+							</div>
+							
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="user_name" value="{{request.form.username}}" placeholder="Username: SKT T1 Faker"  required>
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password"  required>
+							</div>
+							<div class="col-md-12 form-group" style="position: relative;">
+								<input type="password" class="form-control" id="cf_password" onkeyup="validate();" name="cf_password" placeholder="Confirm Password"  required>
+								<div id="error_ps" class="error"></div>
+							</div>
+							
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="phone_number" value="{{request.form.phone_number}}" placeholder="Phone Number: 0987654321" pattern="[0]{1}[0-9]{9}"  required>
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control"  name="address" value="{{request.form.address}}" placeholder="Address: Ngọc Thanh- Kim Động -Hưng Yên"  required>
+							</div>
+							
+							<!-- <div class="col-md-12 form-group">
+								<div class="creat_account">
+									<input type="checkbox" id="f-option2" name="admin_check" value="1">
+									<label for="f-option2">Login as Admin</label>
+								</div>
+							</div> -->
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit"  id="register_bt" class="primary-btn" disabled>Register</button>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+
+	<!-- start footer Area -->
+	{% include 'footer.html' %}
+	<!-- End footer Area -->
+
+	
+	
+
+	<script src="../static/user/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="../static/user/js/vendor/bootstrap.min.js"></script>
+	<script src="../static/user/js/jquery.ajaxchimp.min.js"></script>
+	<script src="../static/user/js/jquery.nice-select.min.js"></script>
+	<script src="../static/user/js/jquery.sticky.js"></script>
+	<script src="../static/user/js/nouislider.min.js"></script>
+	<script src="../static/user/js/countdown.js"></script>
+	<script src="../static/user/js/jquery.magnific-popup.min.js"></script>
+	<script src="../static/user/js/owl.carousel.min.js"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="../static/user/js/gmaps.min.js"></script>
+	<script src="../static/user/js/main.js"></script>
+	<script src="../static/user/js/user.js"></script>
+	<script>
+		function validate(){
+	
+			var a = document.getElementById("password").value;
+			var b = document.getElementById("cf_password").value;
+			if (a!=b) {
+			//    alert("Passwords do no match");
+				document.getElementById("error_ps").innerHTML="Passwords do no match !"
+			   return false;
+			}
+			else{
+				document.getElementById("error_ps").innerHTML=""
+				return true;
+				
+			}
+		}
+	
+	
+		// function ValidatePhone(){
+		//     var phone_number =document.getElementById("phone_number").value;
+		//     if
+		// }
+	
+		function ValidateEmail()
+		{
+		var inputText=document.getElementById("email").value;
+		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if(inputText.match(mailformat))
+		{
+			document.getElementById("error_email").innerHTML=""
+		document.contactForm.email.focus();
+		
+		return true;
+		}
+		else
+		{
+		document.getElementById("error_email").innerHTML="Invalid email !";
+		document.contactForm.email.focus();
+		return false;
+		}
+		}
+	 </script>
+	 <script type="text/javascript">
+		$(document).ready(function() {
+			
+			$("#email").on('input', function(e) {
+				
+
+				
+				$('#email_check').hide();
+				
+				if ($('#email').val() == null || $('#email').val() =="") {
+					// $('#email_check').show();
+					// $("#email_check").html("Email is required field.").css("color", "red");
+				} else {
+					$.ajax({
+						type: "POST",
+						url: "http://localhost:5000/user_check",
+						data: $('#form_register').serialize(),
+						dataType: "html",
+						cache: false,
+						success: function(msg) {
+							
+							// abv=$("#email_check").html(content);
+							// alert(typeof(msg));
+							// alert(null);
+							// alert(msg==undefined );
+							// var compare = String(msg).localeCompare("OK");
+							temp=msg.substr(1, 2);
+							// alert(temp);
+							// alert(msg+" "+compare+" "+typeof(compare)+typeof(msg)+ " ");
+							if(temp=="OK"){
+								$("#register_bt").prop('disabled', false);
+								
+							
+							}
+							else {
+								$('#email_check').show();
+								$("#email_check").html(msg);
+								$("#register_bt").prop('disabled', true);
+							}
+							
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							$('#email_check').show();
+							$("#email_check").html(textStatus + errorThrown);
+						}
+					});
+				}
+			});
+			
+		});
+	</script>
+</body>
+
+</html>
