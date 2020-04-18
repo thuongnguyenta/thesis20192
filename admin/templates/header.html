@@ -40,19 +40,19 @@
                              aria-expanded="false">Account</a>
                             <ul class="dropdown-menu">
                                 {% if 'id' in session %}
-                                <li class="nav-item"><a class="nav-link" href="/user_cart">My Cart</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/user_profile">Personal Infor</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/user_history_order">History Order</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/user_cart"> <span class="ti-bag"></span> : My Cart</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/user_profile"> <img src="../static/image/people/person.png" width="20px" height="20px"  alt="post">: Personal Infor</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/user_history_order"> <img src="../static/image/people/order_history.png" width="20px" height="20px"  alt="post">: History Order</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/logout"> <img src="../static/image/people/logout.jpg" width="20px" height="20px"  alt="post">: Logout</a></li>
                                 {% else %}
-                                <li class="nav-item"><a class="nav-link" href="/user_login">Login/Register</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/user_login"><img src="../static/image/people/login.png" width="20px" height="20px"  alt="post">: Login/Register</a></li>
                                 {% endif %}
                             </ul>
                         </li>
                         
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+                        <!-- <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li> -->
                         <li class="nav-item">
                             <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                         </li>

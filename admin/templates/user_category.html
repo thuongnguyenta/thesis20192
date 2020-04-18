@@ -251,8 +251,10 @@
 				<div class="sidebar-categories">
 					<div class="head">Browse Categories</div>
 					<ul class="main-categories">
+						<li class="main-nav-list"><a href="/user_product" data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable"><span
+							class="lnr lnr-arrow-right"></span>All Shoes<span class="number">()</span></a>
 						{% for shoe_t in shoe_type %}
-						<li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable"><span
+						<li class="main-nav-list"><a href="/user_product/{{shoe_t['shoes_type']}}"data-toggle="collapse" target="_blank" aria-expanded="false" aria-controls="fruitsVegetable"><span
 								 class="lnr lnr-arrow-right"></span>{{shoe_t['shoes_type']}}<span class="number">({{shoe_t['number']}})</span></a>
 							<!-- <ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false" aria-controls="fruitsVegetable">
 								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
@@ -358,7 +360,7 @@
 					</ul>
 				</div>
 				
-				<div class="position_absolute dp_none " >
+				<div class="position_absolute dp_none " style="top:0px;" >
 					<a href="javascript:void(0);" class="icon1" onclick="myFunction()">
 						<i class="fa fa-bars list_filter"></i>
 					</a>
@@ -366,10 +368,10 @@
 				</div>
 				<div class="sidebar-filter mt-50">
 					<div class="top-filter-head hidden_div">Product Filters</div>
-					<div class="filter_check margin" id="filter_check" style="min-height: 95%;"  onclick="myFunction()">
+					<div class="filter_check margin" id="filter_check" style="min-height: 95%;"  ">
 						
 						<div class="filter_ct shoe padding_top50 margin_ct" style="max-width: 300px;">
-							<div class="close" style="right: 10px;top: 10px;"  onclick="myFunction()"></div>
+							<div id="" class="close responsive_page" onclick="myFunction()"></div>
 							<div class="gender checkbox padding_left" style="margin-top:15px" id="gender_check">
 								<section class="filter_square" style="margin-bottom:-20px">
 									<div class="flex dp_flex shoe bg_color_ddd">

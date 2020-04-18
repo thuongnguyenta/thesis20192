@@ -37,10 +37,10 @@ mysql = MySQL(app)
 
 @app.route('/')
 def form(): 
-    return render_template('login.html')
+    return render_template('user_login.html')
 
-@app.route('/login',methods=["POST","GET"])
-def login(): 
+# @app.route('/login',methods=["POST","GET"])
+# def login(): 
     if request.method=='POST':
         email = request.form['user_name']
         password = request.form['password']
@@ -70,66 +70,83 @@ def logout():
 
 @app.route('/product')
 def product():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM shoes")
-    rows=cur.fetchall()
+    if 'id' in session:
+        if session['role']==1:
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM shoes")
+            rows=cur.fetchall()
 
-    cur.execute("SELECT * FROM shoes,shoes_surface WHERE shoes.id_shoes=shoes_surface.id_shoes")
-    surfaces=cur.fetchall()
+            cur.execute("SELECT * FROM shoes,shoes_surface WHERE shoes.id_shoes=shoes_surface.id_shoes")
+            surfaces=cur.fetchall()
 
 
-    cur.execute("SELECT * FROM shoes,shoes_color WHERE shoes_color.id_shoes=shoes.id_shoes")
-    colors=cur.fetchall()
+            cur.execute("SELECT * FROM shoes,shoes_color WHERE shoes_color.id_shoes=shoes.id_shoes")
+            colors=cur.fetchall()
 
-    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes_color.id_shoes=shoes.id_shoes AND shoes_color_image.id_shoes_color=shoes_color.id_shoes_color")
-    color_images=cur.fetchall()
-    
-    return render_template('basic-table.html',shoes=rows,surfaces=surfaces,colors=colors,color_images=color_images,a=[],b=[])
+            cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes_color.id_shoes=shoes.id_shoes AND shoes_color_image.id_shoes_color=shoes_color.id_shoes_color")
+            color_images=cur.fetchall()
+            
+            return render_template('basic-table.html',shoes=rows,surfaces=surfaces,colors=colors,color_images=color_images,a=[],b=[])
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 @app.route('/order')
 def order(): 
     # if 'id' in session:
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM user_order,account,ship WHERE user_order.id_user=account.id_account AND ship.id_order=user_order.id_order")
-        user_order=cur.fetchall()
-        cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color GROUP BY order_detail.id_order_detail")
-        order_detail=cur.fetchall()
-        return render_template('order.html',user_order=user_order,order_detail=order_detail)
+    if 'id' in session:
+        if session['role']==1:
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM user_order,account,ship WHERE user_order.id_user=account.id_account AND ship.id_order=user_order.id_order")
+            user_order=cur.fetchall()
+            cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color GROUP BY order_detail.id_order_detail")
+            order_detail=cur.fetchall()
+            return render_template('order.html',user_order=user_order,order_detail=order_detail)
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
     
 @app.route('/customer')
 def customer(): 
     # if 'id' in session:
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM account WHERE role=2 ")
-        user=cur.fetchall()
-        # cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color GROUP BY order_detail.id_order_detail")
-        # order_detail=cur.fetchall()
-        return render_template('customer.html',user=user)
+    if 'id' in session:
+        if session['role']==1:
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM account WHERE role=2 ")
+            user=cur.fetchall()
+            # cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color GROUP BY order_detail.id_order_detail")
+            # order_detail=cur.fetchall()
+            return render_template('customer.html',user=user)
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 
 @app.route('/profile')
 def profile():
     if 'id' in session:
-        id_admin= session['id']
-        cur= mysql.connection.cursor()
-        cur.execute("SELECT * FROM account WHERE id_account=%s",[id_admin])
-        rows=cur.fetchall()
-        return render_template('profile.html',account=rows)
+        if session['role']==1:
+            id_admin= session['id']
+            cur= mysql.connection.cursor()
+            cur.execute("SELECT * FROM account WHERE id_account=%s",[id_admin])
+            rows=cur.fetchall()
+            return render_template('profile.html',account=rows)
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 @app.route('/profile/update',methods=['POST','GET'])
 def update_profile():
     if 'id' in session:
-        if request.method=='POST':
-            username=request.form['username']
-            password=request.form['password']
-            phone_number =request.form['phone_number']
-            address =request.form['address']
-            cur=mysql.connection.cursor()
-            cur.execute("UPDATE account SET username=%s,phone_number=%s,address=%s WHERE id_account =%s ",[username,phone_number,address,session['id']])
-            mysql.connection.commit()
+        if session['role']==1:
+            if request.method=='POST':
+                username=request.form['username']
+                password=request.form['password']
+                phone_number =request.form['phone_number']
+                address =request.form['address']
+                cur=mysql.connection.cursor()
+                cur.execute("UPDATE account SET username=%s,phone_number=%s,address=%s WHERE id_account =%s ",[username,phone_number,address,session['id']])
+                mysql.connection.commit()
+                return redirect(url_for('profile'))
             return redirect(url_for('profile'))
-        return redirect(url_for('profile'))
-    return render_template("login.html")
+        return redirect(url_for('user_product'))
+    return render_template("user_login.html")
 
 @app.route('/profile/change_password',methods=['POST','GET'])
 def change_password():
@@ -155,65 +172,69 @@ def change_password():
 
 @app.route('/dashboard')
 def dashboard():
-    cur=mysql.connection.cursor()
-    cur.execute("SELECT count(*) as number FROM shoes")
-    number=cur.fetchall()
-    number_product=number[0]['number']
+    if 'id' in session:
+        if session['role']==1:
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT count(*) as number FROM shoes")
+            number=cur.fetchall()
+            number_product=number[0]['number']
 
-    today = datetime.datetime.today()
-# datem = datetime.datetime(today.year, today.month, 1)
-    cur.execute("SELECT SUM(total_price) as income FROM user_order,ship WHERE user_order.id_order=ship.id_order AND MONTH(time_order)=%s AND YEAR(time_order)=%s AND ship.status=%s",[today.month,today.year,"Hoàn Thành"])
-    income=cur.fetchall()
-    print (income)
-    # now_income=income[0]['income']
-    # print(now_income)
-    if income[0]['income'] != None:
-        now_income=int(income[0]['income'])
-        # print(now_income)
-    else:
-        now_income=int(0)
-    # print(now_income)
+            today = datetime.datetime.today()
+            # datem = datetime.datetime(today.year, today.month, 1)
+            cur.execute("SELECT SUM(total_price) as income FROM user_order,ship WHERE user_order.id_order=ship.id_order AND MONTH(time_order)=%s AND YEAR(time_order)=%s AND ship.status=%s",[today.month,today.year,"Hoàn Thành"])
+            income=cur.fetchall()
+            print (income)
+            # now_income=income[0]['income']
+            # print(now_income)
+            if income[0]['income'] != None:
+                now_income=int(income[0]['income'])
+                # print(now_income)
+            else:
+                now_income=int(0)
+            # print(now_income)
 
-    cur.execute("SELECT SUM(total_price) as income FROM user_order,ship WHERE user_order.id_order=ship.id_order AND ship.status='Giao Hàng'")
-    user=cur.fetchall()
-    if user[0]['income'] != None:
-        user_income=int(user[0]['income'])
-        # print(now_income)
-    else:
-        user_income=int(0)
-    # number_user=user[0]['income']
+            cur.execute("SELECT SUM(total_price) as income FROM user_order,ship WHERE user_order.id_order=ship.id_order AND ship.status='Giao Hàng'")
+            user=cur.fetchall()
+            if user[0]['income'] != None:
+                user_income=int(user[0]['income'])
+                # print(now_income)
+            else:
+                user_income=int(0)
+            # number_user=user[0]['income']
 
-    cur.execute("SELECT total_price,order_quantity,SUM(total_price) as income,MONTH(time_order) as month,YEAR(time_order) as year FROM `user_order` GROUP BY MONTH(time_order),YEAR(time_order)")
-    combo_chart=cur.fetchall()
-    combo_chart=json.dumps(combo_chart)
-
-
-    cur.execute("SELECT * FROM shoes WHERE shoes.id_shoes NOT IN(select s.id_shoes FROM shoes as s,order_detail,user_order WHERE user_order.id_order=order_detail.id_order AND s.id_shoes=order_detail.id_shoes AND MONTH(user_order.time_order)=MONTH(CURRENT_DATE) GROUP BY s.id_shoes)")
-    shoes_remain=cur.fetchall()
-
-    cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[today.year,today.month])
-    sp=cur.fetchall()
-
-    # print(sp)
-    if sp:
-        sp=sp
-    else:
-        if today.month==1:
-            year=today.year-1
-            month=12
-            cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[year,month])
-        else:
-            cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[today.year,today.month-1])
-        sp=cur.fetchall()
-
-    cur.execute("SELECT * FROM comment,shoes,account WHERE comment.id_shoes=shoes.id_shoes AND comment.id_user=account.id_account AND status=0 limit 10")
-    comment=cur.fetchall()
+            cur.execute("SELECT total_price,order_quantity,SUM(total_price) as income,MONTH(time_order) as month,YEAR(time_order) as year FROM `user_order` GROUP BY MONTH(time_order),YEAR(time_order)")
+            combo_chart=cur.fetchall()
+            combo_chart=json.dumps(combo_chart)
 
 
-    cur.execute("SELECT * FROM account WHERE account.role=2 limit 10")
-    account=cur.fetchall()
+            cur.execute("SELECT * FROM shoes WHERE shoes.id_shoes NOT IN(select s.id_shoes FROM shoes as s,order_detail,user_order WHERE user_order.id_order=order_detail.id_order AND s.id_shoes=order_detail.id_shoes AND MONTH(user_order.time_order)=MONTH(CURRENT_DATE) GROUP BY s.id_shoes)")
+            shoes_remain=cur.fetchall()
 
-    return render_template('dashboard.html',number_product=number_product,income=now_income,user_income=user_income,sp=enumerate(sp),combo_chart=combo_chart,today=today,comment=comment,account=account,shoes_remain=shoes_remain)
+            cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[today.year,today.month])
+            sp=cur.fetchall()
+
+            # print(sp)
+            if sp:
+                sp=sp
+            else:
+                if today.month==1:
+                    year=today.year-1
+                    month=12
+                    cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[year,month])
+                else:
+                    cur.execute("SELECT *,count(*) as number_pur FROM shoes,user_order,order_detail WHERE shoes.id_shoes=order_detail.id_shoes AND order_detail.id_order=user_order.id_order AND YEAR(time_order)=%s AND MONTH(time_order)=%s GROUP BY shoes.id_shoes ORDER BY number_pur DESC limit 10",[today.year,today.month-1])
+                sp=cur.fetchall()
+
+            cur.execute("SELECT * FROM comment,shoes,account WHERE comment.id_shoes=shoes.id_shoes AND comment.id_user=account.id_account AND status=0 limit 10")
+            comment=cur.fetchall()
+
+
+            cur.execute("SELECT * FROM account WHERE account.role=2 limit 10")
+            account=cur.fetchall()
+
+            return render_template('dashboard.html',number_product=number_product,income=now_income,user_income=user_income,sp=enumerate(sp),combo_chart=combo_chart,today=today,comment=comment,account=account,shoes_remain=shoes_remain)
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 @app.route('/dashboard/comment',methods=['POST'])
 def comment_ap():
@@ -379,112 +400,120 @@ def delete_color_image():
         sp=cur.fetchall()
         resp=""
         for idx,pr in enumerate(sp):
-            resp+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='50px' height='50px'></label>"
+            resp+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='150px' height='150px'></label>"
         print (resp)
         return resp
 
 
 @app.route('/add_product',methods=['GET','POST'])
 def add_product():
-    if request.method =="POST":
-        cur =mysql.connection.cursor()
-        shoes_name= request.form['shoes_name']
-        gender_shoes =request.form['gender']
-        shoes_type =request.form['shoes_type']
-        feature =request.form['feature']
-        price =request.form['price']
-        athleter= request.form['athleter']
-        if athleter :
-            athleter
-        else:
-            athleter=None
-        sale= request.form['sale']
-        describe= request.form['describe']
-        catalogy =request.form['catalogy']
-        surface= request.form.getlist("surface")
-        colors =request.form.getlist('color')
-        # print(shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,describe,catalogy,surface,colors)
-        cur.execute("INSERT INTO shoes(id_shoes,shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,`describe`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",["NULL",shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,describe])
-        mysql.connection.commit()
+    if 'id' in session:
+        if session['role']==1:
+            if request.method =="POST":
+                cur =mysql.connection.cursor()
+                shoes_name= request.form['shoes_name']
+                gender_shoes =request.form['gender']
+                shoes_type =request.form['shoes_type']
+                feature =request.form['feature']
+                price =request.form['price']
+                athleter= request.form['athleter']
+                if athleter :
+                    athleter
+                else:
+                    athleter=None
+                sale= request.form['sale']
+                describe= request.form['describe']
+                catalogy =request.form['catalogy']
+                surface= request.form.getlist("surface")
+                colors =request.form.getlist('color')
+                # print(shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,describe,catalogy,surface,colors)
+                cur.execute("INSERT INTO shoes(id_shoes,shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,`describe`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",["NULL",shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,describe])
+                mysql.connection.commit()
 
-        cur.execute("SELECT * FROM shoes WHERE shoes_name=%s ORDER BY id_shoes DESC limit 1",[shoes_name])
-        rows= cur.fetchall()
-        id_shoes = rows[0]['id_shoes']
-        for sf in surface:
-            cur.execute("INSERT INTO shoes_surface(id_shoes_surface,id_shoes,surface) VALUES(%s,%s,%s)",["NULL",id_shoes,sf])
-            mysql.connection.commit()
-        for color in colors:
-            cur.execute("INSERT INTO shoes_color(id_shoes_color,id_shoes,color) VALUES(%s,%s,%s)",["NULL",id_shoes,color])
-            mysql.connection.commit()
-        return redirect(url_for('product'))
-    return redirect(url_for('product'))
+                cur.execute("SELECT * FROM shoes WHERE shoes_name=%s ORDER BY id_shoes DESC limit 1",[shoes_name])
+                rows= cur.fetchall()
+                id_shoes = rows[0]['id_shoes']
+                for sf in surface:
+                    cur.execute("INSERT INTO shoes_surface(id_shoes_surface,id_shoes,surface) VALUES(%s,%s,%s)",["NULL",id_shoes,sf])
+                    mysql.connection.commit()
+                for color in colors:
+                    cur.execute("INSERT INTO shoes_color(id_shoes_color,id_shoes,color) VALUES(%s,%s,%s)",["NULL",id_shoes,color])
+                    mysql.connection.commit()
+                return redirect(url_for('product'))
+            return redirect(url_for('product'))
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 @app.route('/update_product/<id_shoes>',methods=['GET','POST'])
 def update_product(id_shoes):
-    # print("b")
-    if request.method =="POST":
-        # print("a")
-        cur =mysql.connection.cursor()
-        shoes_name= request.form['shoes_name']
-        gender_shoes =request.form['gender']
-        shoes_type =request.form['shoes_type']
-        feature =request.form['feature']
-        price =request.form['price']
-        athleter= request.form['athleter']
-        if athleter :
-            athleter
-        else:
-            athleter=None
-        sale= request.form['sale']
-        describe= request.form['describe']
-        catalogy =request.form['catalogy']
-        new_surface= request.form.getlist("surface")
-        new_colors =request.form.getlist('color')
-        cur.execute("UPDATE shoes SET shoes_name=%s,gender_shoes=%s,shoes_type=%s,feature=%s,price=%s,athleter=%s,sale=%s,catalogy=%s,`describe`=%s WHERE id_shoes=%s",[shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,describe,id_shoes])
-        mysql.connection.commit()
-
-        # Update surface
-        cur.execute("SELECT * FROM shoes_surface WHERE id_shoes=%s",[id_shoes])
-        old_surface=[]
-        temps= cur.fetchall()
-        for temp in temps:
-            old_surface.append(temp['surface'])
-        for sf in new_surface:
-            if sf not in old_surface:
-                cur.execute("INSERT INTO shoes_surface(id_shoes_surface,id_shoes,surface) VALUES(%s,%s,%s)",["NULL",id_shoes,sf]) 
-                mysql.connection.commit()
-        for old_sf in old_surface:
-            if old_sf not in new_surface:
-                cur.execute("DELETE FROM shoes_surface WHERE id_shoes =%s AND surface =%s",[id_shoes,old_sf])
-
-        # ADD color
-        cur.execute("SELECT * FROM shoes_color WHERE id_shoes=%s",[id_shoes])
-        old_color=[]
-        set_image_color=[]
-        temps_color=cur.fetchall()
-        for temp in temps_color:
-            old_color.append(temp['color'])
-        for cl in new_colors:
-            if cl not in old_color:
-                cur.execute("INSERT INTO shoes_color(id_shoes_color,id_shoes,color) VALUES(%s,%s,%s)",["NULL",id_shoes,cl]) 
+    if 'id' in session:
+        if session['role']==1:
+        # print("b")
+            if request.method =="POST":
+                # print("a")
+                cur =mysql.connection.cursor()
+                shoes_name= request.form['shoes_name']
+                gender_shoes =request.form['gender']
+                shoes_type =request.form['shoes_type']
+                feature =request.form['feature']
+                price =request.form['price']
+                athleter= request.form['athleter']
+                if athleter :
+                    athleter
+                else:
+                    athleter=None
+                sale= request.form['sale']
+                describe= request.form['describe']
+                catalogy =request.form['catalogy']
+                new_surface= request.form.getlist("surface")
+                new_colors =request.form.getlist('color')
+                cur.execute("UPDATE shoes SET shoes_name=%s,gender_shoes=%s,shoes_type=%s,feature=%s,price=%s,athleter=%s,sale=%s,catalogy=%s,`describe`=%s WHERE id_shoes=%s",[shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,describe,id_shoes])
                 mysql.connection.commit()
 
-        # select color set image
-        cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes_color.id_shoes=shoes.id_shoes AND shoes_color_image.id_shoes_color=shoes_color.id_shoes_color AND shoes.id_shoes=%s GROUP BY shoes_color.id_shoes_color",[id_shoes])
-        set_cl_image = cur.fetchall()
-        for i in set_cl_image:
-            set_image_color.append(i['color'])
-        
-        for old_cl in old_color:
-            
-            if old_cl not in new_colors:
+                # Update surface
+                cur.execute("SELECT * FROM shoes_surface WHERE id_shoes=%s",[id_shoes])
+                old_surface=[]
+                temps= cur.fetchall()
+                for temp in temps:
+                    old_surface.append(temp['surface'])
+                for sf in new_surface:
+                    if sf not in old_surface:
+                        cur.execute("INSERT INTO shoes_surface(id_shoes_surface,id_shoes,surface) VALUES(%s,%s,%s)",["NULL",id_shoes,sf]) 
+                        mysql.connection.commit()
+                for old_sf in old_surface:
+                    if old_sf not in new_surface:
+                        cur.execute("DELETE FROM shoes_surface WHERE id_shoes =%s AND surface =%s",[id_shoes,old_sf])
+
+                # ADD color
+                cur.execute("SELECT * FROM shoes_color WHERE id_shoes=%s",[id_shoes])
+                old_color=[]
+                set_image_color=[]
+                temps_color=cur.fetchall()
+                for temp in temps_color:
+                    old_color.append(temp['color'])
+                for cl in new_colors:
+                    if cl not in old_color:
+                        cur.execute("INSERT INTO shoes_color(id_shoes_color,id_shoes,color) VALUES(%s,%s,%s)",["NULL",id_shoes,cl]) 
+                        mysql.connection.commit()
+
+                # select color set image
+                cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes_color.id_shoes=shoes.id_shoes AND shoes_color_image.id_shoes_color=shoes_color.id_shoes_color AND shoes.id_shoes=%s GROUP BY shoes_color.id_shoes_color",[id_shoes])
+                set_cl_image = cur.fetchall()
+                for i in set_cl_image:
+                    set_image_color.append(i['color'])
                 
-                if old_cl not in set_image_color:
-                    cur.execute("DELETE FROM shoes_color WHERE id_shoes =%s AND color =%s",[id_shoes,old_cl])
-                    mysql.connection.commit()
+                for old_cl in old_color:
+                    
+                    if old_cl not in new_colors:
+                        
+                        if old_cl not in set_image_color:
+                            cur.execute("DELETE FROM shoes_color WHERE id_shoes =%s AND color =%s",[id_shoes,old_cl])
+                            mysql.connection.commit()
 
-        return redirect(url_for('product'))
-    return redirect(url_for('product'))
+                return redirect(url_for('product'))
+            return redirect(url_for('product'))
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 @app.route('/update_product/color/<id_shoes>',methods=['POST','GET'])
 def update_color_image(id_shoes):
@@ -500,25 +529,27 @@ def update_color_image(id_shoes):
         print(shoes_delete)
         # print(request)
 
-        shoes_image = request.files['file']
+        shoes_image = request.files.getlist('file')
+        print(shoes_image)
         path_save=uploads_dir+str(id_shoes)+"/"+str(shoes_color)+"/"
         if not os.path.exists(path_save): 
             os.makedirs(path_save)
-        shoes_image.save(os.path.join(path_save, secure_filename(shoes_image.filename)))
+        # shoes_image.save(os.path.join(path_save, secure_filename(shoes_image.filename)))
 
          # save each "charts" file
-        # for file in request.files.getlist('charts'):
-        #     file.save(os.path.join(uploads_dir, secure_filename(file.name)))
+        for file in shoes_image:
+            file.save(os.path.join(path_save, secure_filename(file.filename)))
+            # file.save(os.path.join(uploads_dir, secure_filename(file.name)))
         
-        link=str(id_shoes)+"/"+str(shoes_color)+"/"+shoes_image.filename
+            link=str(id_shoes)+"/"+str(shoes_color)+"/"+file.filename
         # print("4")
-        print(path_save,link)
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM shoes,shoes_color WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes.id_shoes=%s AND shoes_color.color=%s",[id_shoes,shoes_color])
-        temp=cur.fetchall()
-        id_shoes_color = temp[0]['id_shoes_color']
-        cur.execute("INSERT INTO shoes_color_image(id_shoes_color_image,id_shoes_color,image) VALUES(%s,%s,%s)",["NULL",id_shoes_color,link])
-        mysql.connection.commit()
+            print(link)
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM shoes,shoes_color WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes.id_shoes=%s AND shoes_color.color=%s",[id_shoes,shoes_color])
+            temp=cur.fetchall()
+            id_shoes_color = temp[0]['id_shoes_color']
+            cur.execute("INSERT INTO shoes_color_image(id_shoes_color_image,id_shoes_color,image) VALUES(%s,%s,%s)",["NULL",id_shoes_color,link])
+            mysql.connection.commit()
         # print(shoes_delete,shoes_image)
         return redirect(url_for('product'))
 
@@ -530,11 +561,15 @@ def update_color_image(id_shoes):
 @app.route('/complete/<id_order>')
 def complete(id_order):
     # if 'id' in session:
-        cur=mysql.connection.cursor()
-        cur.execute("UPDATE ship SET status=%s WHERE id_order= %s",["Hoàn Thành",id_order])
-        mysql.connection.commit()
-        return redirect(url_for('order'))
-    # return redirect(url_for('form'))
+    if 'id' in session:
+        if session['role']==1:
+            cur=mysql.connection.cursor()
+            cur.execute("UPDATE ship SET status=%s WHERE id_order= %s",["Hoàn Thành",id_order])
+            mysql.connection.commit()
+            return redirect(url_for('order'))
+    
+        return redirect(url_for('user_product'))
+    return redirect(url_for('user_login'))
 
 
 @app.route('/product_color/<id_shoes>', methods=['POST'])
@@ -613,6 +648,30 @@ def user_product():
     shoe_type = cur.fetchall()
 
     return render_template('user_category.html',shoes=shoes,colors=color,shoe_type=shoe_type,surface=surface,a=a)
+
+@app.route('/user_product/<type_s>')
+def shoes_type(type_s):
+
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes AND shoes.shoes_type= %s",[type_s])
+    rows=cur.fetchall()
+
+    a=[]
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes")
+    shoes=cur.fetchall()
+
+
+    cur.execute("SELECT * FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes_surface AND shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color= shoes_color_image.id_shoes_color GROUP BY shoes_color.id_shoes_color")
+    color =cur.fetchall()  
+
+    cur.execute("SELECT * FROM shoes,shoes_surface WHERE shoes.id_shoes=shoes_surface.id_shoes")
+    surface=cur.fetchall()
+    
+    cur.execute("SELECT shoes_type,COUNT(*) as number FROM `shoes` GROUP BY shoes_type")
+    shoe_type = cur.fetchall()
+
+    return render_template('user_category.html',shoes=rows, colors=color, shoe_type=shoe_type,surface=surface,a=a,type_shoes=type_s)
 
 
 @app.route('/user_search',methods=['GET','POST'])
@@ -988,12 +1047,25 @@ def upload():
         return redirect(url_for('user_profile'))
     return redirect(url_for('user_login'))
 
-@app.route('/user+history_order')
+@app.route('/user_history_order')
 def user_history():
     if 'id' in session:
         id_account = session['id']
         cur=mysql.connection.cursor()
         cur.execute("SELECT * FROM account WHERE id_account =%s" ,[id_account])
         rows=cur.fetchall()
-        return render_template('user_historyorder.html',person=rows)
+
+        # cur = mysql.connection.cursor()
+        # cur.execute("SELECT * FROM shoes")
+        # abc=cur.fetchall()
+
+        id_user = session['id']
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM user_order,ship WHERE user_order.id_order=ship.id_order AND user_order.id_user =%s",[id_user])
+        rows=cur.fetchall()
+
+        cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color AND user_order.id_user =%s GROUP BY order_detail.id_order_detail",[id_user])
+        detail=cur.fetchall()
+
+        return render_template('user_historyorder.html',order_history=rows,order_detail=detail,person=rows)
     return redirect(url_for('user_login'))

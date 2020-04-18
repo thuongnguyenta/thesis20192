@@ -52,3 +52,17 @@ function display(id){
             document.getElementById(id).style.display= "block";    
     }
 }
+
+
+function hide_order(id){
+    var x="order_"+id;
+    // alert(x);
+    document.getElementById(x).style.display= "none";  
+    
+}
+
+function show_order(id){
+    var x="order_"+id;
+    // alert(x);
+    document.getElementById(x).style.display= "block";
+}
