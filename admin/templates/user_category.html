@@ -496,11 +496,12 @@
 										</div>
 									</div>
 									<div id="athletercb" class="hide margin_t_20">
+										<div></div>
 										<div class="athleter">
 											{% for shoe in shoes%}
-												{% if shoe['athleter'] %}
+												{% if shoe['athleter'] not in a and shoe['athleter'] %}
 												<label class="container2">{{shoe['athleter']}}
-													<input type="checkbox" value="{{shoe['athleter']}}" name="athleter">
+													<input type="checkbox" value="{{shoe['athleter']}}" a="{{a.append(shoe['athleter'])}}" name="athleter">
 													<span class="checkmark"></span>
 												</label>
 												
@@ -855,8 +856,7 @@
 				<div class="col-lg-6 text-center">
 					<div class="section-title">
 						<h1>Deals of the Week</h1>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua.</p>
+						<p>Product deal for everyone !</p>
 					</div>
 				</div>
 			</div>
@@ -1127,6 +1127,38 @@
 	<script src="../static/user/js/main.js"></script>
 	<script src="../static/user/js/user.js"></script>
 	<!-- <script language="JavaScript" type="text/javascript" src="../static/user/js/jquery-3.4.1.min.js"></script> -->
+	<script type="text/javascript">
+		
+		$(document).ready(function() {
+          $(".img-fluid").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			  id_shoes=id_shoes.substr(0,id_shoes.length-2);
+			//   alert(id_shoes);
+			$.ajax({
+              data: {'id_user':id,
+			  'id_shoes':id_shoes
+			  },
+              type:"POST",
+              url : "/tracking"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			console.log("Done");
+            // $("#notification").show();
+            });
+		  });
+		  });
+
+		
+	</script>
 </body>
 
 </html>

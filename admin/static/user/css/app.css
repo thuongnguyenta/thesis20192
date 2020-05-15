@@ -299,10 +299,7 @@ margin-top:20px;
     visibility: hidden;
   }
   
-  .round input[type="checkbox"]:checked + label {
-    /* background-color: #66bb6a; */
-    /* border-color: #66bb6a; */
-  }
+
   
   .round input[type="checkbox"]:checked + label:after {
     opacity: 1;
@@ -377,7 +374,7 @@ margin-top:20px;
 .rate {
   position: absolute;
   top: 77px;
-  left: 124px;
+  left: 250px;
   padding: 0 10px;
 }
 .rate:not(:checked) > input {
@@ -453,6 +450,13 @@ transform: rotate(-45deg);
 {
     display: none;
 }
+/* .detail_pr > div:nth-child(n+2) 
+{
+    display: none;
+} */
+/* .detail_pr div:first-child {
+  display: block;
+} */
 .size:not(:checked) > label{
     float: right;
     width: 1em;

@@ -27,11 +27,13 @@ $(document).ready(function(){
     // alert("1");
     var col= $('input[name="color"]:checked').prop('value');
     $('.image_element').hide();
+    $('.s_Product_carousel').hide();
     // $('.single-prd-item').remove();
     $('input[name="color"]:checked').each(function(){
       // alert($(this).val());
       
       $('.image_element[color="'+$(this).val()+'"]').show()
+      $('.s_Product_carousel[color="'+$(this).val()+'"]').show()
         // var src_link= $(".image_element img").attr("src");
         // alert(src_link);
     //   $('.s_Product_carousel').append('<div class="single-prd-item" color="">'+
@@ -166,6 +168,17 @@ $(document).ready(function(){
       nav:false,
       dots:true
     });
+
+
+    // $(".s_Product_carousel2").owlCarousel({
+    //   items:1,
+    //   autoplay:false,
+    //   autoplayTimeout: 5000,
+    //   loop:true,
+    //   nav:false,
+    //   navText:["<img src='../static/user/img/product/prev.png'>","<img src='../static/user/img/product/next.png'>"],
+    //   dots:true
+    // });
     
     /*=================================
     Javascript for exclusive area carousel

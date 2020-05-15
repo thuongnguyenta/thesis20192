@@ -2,6 +2,7 @@
 <html lang="zxx" class="no-js">
 
 <head>
+	<script src="/static/user/js/jquery-3.4.1.min.js"></script>
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Favicon-->
@@ -42,13 +43,29 @@
 			<div class="row fullscreen align-items-center justify-content-start">
 				<div class="col-lg-12">
 					<div class="active-banner-slider owl-carousel">
+						<div class="row single-slide">
+							<div class="col-lg-5">
+								<div class="banner-content">
+									<h1>Nike New <br>Collection!</h1>
+									<p>Fashion Stylist with feature unique !</p>
+									<div class="add-bag d-flex align-items-center">
+										<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+										<span class="add-text text-uppercase">Add to Bag</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-7">
+								<div class="banner-img">
+									<img class="img-fluid" src="../static/user/img/banner/banner-img.png" alt="">
+								</div>
+							</div>
+						</div>
 						<!-- single-slide -->
 						<div class="row single-slide align-items-center d-flex">
 							<div class="col-lg-5 col-md-6">
 								<div class="banner-content">
 									<h1>Nike New <br>Collection!</h1>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+									<p>Best sell for you !</p>
 									<div class="add-bag d-flex align-items-center">
 										<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
 										<span class="add-text text-uppercase">Add to Bag</span>
@@ -57,29 +74,12 @@
 							</div>
 							<div class="col-lg-7">
 								<div class="banner-img">
-									<img class="img-fluid" src="../static/user/img/banner/banner-img.png" alt="">
+									<img class="img-fluid" src="../static/user/img/banner/air-vapormax-flyknit-3-shoe-xr9cgR.png" alt="">
 								</div>
 							</div>
 						</div>
 						<!-- single-slide -->
-						<div class="row single-slide">
-							<div class="col-lg-5">
-								<div class="banner-content">
-									<h1>Nike New <br>Collection!</h1>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-									<div class="add-bag d-flex align-items-center">
-										<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-										<span class="add-text text-uppercase">Add to Bag</span>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-7">
-								<div class="banner-img">
-									<img class="img-fluid" src="../static/user/img/banner/banner-img.png" alt="">
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -212,26 +212,27 @@
 				<div class="row justify-content-center">
 					<div class="col-lg-6 text-center">
 						<div class="section-title">
-							<h1>Latest Products</h1>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-								dolore
-								magna aliqua.</p>
+							<h1>Feature Products</h1>
+							<p>Most popular product in shop  .</p>
+							<!-- <button class="img-fluid">Click Here!</button> -->
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<!-- single product -->
 
-					{% for shoe in shoes %}
+					{% for shoe in shoes['recomms'] %}
 					<div class="col-lg-3 col-md-6">
 						<div class="single-product">
-							<img class="img-fluid" src="../static/image/shoes_image/{{shoe['image']}}" alt="">
+							<a href="/user_productdetail/{{shoe['values']['id_shoes']}}">
+							<img class="img-fluid" id="{{shoe['values']['id_shoes']}}" src="{{shoe['values']['image']}}"  alt="">
+							</a>
 							<div class="product-details">
-								<h6 style="min-height: 50px;">{{shoe['shoes_name']}}</h6>
+								<h6 style="min-height: 50px;">{{shoe['values']['shoes_name']}}</h6>
 								<div class="price">
-									<h6>{{shoe['price']*(1-shoe['sale']/100)}}<ins>đ</ins></h6>
+									<h6>{{shoe['values']['price']*(1-shoe['values']['sale']/100)}}<ins>đ</ins></h6>
 									{% if shoe['sale'] %}
-									<h6 class="l-through">{{shoe['price']}}<ins>đ</ins></h6>
+									<h6 class="l-through">{{shoe['values']['price']}}<ins>đ</ins></h6>
 									{% endif %}
 								</div>
 								<div class="prd-bottom">
@@ -269,9 +270,7 @@
 					<div class="col-lg-6 text-center">
 						<div class="section-title">
 							<h1>Coming Products</h1>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-								dolore
-								magna aliqua.</p>
+							<p>Product is coming as soon as posible early !.</p>
 						</div>
 					</div>
 				</div>
@@ -280,7 +279,7 @@
 					{% for new in shoes_new %}
 					<div class="col-lg-3 col-md-6">
 						<div class="single-product">
-							<img class="img-fluid" src="../static/image/shoes_image/{{new['image']}}" alt="">
+							<img class="img-fluid" id="{{new['id_shoes']}}" src="../static/image/shoes_image/{{new['image']}}"  alt="">
 							<div class="product-details">
 								<h6 style="min-height: 50px;">{{new['shoes_name']}}</h6>
 								<div class="price">
@@ -654,8 +653,7 @@
 				<div class="col-lg-6 text-center">
 					<div class="section-title">
 						<h1>Deals of the Week</h1>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua.</p>
+						<p>Product has sale for everyone can possive.</p>
 					</div>
 				</div>
 			</div>
@@ -746,6 +744,56 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="../static/user/js/gmaps.min.js"></script>
 	<script src="../static/user/js/main.js"></script>
+	<!-- <script type="text/javascript">
+		// alert("1");
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-12345-6']);
+		_gaq.push(['_trackPageview']);
+	  
+		(function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	  </script>
+	  <script type="text/javascript">
+		var pageTracker = _gat._getTracker('UA-12345-6');
+		pageTracker._trackPageview();
+
+		_gaq.push(['_setAccount', 'UA-XXXXX-X']);
+		_gaq.push(['_trackPageview']);
+	  </script> -->
+
+		<script type="text/javascript">
+		
+		$(document).ready(function() {
+          $(".img-fluid").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			$.ajax({
+              data: {'id_user':id,
+			  'id_shoes':id_shoes
+			  },
+              type:"POST",
+              url : "/tracking"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			alert("Done");
+            // $("#notification").show();
+            });
+		  });
+		  });
+
+		
+	</script>
 </body>
 
 </html>

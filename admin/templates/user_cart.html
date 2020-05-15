@@ -271,8 +271,8 @@
                                 <td></td>
                                 <td>
                                     <div class="checkout_btn_inner d-flex align-items-center">
-                                        <a class="gray_btn" href="/user_product">Continue Shopping</a>
-                                        <button class="primary-btn" type="submit">Proceed to checkout</button>
+                                        <a class="gray_btn" style="position:absolute;right:50%;" href="/user_product">Continue Shopping</a>
+                                        <button class="primary-btn" style="position:absolute;left:50%;" type="submit">Proceed to checkout</button>
                                     </div>
                                 </td>
                             </tr>
@@ -280,11 +280,49 @@
                     </table>
                 </div>
                 </form>
+
+                
             </div>
         </div>
     </section>
     <!--================End Cart Area =================-->
+    <!-- Start related-product Area -->
+	<section class="related-product-area section_gap_bottom">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>You also like !</h1>
+						<p>Product suggstion for you</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-9">
+					
+					<div class="dp_flex">
+					{% for rcm in recommended['recomms'] %}
+					<div class="col-lg-4 col-md-4 col-sm-6">
+						<div class="click_detail" id="{{rcm['values']['id_shoes']}}"><a href="/user_productdetail/{{rcm['values']['id_shoes']}}"><img src="{{rcm['values']['image']}}" height="200px" width="200px"></a></div>
+						<div>{{rcm['values']['shoes_name']}}</div>
+						<div>{{rcm['values']['price']}}</div>
+					</div>
+					{% endfor %}
+					</div>
 
+					
+				</div>
+				<div class="col-lg-3">
+					<div class="ctg-right">
+						<a href="#" target="_blank">
+							<img class="img-fluid d-block mx-auto" src="../static/user/img/category/c5.jpg" alt="">
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+    </section>
+    
     <!-- start footer Area -->
     {% include 'footer.html' %}
     <!-- End footer Area -->
@@ -316,6 +354,35 @@
             $("#factor_price_"+id_cart_detail).html(myObj.resp2);
             });
           });
+
+
+          $(".click_detail").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			//   id_shoes=id_shoes.substr(0,id_shoes.length-2);
+			//   alert(id_shoes);
+			$.ajax({
+              data: {'id_user':id,
+			  'id_shoes':id_shoes
+			  },
+              type:"POST",
+              url : "/tracking"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			console.log("Done");
+            // $("#notification").show();
+            });
+		  });
+
+
         });
     
     </script>

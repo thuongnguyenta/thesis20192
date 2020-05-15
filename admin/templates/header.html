@@ -26,30 +26,40 @@
                                 <li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li> -->
                             </ul>
                         </li>
-                        <li class="nav-item submenu dropdown">
+                        <!-- <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                              aria-expanded="false">Blog</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
                                 <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <li class="nav-item"><a class="nav-link" href="#bottom">Contact</a></li>
+                        {% if 'id' in session %}
                         <li id="person" class="nav-item submenu dropdown ">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                             aria-expanded="false">Account</a>
+                             aria-expanded="false">{{session['name']}} <img class="input_ps" src="{{session['cover_image']}}" width="30px" height="30px"></a>
                             <ul class="dropdown-menu">
-                                {% if 'id' in session %}
+                                
                                 <li class="nav-item"><a class="nav-link" href="/user_cart"> <span class="ti-bag"></span> : My Cart</a></li>
                                 <li class="nav-item"><a class="nav-link" href="/user_profile"> <img src="../static/image/people/person.png" width="20px" height="20px"  alt="post">: Personal Infor</a></li>
                                 <li class="nav-item"><a class="nav-link" href="/user_history_order"> <img src="../static/image/people/order_history.png" width="20px" height="20px"  alt="post">: History Order</a></li>
                                 <li class="nav-item"><a class="nav-link" href="/logout"> <img src="../static/image/people/logout.jpg" width="20px" height="20px"  alt="post">: Logout</a></li>
-                                {% else %}
-                                <li class="nav-item"><a class="nav-link" href="/user_login"><img src="../static/image/people/login.png" width="20px" height="20px"  alt="post">: Login/Register</a></li>
-                                {% endif %}
+                                
                             </ul>
                         </li>
-                        
+                        {% else %}
+                        <li id="person" class="nav-item submenu dropdown ">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                             aria-expanded="false">Account</a>
+                            <ul class="dropdown-menu">
+                                
+                                
+                                <li class="nav-item"><a class="nav-link" href="/user_login"><img src="../static/image/people/login.png" width="20px" height="20px"  alt="post">: Login/Register</a></li>
+                                
+                            </ul>
+                        </li>
+                        {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <!-- <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li> -->

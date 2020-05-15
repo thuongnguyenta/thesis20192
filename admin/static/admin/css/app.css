@@ -295,3 +295,7 @@ opacity: 1;
     right: 200px;
     top: 22px;
 }
+
+.scale_able :hover{
+  transform: scale(2);
+}

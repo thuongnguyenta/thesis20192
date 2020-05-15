@@ -1,3 +1,7 @@
+from recombee_api_client.api_client import RecombeeClient
+from recombee_api_client.api_requests import *
+
+
 from flask import Flask,render_template, flash, redirect , url_for , session ,request, logging
 from flask_mysqldb import MySQL
 from werkzeug.utils import secure_filename
@@ -6,6 +10,17 @@ import json
 # from flask_dropzone import Dropzone
 # from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import os
+
+from form import EmailForm,PasswordForm
+from itsdangerous import URLSafeSerializer
+
+
+from flask_mail import Mail, Message
+# from . import app
+# from .forms import EmailForm
+# from .models import User
+# from .util import send_email, ts
+
 
 # import pymysql
 # from app import app
@@ -16,9 +31,14 @@ from flask import jsonify
 # from functools import wraps
 
 
+client = RecombeeClient('hanoi-university-of-science-and-technology-dev', 'Q1NZZQ9do57L9rFjJtN293YZzInHoVGWjFogWIYiAQR8cHAyKw32eB2zAYSPurnH')
+
+
 app = Flask(__name__)
 app.debug = True
 
+
+app.config['SECRET_KEY']="secret key"
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 
@@ -27,6 +47,16 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = '20192'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'seeyouagain791142@gmail.com'
+app.config['MAIL_PASSWORD'] = '24111997'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
 
 uploads_dir = './static/image/shoes_image/'
 
@@ -41,25 +71,25 @@ def form():
 
 # @app.route('/login',methods=["POST","GET"])
 # def login(): 
-    if request.method=='POST':
-        email = request.form['user_name']
-        password = request.form['password']
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM account WHERE email=%s AND password =%s AND role=1",[email,password])
-        rows=cur.fetchall()
-        if len(rows) ==0:
-            error="Incorrect email or password"
-            return render_template('login.html',error=error)
-        else:
-            session['id'] = rows[0]['id_account']
-            session['name'] = rows[0]['username']
-            session["email"] =rows[0]['email']
-            # session['role'] =rows[0]['role']
-            session['address']=rows[0]['address']
-            session['phone_number']=rows[0]['phone_number']
-            session['cover_image']=rows[0]['cover_image']
-            return redirect(url_for('dashboard'))
-    return render_template('login.html')
+    # if request.method=='POST':
+    #     email = request.form['user_name']
+    #     password = request.form['password']
+    #     cur=mysql.connection.cursor()
+    #     cur.execute("SELECT * FROM account WHERE email=%s AND password =%s AND role=1",[email,password])
+    #     rows=cur.fetchall()
+    #     if len(rows) ==0:
+    #         error="Incorrect email or password"
+    #         return render_template('login.html',error=error)
+    #     else:
+    #         session['id'] = rows[0]['id_account']
+    #         session['name'] = rows[0]['username']
+    #         session["email"] =rows[0]['email']
+    #         # session['role'] =rows[0]['role']
+    #         session['address']=rows[0]['address']
+    #         session['phone_number']=rows[0]['phone_number']
+    #         session['cover_image']=rows[0]['cover_image']
+    #         return redirect(url_for('dashboard'))
+    # return render_template('login.html')
 
 @app.route('/logout')
 def logout():
@@ -136,8 +166,11 @@ def update_profile():
     if 'id' in session:
         if session['role']==1:
             if request.method=='POST':
+                # print("1")
                 username=request.form['username']
-                password=request.form['password']
+                # print("2")
+                # password=request.form['password']
+                # print("3")
                 phone_number =request.form['phone_number']
                 address =request.form['address']
                 cur=mysql.connection.cursor()
@@ -377,7 +410,7 @@ def color_image():
         sp=cur.fetchall()
         reps=""
         for idx,pr in enumerate(sp):
-            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='120px' height='120px'></label>"
+            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label class='scale_able' for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='120px' height='120px'></label>"
         print (reps)
         return reps
 # @app.route('/product/color_image/delete',methods=['POST'])
@@ -439,6 +472,12 @@ def add_product():
                 for color in colors:
                     cur.execute("INSERT INTO shoes_color(id_shoes_color,id_shoes,color) VALUES(%s,%s,%s)",["NULL",id_shoes,color])
                     mysql.connection.commit()
+
+                ### send infor to recombee
+
+                # update_item_id(id_shoes)
+
+                ###
                 return redirect(url_for('product'))
             return redirect(url_for('product'))
         return redirect(url_for('user_product'))
@@ -510,6 +549,10 @@ def update_product(id_shoes):
                             cur.execute("DELETE FROM shoes_color WHERE id_shoes =%s AND color =%s",[id_shoes,old_cl])
                             mysql.connection.commit()
 
+                ### send infor to recombee
+                # update_item_id(id_shoes)
+
+                ###
                 return redirect(url_for('product'))
             return redirect(url_for('product'))
         return redirect(url_for('user_product'))
@@ -551,6 +594,10 @@ def update_color_image(id_shoes):
             cur.execute("INSERT INTO shoes_color_image(id_shoes_color_image,id_shoes_color,image) VALUES(%s,%s,%s)",["NULL",id_shoes_color,link])
             mysql.connection.commit()
         # print(shoes_delete,shoes_image)
+        ### send infor to recombee
+        update_item_id(id_shoes)
+
+        ###
         return redirect(url_for('product'))
 
 
@@ -615,6 +662,16 @@ def username_check():
 
 @app.route('/user_index')
 def user_index():
+
+    recommended={'recommId': '77c149bd875d2fb73b60574990507e6f', 'recomms': [{'id': '3', 'values': {'id_shoes': 3, 'shoes_type': 'Football', 'catalogy': 'Boot', 'color': ['Blue'], 'describe': 'Has alot of Surface and has durable with time\r\n', 'athleter': 'Cristiano Ronaldo', 'sale': 10, 'image': '/static/image/shoes_image/2/Lemon Venom/i1-e43bc0a3-290d-4620-983e-4d3d0a4688aa.webp', 'gender_shoes': 'Man', 'shoes_name': 'Nike Mercurial Superfly 7 Elite MDS FG', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 8799000.0, 'feature': 'Reflection'}}, {'id': '1', 'values': {'id_shoes': 1, 'shoes_type': 'Running', 'catalogy': 'Snacker', 'color': ['Black,Orange,White,Red'], 'describe': 'Shoes suitable for every one,!', 'athleter': None, 'sale': 0, 'image': '/static/image/shoes_image/1/Black/52600ab1-4a17-4822-91f1-cfeb580c3004.webp', 'gender_shoes': 'Both', 'shoes_name': 'Nike React Infinity Run Flyknit', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 4699000.0, 'feature': 'Waterproof'}}, {'id': '8', 'values': {'id_shoes': 8, 'shoes_type': 'Basketball', 'catalogy': 'Snacker', 'color': ['Black,Grey'], 'describe': 'The Air Jordan XXXIV PF continues the legacy of a cultural icon. Light, responsive sculpted', 'athleter': None, 'sale': 0, 'image': '/static/image/shoes_image/8/Black/3d7b03ea-3466-4056-a344-3492e88f8b6c.webp', 'gender_shoes': 'Man', 'shoes_name': 'Air Jordan XXXIV PF', 'surface': ['Artificial Grass,Multi Ground,Indoor,Grass'], 'price': 5129000.0, 'feature': 'Reflection'}}, {'id': '4', 'values': {'id_shoes': 4, 'shoes_type': 'Training', 'catalogy': 'Sandals', 'color': ['Purple'], 'describe': 'Comfortable for Woman and has style perfect\r\n', 'athleter': '', 'sale': 0, 'image': '/static/image/shoes_image/3/White Purple/112ade84-3b68-4b31-962f-8ce56d55ca71.webp', 'gender_shoes': 'Woman', 'shoes_name': 'Nike Air Max 200', 'surface': ['Multi Ground,Indoor'], 'price': 3519000.0, 'feature': 'Waterproof'}}]}
+        
+        # 1: id_item,3:id_account,2 is number get_recommend
+    # recommended = client.send(RecommendItemsToUser(0,4,
+    #                                         scenario='product_detail',
+    #                                         return_properties=True,
+    #                                         cascade_create=True))
+        
+    print(recommended)
     cur=mysql.connection.cursor()
     cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes LIMIT 4")
     shoes=cur.fetchall()
@@ -625,7 +682,7 @@ def user_index():
     cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes.sale!=0 AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes LIMIT 8")
     shoes_sale=cur.fetchall()
 
-    return render_template('user_index.html',shoes=shoes,shoes_new=shoes_new,shoes_sale=shoes_sale)
+    return render_template('user_index.html',shoes=recommended,shoes_new=shoes_new,shoes_sale=shoes_sale)
 
 
 
@@ -697,6 +754,19 @@ def search():
         return render_template('user_category.html',shoes=rows, colors=color, shoe_type=shoe_type,surface=surface,a=a,search=search_in4)
 @app.route('/user_productdetail/<id_shoes>')
 def detail_product(id_shoes):
+    recommended={'recommId': 'a7f9137877465c2b505c468010440298', 'recomms': [{'id': '4', 'values': {'sale': 0, 'image': '/static/image/shoes_image/3/White Purple/112ade84-3b68-4b31-962f-8ce56d55ca71.webp', 'id_shoes': 4, 'shoes_type': 'Training', 'catalogy': 'Sandals', 'athleter': '', 'color': ['Purple'], 'describe': 'Comfortable for Woman and has style perfect\r\n', 'gender_shoes': 'Woman', 'shoes_name': 'Nike Air Max 200', 'surface': ['Multi Ground,Indoor'], 'price': 3519000.0, 'feature': 'Waterproof'}}, {'id': '8', 'values': {'sale': 0, 'image': '/static/image/shoes_image/8/Black/3d7b03ea-3466-4056-a344-3492e88f8b6c.webp', 'id_shoes': 8, 'shoes_type': 'Basketball', 'catalogy': 'Snacker', 'athleter': None, 'color': ['Black,Grey'], 'describe': 'The Air Jordan XXXIV PF continues the legacy of a cultural icon. Light, responsive sculpted', 'gender_shoes': 'Man', 'shoes_name': 'Air Jordan XXXIV PF', 'surface': ['Artificial Grass,Multi Ground,Indoor,Grass'], 'price': 5129000.0, 'feature': 'Reflection'}}, {'id': '3', 'values': {'sale': 10, 'image': '/static/image/shoes_image/2/Lemon Venom/i1-e43bc0a3-290d-4620-983e-4d3d0a4688aa.webp', 'id_shoes': 3, 'shoes_type': 'Football', 'catalogy': 'Boot', 'athleter': 'Cristiano Ronaldo', 'color': ['Blue'], 'describe': 'Has alot of Surface and has durable with time\r\n', 'gender_shoes': 'Man', 'shoes_name': 'Nike Mercurial Superfly 7 Elite MDS FG', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 8799000.0, 'feature': 'Reflection'}}]}
+    # if 'id' in session:
+    # # 1: id_item,3:id_account,2 is number get_recommend
+    #     recommended = client.send(RecommendItemsToItem('1', session['id'], 3,
+    #                                            scenario='product_detail',
+    #                                            return_properties=True,
+    #                                            cascade_create=True))
+    # else:
+    #     recommended = client.send(RecommendItemsToItem('1', '0', 3,
+    #                                            scenario='product_detail',
+    #                                            return_properties=True,
+    #                                            cascade_create=True))
+    # print(recommended)
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM shoes,shoes_color_image,shoes_color WHERE shoes.id_shoes=shoes_color.id_shoes and shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=%s ORDER BY shoes_color.id_shoes_color",[id_shoes])
     shoe= cur.fetchall()
@@ -716,7 +786,10 @@ def detail_product(id_shoes):
     cur.execute("SELECT * FROM shoes_surface WHERE id_shoes=%s",[id_shoes])
     surface=cur.fetchall()
 
-    return render_template("user_productdetail.html",shoe_detail=shoe,color=color,comment=comment,star=star,count_cm=count_cm,surface=surface)
+    cur.execute("SELECT * FROM `shoes_color` WHERE shoes_color.id_shoes=%s",[id_shoes])
+    all_color=cur.fetchall()
+
+    return render_template("user_productdetail.html",shoe_detail=shoe,color=color,comment=comment,star=star,count_cm=count_cm,surface=surface,all_color=all_color,recommended=recommended)
 
 @app.route('/user_login', methods=['POST','GET'])
 def user_login():
@@ -830,11 +903,20 @@ def comment(id_shoes):
 @app.route('/user_cart')
 def user_cart():
     if 'id' in session:
+        recommended={'recommId': 'a7f9137877465c2b505c468010440298', 'recomms': [{'id': '4', 'values': {'sale': 0, 'image': '/static/image/shoes_image/3/White Purple/112ade84-3b68-4b31-962f-8ce56d55ca71.webp', 'id_shoes': 4, 'shoes_type': 'Training', 'catalogy': 'Sandals', 'athleter': '', 'color': ['Purple'], 'describe': 'Comfortable for Woman and has style perfect\r\n', 'gender_shoes': 'Woman', 'shoes_name': 'Nike Air Max 200', 'surface': ['Multi Ground,Indoor'], 'price': 3519000.0, 'feature': 'Waterproof'}}, {'id': '8', 'values': {'sale': 0, 'image': '/static/image/shoes_image/8/Black/3d7b03ea-3466-4056-a344-3492e88f8b6c.webp', 'id_shoes': 8, 'shoes_type': 'Basketball', 'catalogy': 'Snacker', 'athleter': None, 'color': ['Black,Grey'], 'describe': 'The Air Jordan XXXIV PF continues the legacy of a cultural icon. Light, responsive sculpted', 'gender_shoes': 'Man', 'shoes_name': 'Air Jordan XXXIV PF', 'surface': ['Artificial Grass,Multi Ground,Indoor,Grass'], 'price': 5129000.0, 'feature': 'Reflection'}}, {'id': '3', 'values': {'sale': 10, 'image': '/static/image/shoes_image/2/Lemon Venom/i1-e43bc0a3-290d-4620-983e-4d3d0a4688aa.webp', 'id_shoes': 3, 'shoes_type': 'Football', 'catalogy': 'Boot', 'athleter': 'Cristiano Ronaldo', 'color': ['Blue'], 'describe': 'Has alot of Surface and has durable with time\r\n', 'gender_shoes': 'Man', 'shoes_name': 'Nike Mercurial Superfly 7 Elite MDS FG', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 8799000.0, 'feature': 'Reflection'}}]}
+        # if 'id' in session:
+        # 1: id_item,3:id_account,2 is number get_recommend
+        # recommended = client.send(RecommendItemsToUser(session['id'],3,
+        #                                         scenario='product_detail',
+        #                                         return_properties=True,
+        #                                         cascade_create=True))
+        
+        print(recommended)
         id_account= session['id']
         cur=mysql.connection.cursor()
         cur.execute("SELECT * FROM cart,cart_detail,shoes_color_image,shoes_color,shoes WHERE cart.id_cart=cart_detail.id_cart AND shoes_color_image.id_shoes_color=cart_detail.id_color AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=cart_detail.id_shoes AND cart.id_user =%s GROUP BY cart_detail.id_cart_detail",[id_account])
         temp=cur.fetchall()
-        return render_template('user_cart.html',cart_detail=temp)
+        return render_template('user_cart.html',cart_detail=temp,recommended=recommended)
     return redirect(url_for('user_login'))
 
 
@@ -974,6 +1056,10 @@ def checkout():
                 price_per_order=item_cart['price_per_product']
                 cur.execute("INSERT INTO order_detail(id_order_detail,id_shoes,id_shoes_color,order_detail_quantity,order_size,id_order,price_per_order) VALUES(%s,%s,%s,%s,%s,%s,%s)",["NULL",id_shoes,id_shoes_color,order_detail_quantity,order_size,id_user_order,price_per_order])
                 mysql.connection.commit()
+
+                ## send recombee
+                client.send(AddPurchase(id_user,id_shoes,cascade_create=True))
+
             
             cur.execute("DELETE FROM cart_detail WHERE id_cart=(SELECT cart.id_cart FROM cart WHERE cart.id_user=%s)",[id_user])
             mysql.connection.commit()
@@ -1069,3 +1155,230 @@ def user_history():
 
         return render_template('user_historyorder.html',order_history=rows,order_detail=detail,person=rows)
     return redirect(url_for('user_login'))
+
+
+
+@app.route('/reset', methods=["GET", "POST"])
+def reset():
+    # form = EmailForm()
+    if request.method=='POST':
+        # user = User.query.filter_by(email=form.email.data).first_or_404()
+        email=request.form['email']
+        # print('Email:'+email)
+        cur=mysql.connection.cursor()
+        cur.execute("SELECT * FROM account WHERE email=%s",[email])
+        rows=cur.fetchall()
+        if len(rows) ==0:
+            return "Email not exist or hasn't use !"
+        else:
+            subject = "Password reset requested"
+
+            # Here we use the URLSafeTimedSerializer we created in `util` at the
+            # beginning of the chapter
+            s = URLSafeSerializer(app.config['SECRET_KEY'])
+            # s = URLSafeSerializer('super-secret-key')
+            token =s.dumps(email, salt='recover-key')
+            # token = "1232312sdgs4124"
+            print('Token:')
+            print(token)
+
+            recover_url = url_for(
+                'reset_with_token',
+                token=token,
+                _external=True)
+
+            html = render_template(
+                'recover.html',
+                recover_url=recover_url)
+
+            # Let's assume that send_email was defined in myapp/util.py
+            send_email(subject,[email],html)
+
+            return "Access Email to confirm !"
+    return render_template('reset.html', form=form)
+
+
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    # try:
+        s = URLSafeSerializer(app.config['SECRET_KEY'])
+        email = s.loads(token, salt="recover-key")
+       
+
+        if request.method=='POST':
+            
+            password=request.form['password']
+            cur=mysql.connection.cursor()
+            cur.execute("UPDATE account SET password=%s WHERE email =%s ",[password,email])
+            mysql.connection.commit()
+            print('Xong')
+
+            return redirect(url_for('user_login'))
+
+        return render_template('reset_with_token.html',  token=token,email=email)
+
+def send_email(message,recei,body):
+	# try:
+		msg = Message(message,
+		  sender="seeyouagain791142@gmail.com",
+		  recipients=recei)
+		msg.body = body           
+		mail.send(msg)
+		return 'Mail sent!'
+        
+
+@app.route('/tracking',  methods=["GET", "POST"])
+def tracking():
+    if request.method=='POST':
+        id_user=request.form['id_user']
+        id_shoes=request.form['id_shoes']
+        a={'id_user':id_user,'id_shoes':id_shoes}
+        print(id_shoes)
+        with open('./log.json') as data_file:    
+            data = json.load(data_file)
+            # data.append()
+        data.append(a)
+        with open('log.json', 'w') as f:
+            json.dump(data, f)
+            f.close()
+        print(data)
+    #     return "done"
+        # time=datetime.datetime.today(),
+        client.send(AddDetailView(id_user, id_shoes, cascade_create=True))
+        return "done"
+
+
+@app.route('/add_to_cart/tracking',  methods=["GET", "POST"])
+def add_to_cart_tracking():
+    if request.method=='POST':
+        id_user=request.form['id_user']
+        id_shoes=request.form['id_shoes']
+        a={'id_user':id_user,'id_shoes':id_shoes}
+        print(id_shoes)
+        with open('./add_to_cart.json') as data_file:    
+            data = json.load(data_file)
+            # data.append()
+        data.append(a)
+        with open('add_to_cart.json', 'w') as f:
+            json.dump(data, f)
+            f.close()
+        print(data)
+    #     return "done"
+        # time=datetime.datetime.today(),
+        client.send(AddCartAddition(id_user, id_shoes, cascade_create=True))
+        return "done"
+
+
+@app.route('/comments/tracking/<id_shoes>',  methods=["GET", "POST"])
+def comments_tracking(id_shoes):
+    print("123")
+    if request.method=='POST':
+        print('comment_tracking')
+        # id_user=request.form['id_user']
+        # id_shoes=request.form['id_shoes']
+        id_user=session['id']
+        # id_shoes=id_shoes
+        rate=(int(request.form['rate'])-3)/2
+        a={'id_user':id_user,'id_shoes':id_shoes,'rating':rate}
+        print(id_shoes)
+        with open('./comments.json') as data_file:    
+            data = json.load(data_file)
+            # data.append()
+        data.append(a)
+        with open('comments.json', 'w') as f:
+            json.dump(data, f)
+            f.close()
+        print(data)
+    #     return "done"
+        # time=datetime.datetime.today(),
+        client.send(AddRating(id_user, id_shoes,rate, cascade_create=True))
+        return "done"
+
+
+
+
+@app.route('/update_data')
+def update_data_server():
+
+    cur=mysql.connection.cursor()
+
+    # cur.execute("SELECT * FROM shoes")
+    # temp=cur.fetchall()
+    
+    
+    # for item in temp:
+    #     print(item['id_shoes'])
+    #     client.send(SetItemValues(item['id_shoes'],item,cascade_create=True))
+        # print(item)
+
+    # print(json_data)
+    cur.execute("SELECT * FROM account WHERE role='2'")
+    account= cur.fetchall()
+    for ac in account:
+        client.send(SetUserValues(ac['id_account'],{'address':ac['address'],'id_account':ac['id_account']},cascade_create=True))
+    return "Store user complete !"
+@app.route('/update_item')
+def update_item():
+    cur=mysql.connection.cursor()
+
+    cur.execute("SELECT shoes.id_shoes,shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,shoes.describe,image,GROUP_CONCAT(DISTINCT surface SEPARATOR ',') as surface,GROUP_CONCAT(DISTINCT color SEPARATOR ',') as color FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes AND shoes.id_shoes=shoes_color.id_shoes and shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes")
+    temp=cur.fetchall()
+    
+    
+    for item in temp:
+        print(item['id_shoes'])
+        current_item={
+            "id_shoes":item['id_shoes'],
+            "shoes_name":item['shoes_name'],
+            "gender_shoes":item['gender_shoes'],
+            "shoes_type":item['shoes_type'],
+            "feature":item['feature'],
+            "price":item['price'],
+            "athleter":item['athleter'],
+            "sale":item['sale'],
+            "catalogy":item['catalogy'],
+            "describe":item['describe'],
+            "image":"/static/image/shoes_image/"+item['image'],
+            "surface":[item['surface']],
+            "color":[item['color']]
+        }
+        client.send(SetItemValues(item['id_shoes'],current_item,cascade_create=True))
+    return "Update item complete !"
+
+def update_item_id(id_shoes):
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT shoes.id_shoes,shoes_name,gender_shoes,shoes_type,feature,price,athleter,sale,catalogy,shoes.describe,image,GROUP_CONCAT(DISTINCT surface SEPARATOR ',') as surface,GROUP_CONCAT(DISTINCT color SEPARATOR ',') as color FROM shoes,shoes_surface,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_surface.id_shoes AND shoes.id_shoes=shoes_color.id_shoes and shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=%s GROUP BY shoes.id_shoes",[id_shoes])
+    temp=cur.fetchall()
+    
+    
+    for item in temp:
+        # print(item['id_shoes'])
+        current_item={
+            "id_shoes":item['id_shoes'],
+            "shoes_name":item['shoes_name'],
+            "gender_shoes":item['gender_shoes'],
+            "shoes_type":item['shoes_type'],
+            "feature":item['feature'],
+            "price":item['price'],
+            "athleter":item['athleter'],
+            "sale":item['sale'],
+            "catalogy":item['catalogy'],
+            "describe":item['describe'],
+            "image":"/static/image/shoes_image/"+item['image'],
+            "surface":[item['surface']],
+            "color":[item['color']]
+        }
+        client.send(SetItemValues(item['id_shoes'],current_item,cascade_create=True))
+    return "Update item "+temp[0]['shoes_name'] +" complete !"
+
+
+@app.route('/getdata_recomendation')
+def getdata_recomendation(id_shoes):
+    return update_item_id(id_shoes)
+    # 1: id_item,3:id_account,2 is number get_recommend
+    # recommended = client.send(RecommendItemsToItem('1', '3', 2,
+    #                                            scenario='product_detail',
+    #                                            return_properties=True,
+    #                                            cascade_create=True))
+    # print(recommended)
+    # return "1"

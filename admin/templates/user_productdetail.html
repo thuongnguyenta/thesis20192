@@ -2,6 +2,7 @@
 <html lang="zxx" class="no-js">
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="../static/user/js/jquery-3.4.1.min.js"></script>
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Favicon-->
@@ -58,24 +59,34 @@
 		<div class="container">
 			<div class="row s_product_inner">
 				<div class="col-lg-6">
-					<div class="s_Product_carousel">
-						{% for shoe_element in shoe_detail %}
-						{% if shoe_element['id_shoes_color']== shoe_detail[0]['id_shoes_color'] %}
-						<div class="single-prd-item" color="{{shoe_element['color']}}">
-							<img class="img-fluid" id="big_{{shoe_element[id_shoes_color_image]}}" src="../static/image/shoes_image/{{shoe_element['image']}}" alt="">
-						</div>
-						<!-- {% else %}
-						<div class="single-prd-item" color="{{shoe_element['color']}}" style="display:none;">
-							<img class="img-fluid" id="big_{{shoe_element[id_shoes_color_image]}}" src="../static/image/shoes_image/{{shoe_element['image']}}" alt="">
-						</div>
-						{% endif %} -->
+					<div class="detail_pr">
+						{% for one_cl in all_color %}
+						{% if one_cl['id_shoes_color'] == shoe_detail[0]['id_shoes_color'] %}
+							<div class="s_Product_carousel" id="one_cl_{{one_cl['color']}}" color="{{one_cl['id_shoes_color']}}">
+								{% for shoe_element in shoe_detail %}
+									{% if shoe_element['color']==one_cl['color'] %}
+									
+									<div class="single-prd-item" color="{{shoe_element['color']}}">
+										<img class="img-fluid" id="big_{{shoe_element[id_shoes_color_image]}}" src="../static/image/shoes_image/{{shoe_element['image']}}" alt="">
+									</div>
+									{% endif %}
+								{% endfor %}
+								
+							</div>
+						{% else %}
+							<div class="s_Product_carousel" style="display:none;" id="one_cl_{{one_cl['color']}}" color="{{one_cl['id_shoes_color']}}">
+								{% for shoe_element in shoe_detail %}
+									{% if shoe_element['color']==one_cl['color'] %}
+									
+									<div class="single-prd-item" color="{{shoe_element['color']}}">
+										<img class="img-fluid" id="big_{{shoe_element[id_shoes_color_image]}}" src="../static/image/shoes_image/{{shoe_element['image']}}" alt="">
+									</div>
+									{% endif %}
+								{% endfor %}
+								
+							</div>
+						{% endif %}
 						{% endfor %}
-						<!-- <div class="single-prd-item">
-							<img class="img-fluid" src="../static/image/shoes_image/{{shoe_detail[1]['image']}}" alt="">
-						</div>
-						<div class="single-prd-item">
-							<img class="img-fluid" src="../static/image/shoes_image/{{shoe_detail[2]['image']}}" alt="">
-						</div> -->
 					</div>
 					<div class="dp_flex flex-wrap">
 						{% for shoe_element in shoe_detail %}
@@ -106,16 +117,14 @@
 							<li><a class="active" href="#"><span>Category</span> : {{shoe_detail[0]['catalogy']}}</a></li>
 							<li><a href="#"><span>Feature</span> : {{shoe_detail[0]['feature']}}</a></li>
 						</ul>
-						<p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
-							something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
-							during the winter.</p>
+						<p>{{shoe_detail[0]['describe'][0:200]}}</p>
 						<div class="margin">
 							<form action="/add_to_cart" method="POST" class="radio-toolbar">
 								<div id="#radiobt" class="margin">
 								{% for c in color %}
 									<input type="radio" id="{{c['color']}}" name="color" value="{{c['id_shoes_color']}}" >
 									<label for="{{c['color']}}"> 
-										<img title="/static/image/shoes_image/{{c['image']}}" src="/static/image/shoes_image/{{c['image']}}" width="50px" height="50px" onclick="change_image('main_image',this.title)">
+										<img title="/static/image/shoes_image/{{c['image']}}" src="/static/image/shoes_image/{{c['image']}}" width="50px" height="50px">
 									</label>
 								{% endfor %}
 								</div>
@@ -134,7 +143,7 @@
 									<input class="quantity" type="number" name="quantity" min="1" max="10" value="1"> 
 								</div>
 								<div class="card_area d-flex align-items-center">
-									<button class="primary-btn" type="submit">Add to Cart</button>
+									<button class="primary-btn add_to_cart" id="{{shoe_detail[0]['id_shoes']}}" type="submit">Add to Cart</button>
 									<!-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
 									<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a> -->
 								</div>
@@ -547,9 +556,9 @@
 							<div class="review_box">
 								
 								
-								<form class="contact_form" action="/user_productdetail/comment/{{shoe_detail[0]['id_shoes']}}" method="POST">
+								<form class="contact_form" id="rating_form" action="/user_productdetail/comment/{{shoe_detail[0]['id_shoes']}}" method="POST">
 									<h4>Add a Review</h4>
-									<p style="margin:14px;">Your Rating:</p>
+									<p style="margin:14px;">Your Rating:( login required !)</p>
 									
 									{% include 'star.html' %}
 									<!-- <div class="col-md-12">
@@ -574,7 +583,7 @@
 									</div>
 									<div class="col-md-12 text-right">
 										{% if 'id' in session %}
-										<button type="submit" value="submit" class="primary-btn" >Submit Now</button>
+										<button type="submit"  value="submit" class="primary-btn rating_button" id="{{shoe_detail[0]['id_shoes']}}">Submit Now</button>
 										{% else %}
 										<button type="submit" value="submit" class="primary-btn" disabled>Submit Now</button>
 										{% endif %}
@@ -595,15 +604,14 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-6 text-center">
 					<div class="section-title">
-						<h1>Deals of the Week</h1>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua.</p>
+						<h1>You also like !</h1>
+						<p>Product suggstion for you and this shoes !</p>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-9">
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
 							<div class="single-related-product d-flex">
 								<a href="#"><img src="../static/user/img/r1.jpg" alt=""></a>
@@ -712,7 +720,18 @@
 								</div>
 							</div>
 						</div>
+					</div> -->
+					<div class="dp_flex">
+					{% for rcm in recommended['recomms'] %}
+					<div class="col-lg-4 col-md-4 col-sm-6">
+						<div class="click_detail" id="{{rcm['values']['id_shoes']}}"><a href="/user_productdetail/{{rcm['values']['id_shoes']}}"><img src="{{rcm['values']['image']}}" height="200px" width="200px"></a></div>
+						<div>{{rcm['values']['shoes_name']}}</div>
+						<div>{{rcm['values']['price']}}</div>
 					</div>
+					{% endfor %}
+					</div>
+
+					
 				</div>
 				<div class="col-lg-3">
 					<div class="ctg-right">
@@ -748,6 +767,97 @@
 	<script src="../static/user/js/gmaps.min.js"></script>
 	<script src="../static/user/js/main.js"></script>
 	<!-- <script language="JavaScript" type="text/javascript" src="../static/user/js/jquery-3.4.1.min.js"></script> -->
+
+	<script type="text/javascript">
+		
+		$(document).ready(function() {
+          $(".add_to_cart").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			//   id_shoes=id_shoes.substr(0,id_shoes.length-2);
+			//   alert(id_shoes);
+			$.ajax({
+              data: {'id_user':id,
+			  'id_shoes':id_shoes
+			  },
+              type:"POST",
+              url : "/add_to_cart/tracking"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			console.log("Done");
+            // $("#notification").show();
+            });
+		  });
+
+
+
+		  $(".rating_button").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			//   id_shoes=id_shoes.substr(0,id_shoes.length-2);
+			  alert(id_shoes);
+			$.ajax({
+              data: 
+			  $('#rating_form').serialize()
+			  ,
+              type:"POST",
+              url : "/comments/tracking/{{shoe_detail[0]['id_shoes']}}"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			console.log("Done");
+            // $("#notification").show();
+            });
+		  });
+
+
+		  
+          $(".click_detail").click(function(){
+			  var id;
+			  var id_user="{{session['id']}}";
+			  if (id_user=="") {
+				  id="0";
+			  }
+			  else{
+				id=id_user;
+			  };
+			  var id_shoes=this.id;
+			//   id_shoes=id_shoes.substr(0,id_shoes.length-2);
+			//   alert(id_shoes);
+			$.ajax({
+              data: {'id_user':id,
+			  'id_shoes':id_shoes
+			  },
+              type:"POST",
+              url : "/tracking"
+            })
+            .done(function(data){
+            // $("#respond_ajax").html(data);
+			console.log("Done");
+            // $("#notification").show();
+            });
+		  });
+		  
+
+		  });
+
+		
+	</script>
 </body>
 
 </html>
