@@ -10,9 +10,16 @@ import json
 # from flask_dropzone import Dropzone
 # from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import os
+import base64
+
+
 
 from form import EmailForm,PasswordForm
 from itsdangerous import URLSafeSerializer
+
+# import com.snowplowanalytics.snowplow.tracker.*;
+# import com.snowplowanalytics.snowplow.tracker.emitter.*;
+# import com.snowplowanalytics.snowplow.tracker.payload.*;
 
 
 from flask_mail import Mail, Message
@@ -410,7 +417,7 @@ def color_image():
         sp=cur.fetchall()
         reps=""
         for idx,pr in enumerate(sp):
-            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label class='scale_able' for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='120px' height='120px'></label>"
+            reps+="<input type='checkbox' name='color_image' value='"+str(pr['id_shoes_color_image'])+"' id='id_color_image_"+str(pr['id_shoes_color_image'])+"'><label class='' for='id_color_image_"+str(pr['id_shoes_color_image'])+"'><img src='./static/image/shoes_image/"+pr['image']+"' width='120px' height='120px'></label>"
         print (reps)
         return reps
 # @app.route('/product/color_image/delete',methods=['POST'])
@@ -708,9 +715,9 @@ def user_product():
 
 @app.route('/user_product/<type_s>')
 def shoes_type(type_s):
-
+    print(type_s)
     cur=mysql.connection.cursor()
-    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color GROUP BY shoes.id_shoes AND shoes.shoes_type= %s",[type_s])
+    cur.execute("SELECT * FROM shoes,shoes_color,shoes_color_image WHERE shoes.id_shoes=shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.shoes_type=%s GROUP BY shoes.id_shoes",[type_s])
     rows=cur.fetchall()
 
     a=[]
@@ -903,71 +910,75 @@ def comment(id_shoes):
 @app.route('/user_cart')
 def user_cart():
     if 'id' in session:
-        recommended={'recommId': 'a7f9137877465c2b505c468010440298', 'recomms': [{'id': '4', 'values': {'sale': 0, 'image': '/static/image/shoes_image/3/White Purple/112ade84-3b68-4b31-962f-8ce56d55ca71.webp', 'id_shoes': 4, 'shoes_type': 'Training', 'catalogy': 'Sandals', 'athleter': '', 'color': ['Purple'], 'describe': 'Comfortable for Woman and has style perfect\r\n', 'gender_shoes': 'Woman', 'shoes_name': 'Nike Air Max 200', 'surface': ['Multi Ground,Indoor'], 'price': 3519000.0, 'feature': 'Waterproof'}}, {'id': '8', 'values': {'sale': 0, 'image': '/static/image/shoes_image/8/Black/3d7b03ea-3466-4056-a344-3492e88f8b6c.webp', 'id_shoes': 8, 'shoes_type': 'Basketball', 'catalogy': 'Snacker', 'athleter': None, 'color': ['Black,Grey'], 'describe': 'The Air Jordan XXXIV PF continues the legacy of a cultural icon. Light, responsive sculpted', 'gender_shoes': 'Man', 'shoes_name': 'Air Jordan XXXIV PF', 'surface': ['Artificial Grass,Multi Ground,Indoor,Grass'], 'price': 5129000.0, 'feature': 'Reflection'}}, {'id': '3', 'values': {'sale': 10, 'image': '/static/image/shoes_image/2/Lemon Venom/i1-e43bc0a3-290d-4620-983e-4d3d0a4688aa.webp', 'id_shoes': 3, 'shoes_type': 'Football', 'catalogy': 'Boot', 'athleter': 'Cristiano Ronaldo', 'color': ['Blue'], 'describe': 'Has alot of Surface and has durable with time\r\n', 'gender_shoes': 'Man', 'shoes_name': 'Nike Mercurial Superfly 7 Elite MDS FG', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 8799000.0, 'feature': 'Reflection'}}]}
-        # if 'id' in session:
-        # 1: id_item,3:id_account,2 is number get_recommend
-        # recommended = client.send(RecommendItemsToUser(session['id'],3,
-        #                                         scenario='product_detail',
-        #                                         return_properties=True,
-        #                                         cascade_create=True))
-        
-        print(recommended)
-        id_account= session['id']
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM cart,cart_detail,shoes_color_image,shoes_color,shoes WHERE cart.id_cart=cart_detail.id_cart AND shoes_color_image.id_shoes_color=cart_detail.id_color AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=cart_detail.id_shoes AND cart.id_user =%s GROUP BY cart_detail.id_cart_detail",[id_account])
-        temp=cur.fetchall()
-        return render_template('user_cart.html',cart_detail=temp,recommended=recommended)
+        if session['role']==2:
+            recommended={'recommId': 'a7f9137877465c2b505c468010440298', 'recomms': [{'id': '4', 'values': {'sale': 0, 'image': '/static/image/shoes_image/3/White Purple/112ade84-3b68-4b31-962f-8ce56d55ca71.webp', 'id_shoes': 4, 'shoes_type': 'Training', 'catalogy': 'Sandals', 'athleter': '', 'color': ['Purple'], 'describe': 'Comfortable for Woman and has style perfect\r\n', 'gender_shoes': 'Woman', 'shoes_name': 'Nike Air Max 200', 'surface': ['Multi Ground,Indoor'], 'price': 3519000.0, 'feature': 'Waterproof'}}, {'id': '8', 'values': {'sale': 0, 'image': '/static/image/shoes_image/8/Black/3d7b03ea-3466-4056-a344-3492e88f8b6c.webp', 'id_shoes': 8, 'shoes_type': 'Basketball', 'catalogy': 'Snacker', 'athleter': None, 'color': ['Black,Grey'], 'describe': 'The Air Jordan XXXIV PF continues the legacy of a cultural icon. Light, responsive sculpted', 'gender_shoes': 'Man', 'shoes_name': 'Air Jordan XXXIV PF', 'surface': ['Artificial Grass,Multi Ground,Indoor,Grass'], 'price': 5129000.0, 'feature': 'Reflection'}}, {'id': '3', 'values': {'sale': 10, 'image': '/static/image/shoes_image/2/Lemon Venom/i1-e43bc0a3-290d-4620-983e-4d3d0a4688aa.webp', 'id_shoes': 3, 'shoes_type': 'Football', 'catalogy': 'Boot', 'athleter': 'Cristiano Ronaldo', 'color': ['Blue'], 'describe': 'Has alot of Surface and has durable with time\r\n', 'gender_shoes': 'Man', 'shoes_name': 'Nike Mercurial Superfly 7 Elite MDS FG', 'surface': ['Grass,Firm Ground,Artificial Grass,Soft Ground'], 'price': 8799000.0, 'feature': 'Reflection'}}]}
+            # if 'id' in session:
+            # 1: id_item,3:id_account,2 is number get_recommend
+            recommended = client.send(RecommendItemsToUser(session['id'],3,
+                                                    scenario='product_detail',
+                                                    return_properties=True,
+                                                    cascade_create=True))
+            
+            print(recommended)
+            id_account= session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM cart,cart_detail,shoes_color_image,shoes_color,shoes WHERE cart.id_cart=cart_detail.id_cart AND shoes_color_image.id_shoes_color=cart_detail.id_color AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes.id_shoes=cart_detail.id_shoes AND cart.id_user =%s GROUP BY cart_detail.id_cart_detail",[id_account])
+            temp=cur.fetchall()
+            return render_template('user_cart.html',cart_detail=temp,recommended=recommended)
+        return redirect(url_for('user_login'))
     return redirect(url_for('user_login'))
 
 
 @app.route('/add_to_cart', methods= ['GET','POST'] )
 def add_to_cart():
     if 'id' in session:
-        if request.method == 'POST':
-            print("Av")
-            id_account =session['id']
-        
-            id_shoes_color=request.form['color']
-            size=request.form['size']
-            quantity=request.form['quantity']
-            cur =mysql.connection.cursor()
-            cur.execute("SELECT * FROM shoes_color,shoes_color_image,shoes WHERE shoes.id_shoes= shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes_color.id_shoes_color =%s GROUP BY shoes_color.id_shoes_color",[id_shoes_color])
-            rows =cur.fetchall()
-            id_shoes =rows[0]['id_shoes']
-            price_per_product = round( rows[0]['price']*(1-rows[0]['sale']/100))
+        if session['role']==2:
+            if request.method == 'POST':
+                print("Av")
+                id_account =session['id']
+                print(request.form)
+                id_shoes_color=request.form['color']
+                size=request.form['size']
+                quantity=request.form['quantity']
+                cur =mysql.connection.cursor()
+                cur.execute("SELECT * FROM shoes_color,shoes_color_image,shoes WHERE shoes.id_shoes= shoes_color.id_shoes AND shoes_color.id_shoes_color=shoes_color_image.id_shoes_color AND shoes_color.id_shoes_color =%s GROUP BY shoes_color.id_shoes_color",[id_shoes_color])
+                rows =cur.fetchall()
+                id_shoes =rows[0]['id_shoes']
+                price_per_product = round( rows[0]['price']*(1-rows[0]['sale']/100))
 
-            # cart exist ?
+                # cart exist ?
 
-            cur =mysql.connection.cursor()
-            cur.execute("SELECT * FROM cart WHERE id_user=%s",[id_account])
-            cart =cur.fetchall()
-            if len(cart)==0 :
-                # add cart if not exist
-                print("aaaa")
-                cur.execute("INSERT INTO cart(id_cart,id_user,cart_quantity,cart_total_price) VALUES(%s,%s,%s,%s)",["NULL",id_account,"1","0"])
+                cur =mysql.connection.cursor()
+                cur.execute("SELECT * FROM cart WHERE id_user=%s",[id_account])
+                cart =cur.fetchall()
+                if len(cart)==0 :
+                    # add cart if not exist
+                    print("aaaa")
+                    cur.execute("INSERT INTO cart(id_cart,id_user,cart_quantity,cart_total_price) VALUES(%s,%s,%s,%s)",["NULL",id_account,"1","0"])
+                    mysql.connection.commit()
+
+                # query id_cart
+                cur.execute("SELECT id_cart FROM cart WHERE id_user = %s",[id_account])
+                temp = cur.fetchall()
+                id_cart = temp[0]['id_cart']
+                # add product
+                cur.execute("INSERT INTO cart_detail(id_cart_detail,id_shoes,id_color,size,id_cart,quantity,price_per_product) VALUES(%s,%s,%s,%s,%s,%s,%s)",["NULL",id_shoes,id_shoes_color,size,id_cart,quantity,price_per_product])
                 mysql.connection.commit()
 
-            # query id_cart
-            cur.execute("SELECT id_cart FROM cart WHERE id_user = %s",[id_account])
-            temp = cur.fetchall()
-            id_cart = temp[0]['id_cart']
-            # add product
-            cur.execute("INSERT INTO cart_detail(id_cart_detail,id_shoes,id_color,size,id_cart,quantity,price_per_product) VALUES(%s,%s,%s,%s,%s,%s,%s)",["NULL",id_shoes,id_shoes_color,size,id_cart,quantity,price_per_product])
-            mysql.connection.commit()
 
 
-
-            cur.execute("SELECT * FROM `cart_detail` WHERE id_cart=%s",[id_cart])
-            temp2= cur.fetchall()
-            total_price=0
-            total_sp=0
-            for item in temp2:
-                total_price+=item['price_per_product']*item['quantity']
-                total_sp+=item['quantity']
-            cur.execute("UPDATE cart SET cart_quantity=%s,cart_total_price=%s WHERE id_cart=%s",[total_sp,total_price,id_cart])
-            mysql.connection.commit()
+                cur.execute("SELECT * FROM `cart_detail` WHERE id_cart=%s",[id_cart])
+                temp2= cur.fetchall()
+                total_price=0
+                total_sp=0
+                for item in temp2:
+                    total_price+=item['price_per_product']*item['quantity']
+                    total_sp+=item['quantity']
+                cur.execute("UPDATE cart SET cart_quantity=%s,cart_total_price=%s WHERE id_cart=%s",[total_sp,total_price,id_cart])
+                mysql.connection.commit()
+                return redirect(url_for("user_cart"))
             return redirect(url_for("user_cart"))
-        return redirect(url_for("user_cart"))
+        return redirect(url_for('dashboard'))
     return redirect(url_for('dashboard'))
 
 @app.route('/user_cart/delete/<id_cart_detail>')
@@ -1136,24 +1147,26 @@ def upload():
 @app.route('/user_history_order')
 def user_history():
     if 'id' in session:
-        id_account = session['id']
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM account WHERE id_account =%s" ,[id_account])
-        rows=cur.fetchall()
+        if session['role']==2:
+            id_account = session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM account WHERE id_account =%s" ,[id_account])
+            rows=cur.fetchall()
 
-        # cur = mysql.connection.cursor()
-        # cur.execute("SELECT * FROM shoes")
-        # abc=cur.fetchall()
+            # cur = mysql.connection.cursor()
+            # cur.execute("SELECT * FROM shoes")
+            # abc=cur.fetchall()
 
-        id_user = session['id']
-        cur=mysql.connection.cursor()
-        cur.execute("SELECT * FROM user_order,ship WHERE user_order.id_order=ship.id_order AND user_order.id_user =%s",[id_user])
-        rows=cur.fetchall()
+            id_user = session['id']
+            cur=mysql.connection.cursor()
+            cur.execute("SELECT * FROM user_order,ship WHERE user_order.id_order=ship.id_order AND user_order.id_user =%s",[id_user])
+            rows=cur.fetchall()
 
-        cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color AND user_order.id_user =%s GROUP BY order_detail.id_order_detail",[id_user])
-        detail=cur.fetchall()
+            cur.execute("SELECT * FROM user_order,order_detail,shoes,shoes_color_image WHERE user_order.id_order= order_detail.id_order AND shoes.id_shoes=order_detail.id_shoes AND shoes_color_image.id_shoes_color=order_detail.id_shoes_color AND user_order.id_user =%s GROUP BY order_detail.id_order_detail",[id_user])
+            detail=cur.fetchall()
 
-        return render_template('user_historyorder.html',order_history=rows,order_detail=detail,person=rows)
+            return render_template('user_historyorder.html',order_history=rows,order_detail=detail,person=rows)
+        return redirect(url_for('user_login'))
     return redirect(url_for('user_login'))
 
 
@@ -1233,18 +1246,20 @@ def tracking():
         id_user=request.form['id_user']
         id_shoes=request.form['id_shoes']
         a={'id_user':id_user,'id_shoes':id_shoes}
-        print(id_shoes)
-        with open('./log.json') as data_file:    
-            data = json.load(data_file)
-            # data.append()
-        data.append(a)
-        with open('log.json', 'w') as f:
-            json.dump(data, f)
-            f.close()
-        print(data)
+
+        # print(id_shoes)
+        # with open('./log.json') as data_file:    
+        #     data = json.load(data_file)
+        #     # data.append()
+        # data.append(a)
+        # with open('log.json', 'w') as f:
+        #     json.dump(data, f)
+        #     f.close()
+        # print(data)
+
     #     return "done"
         # time=datetime.datetime.today(),
-        client.send(AddDetailView(id_user, id_shoes, cascade_create=True))
+        # client.send(AddDetailView(id_user, id_shoes, cascade_create=True))
         return "done"
 
 
@@ -1279,7 +1294,7 @@ def comments_tracking(id_shoes):
         id_user=session['id']
         # id_shoes=id_shoes
         rate=(int(request.form['rate'])-3)/2
-        a={'id_user':id_user,'id_shoes':id_shoes,'rating':rate}
+        a={'id_user':id_user,'id_shoes':int(id_shoes),'rating':rate}
         print(id_shoes)
         with open('./comments.json') as data_file:    
             data = json.load(data_file)
@@ -1382,3 +1397,117 @@ def getdata_recomendation(id_shoes):
     #                                            cascade_create=True))
     # print(recommended)
     # return "1"
+
+
+
+@app.route('/page_view/com.snowplowanalytics.snowplow/tp2',methods=["GET", "POST"])
+def ahihidongoc():
+    if request.method=='POST':
+        temp=request.data.decode("utf-8")
+        data=json.loads(temp)
+        
+        print(type(data))
+        # print(data)
+        link= data['data'][0]['co']
+        # print(link)
+        data2=json.loads(link)
+        print(data2['data'][1])
+        id_user=int(data2['data'][1]['id_user'])
+        id_shoes=int(data2['data'][1]['id_shoes'])
+        print(id_user)
+        
+        a={'id_user':id_user,'id_shoes':id_shoes}
+        # print(id_shoes)
+        with open('./log.json') as data_file:    
+            n_data = json.load(data_file)
+            # data.append()
+        n_data.append(a)
+        with open('log.json', 'w') as f:
+            json.dump(n_data, f)
+            f.close()
+        print(n_data)
+    #     return "done"
+        # time=datetime.datetime.today(),
+        client.send(AddDetailView(id_user, id_shoes, cascade_create=True))
+    return "1"
+
+@app.route('/addtocart/com.snowplowanalytics.snowplow/tp2',methods=["GET", "POST"])
+def addtocart_tracking():
+    if request.method=='POST':
+        print(request.data)
+        temp=request.data.decode("utf-8")
+        data=json.loads(temp)
+
+        link=data['data'][0]['co']
+        
+        # print(link)
+        
+        data2=json.loads(link)
+        id_user=int(data2['data'][1]['id_user'])
+        id_shoes=int(data2['data'][1]['id_shoes'])
+        print(id_shoes)
+        a={'id_user':id_user,'id_shoes':id_shoes}
+        print(id_shoes)
+
+        # with open('./add_to_cart.json') as data_file:    
+        #     n_data = json.load(data_file)
+        #     # data.append()
+        # n_data.append(a)
+        # with open('add_to_cart.json', 'w') as f:
+        #     json.dump(n_data, f)
+        #     f.close()
+        # print(n_data)
+    
+        # client.send(AddCartAddition(id_user, id_shoes, cascade_create=True))
+      
+    return "1"
+
+
+@app.route('/rating/com.snowplowanalytics.snowplow/tp2',methods=["GET", "POST"])
+def rating_tracking():
+    if request.method=='POST':
+        print(request.data)
+        temp=request.data.decode("utf-8")
+        data=json.loads(temp)
+
+        link=data['data'][0]['co']
+        
+        # print(link)
+        
+        data2=json.loads(link)
+        id_user=int(data2['data'][1]['id_user'])
+        id_shoes=int(data2['data'][1]['id_shoes'])
+        rating = (int(data2['data'][1]['rating'])-3)/2
+        print(id_shoes)
+        a={'id_user':id_user,'id_shoes':id_shoes,'rating':rating}
+        print(rating)
+
+        # with open('././comments.json') as data_file:    
+        #     n_data = json.load(data_file)
+        #     # data.append()
+        # n_data.append(a)
+        # with open('./comments.json', 'w') as f:
+        #     json.dump(n_data, f)
+        #     f.close()
+        # print(n_data)
+    
+        # client.send(AddCartAddition(id_user, id_shoes, cascade_create=True))
+      
+    return "1"
+
+@app.route('/purchase/com.snowplowanalytics.snowplow/tp2',methods=["GET", "POST"])
+def purchase_tracking():
+    if request.method=='POST':
+        print(request.data)
+        temp=request.data.decode("utf-8")
+        data=json.loads(temp)
+
+        link=data['data'][0]['co']
+        
+        print(link)
+        
+        data2=json.loads(link)
+        id_user=data2['data'][1]['id_user']
+        print(id_user)
+      
+    return "1"

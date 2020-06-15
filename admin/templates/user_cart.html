@@ -65,6 +65,7 @@
         <div class="container">
             <div class="cart_inner">
                 <form action="/user_cart/checkout" method="POST">
+                    <!-- <form action="" method="POST">  -->
                 <div class="table-responsive">
                     {% if not cart_detail  %}
                     <h3>You haven't product in cart !</h3>
@@ -251,9 +252,9 @@
                                             <option value="2">Select a State</option>
                                             <option value="4">Select a State</option>
                                         </select> -->
-                                        <input type="text" placeholder="Name..." name="receiver" value="{{session['name']}}" >
-                                        <input type="text" placeholder="Address Shipping..." name="address_ship" value="{{session['address']}}">
-                                        <input type="text" placeholder="Phone Number..." name="phone_number" value="{{session['phone_number']}}">
+                                        <input type="text" placeholder="Name..." name="receiver" value="{{session['name']}}" required>
+                                        <input type="text" placeholder="Address Shipping..." name="address_ship" value="{{session['address']}}" required>
+                                        <input type="text" placeholder="Phone Number..." name="phone_number" pattern="[0]{1}[0-9]{9}" value="0{{session['phone_number']}}" required>
                                         <!-- <a class="gray_btn" href="#">Update Details</a> -->
                                     </div>
                                 </td>
@@ -272,7 +273,12 @@
                                 <td>
                                     <div class="checkout_btn_inner d-flex align-items-center">
                                         <a class="gray_btn" style="position:absolute;right:50%;" href="/user_product">Continue Shopping</a>
-                                        <button class="primary-btn" style="position:absolute;left:50%;" type="submit">Proceed to checkout</button>
+                                        {% if cart_detail %}
+                                        <button id="checkout_button" class="primary-btn" style="position:absolute;left:50%;" type="submit">Proceed to checkout</button>
+                                        {% else %}
+                                        <button id="checkout_button" class="primary-btn" style="position:absolute;left:50%;" type="submit" disabled>Proceed to checkout</button>
+                                        {% endif %}
+                                        <!-- <button style="position: absolute;right: 1%;">Ahihi</button> -->
                                     </div>
                                 </td>
                             </tr>
@@ -386,6 +392,99 @@
         });
     
     </script>
+
+    <!-- Snowplow starts plowing -->
+	<script type="text/javascript">
+		;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
+		p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
+		};p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1;
+		n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","//d1fc8wv8zag5ca.cloudfront.net/2.10.2/sp.js","snowplow_trackpurchase"));
+
+		var id_user="{{session['id']}}";
+		if (id_user=="") {
+					// alert("sao lai v");
+				  id_user="0";
+			  }
+			  else{
+				id_user=id_user;
+			  };
+		// alert(id_user);
+		snowplow_trackpurchase("newTracker", "sp1", "localhost:5000/purchase", {
+		appId: "12cfpro",
+		platform: "web",
+        encodeBase64: false,
+		contexts: {
+			webPage: true,
+			performanceTiming: true,
+            ttm :id_user
+		}
+		});
+        var return_event_context = {
+            schema: "iglu:com.bestbuy/return/jsonschema/1-0-0",
+            data: {
+                transaction_id: 'T6318372'
+                ,transaction_value: 164.83
+                ,item_condition: 'Excelent',
+                id_user: id_user
+            }
+        };
+		// var pageviewContext = [{
+        //     schema: "iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4",
+        //     data: {
+        //         sku: '8532502'
+        //     ,brand: 'Apple'
+        //     }
+        // }];
+        // snowplow_trackpurchase.track_unstruct_event({
+        // "schema": "iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4",
+        // "data": {
+        //     "connected_tstamp": "2015-03-21 17:23:10",
+        //     "disconnected_tstamp": "2015-03-21 17:48:21",
+        //     "reason_for_call": "Response to interest submitted via webform",
+        //     "success": true,
+        //     "order_id": "ab-1903-23904",
+        //     "order_value": "129.44"
+        // }
+        // });
+		
+        buttons = document.querySelectorAll('button')
+
+        buttons.forEach(function(elem) {
+        elem.addEventListener("click", function() {
+            // var rnd = Math.random().toString(36).substring(2);
+            // alert(id_user);
+            url = "123";
+            other_properties = id_user;
+
+            // snowplow_trackpurchase('trackLinkClick', url,other_properties);
+        //     _snaq.push(['trackPageView',
+        //       , // <- Skip the custom page title (get page title automatically instead)
+        //       { page: {
+        //           category: 'sport',
+        //           last_updated$dt: new Date(2014,1,26)
+        //         }
+        //       }
+        //    ]);
+        
+        // window.snowplow_trackpurchase('trackPageView', null , pageviewContext);
+            // window.snowplow_trackpurchase('trackPageView', null, [
+			
+            // {
+            //     schema: "iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4",
+            //     data: {
+            //     userType: 'tester'
+            //     }
+            // }],
+            // null,
+            // {type: 'ttm', value: id_user});
+            window.snowplow_trackpurchase('enableFormTracking',null,return_event_context);
+        });
+        });
+		
+
+	
+	 </script>
+	<!-- Snowplow stops plowing -->
 	
 	<script src="../static/user/js/vendor/jquery-2.2.4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"

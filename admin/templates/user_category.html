@@ -1159,6 +1159,47 @@
 
 		
 	</script>
+	<!-- Snowplow starts plowing -->
+	<!-- <script type="text/javascript">
+		;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
+		p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
+		};p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1;
+		n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","//d1fc8wv8zag5ca.cloudfront.net/2.10.2/sp.js","snowplow_name_here"));
+
+		var id_user="{{session['id']}}";
+		if (id_user=="") {
+					// alert("sao lai v");
+				  id_user="0";
+			  }
+			  else{
+				id_user=id_user;
+			  };
+		// alert(id_user);
+		snowplow_name_here("newTracker", "sp", "localhost:5000/test_link", {
+		appId: "cfe23a",
+		platform: "web",
+		contexts: {
+			webPage: true,
+			performanceTiming: true
+		}
+		});
+
+		
+		window.snowplow_name_here('enableLinkClickTracking', null, [
+			
+		{
+			schema: "iglu:com.snowplowanalytics.snowplow/payload_data/jsonschema/1-0-4",
+			data: {
+			userType: 'tester'
+			}
+		}],
+		null,
+		{type: 'ttm', value: "2130290"});
+		
+
+	
+	 </script> -->
+	<!-- Snowplow stops plowing -->
 </body>
 
 </html>
